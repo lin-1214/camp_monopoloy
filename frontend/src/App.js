@@ -1,16 +1,38 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Grid } from "@mui/material";
 import Header from "./components/Header";
-//import userContext from "./hooks/useUser";
 import "./App.css";
 
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import Notifications from "./components/Notifications";
+import Teams from "./components/Teams/Teams";
+import Properties from "./components/Properties/Properties";
+import LogIn from "./components/LogIn";
+import SetMoney from "./components/NPC/SetMoney";
+import SetOwnership from "./components/NPC/SetOwnership";
+import RoleContext from "./components/useRole";
+import theme from "./theme";
+
 const App = () => {
+  const [role, setRole] = useState("");
+  const value = { role, setRole };
   return (
-    <Grid container>
-      <Header />
-      <Outlet />
-    </Grid>
+    <ThemeProvider theme={theme}>
+      <RoleContext.Provider value={value}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Header />}>
+              <Route path="notifications" element={<Notifications />} />
+              <Route path="teams" element={<Teams />} />
+              <Route path="properties" element={<Properties />} />
+              <Route path="login" element={<LogIn />} />
+              <Route path="setmoney" element={<SetMoney />} />
+              <Route path="setownership" element={<SetOwnership />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </RoleContext.Provider>
+    </ThemeProvider>
   );
 };
 

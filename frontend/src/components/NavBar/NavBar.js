@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Toolbar,
   List,
@@ -8,12 +9,31 @@ import {
   Divider,
   SwipeableDrawer,
 } from "@mui/material";
-import { NavBarItems } from "./NavBarItem";
+import {
+  LogInItems,
+  LogOutItems,
+  NavBarItems,
+  NPCItems,
+  adminItems,
+} from "./NavBarItem";
 import { NavBarStyles } from "./NavStyle";
-import { useNavigate } from "react-router-dom";
+import RoleContext from "../useRole";
 
 const Navbar = ({ open }) => {
   const [currIndex, setIndex] = useState(0);
+  const { role, setRole } = useContext(RoleContext);
+  const mapping = (item) => (
+    <ListItem
+      button
+      key={item.id}
+      onClick={() => handleClick(item.id, item.route)}
+      selected={currIndex === item.id}
+    >
+      <ListItemIcon sx={NavBarStyles.icons}>{item.icon}</ListItemIcon>
+      <ListItemText sx={NavBarStyles.text} primary={item.label} />
+    </ListItem>
+  );
+
   const navigate = useNavigate();
   const handleClick = (index, name) => {
     navigate(name);
@@ -32,17 +52,8 @@ const Navbar = ({ open }) => {
       <Toolbar />
       <Divider />
       <List>
-        {NavBarItems.map((item, index) => (
-          <ListItem
-            button
-            key={item.id}
-            onClick={() => handleClick(item.id, item.route)}
-            selected={currIndex === item.id}
-          >
-            <ListItemIcon sx={NavBarStyles.icons}>{item.icon}</ListItemIcon>
-            <ListItemText sx={NavBarStyles.text} primary={item.label} />
-          </ListItem>
-        ))}
+        {NavBarItems.map(mapping)}
+        {role === "NPC" && NPCItems.map(mapping)}
       </List>
     </SwipeableDrawer>
   );
