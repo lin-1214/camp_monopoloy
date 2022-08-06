@@ -22,7 +22,7 @@ const sessionOption = {
   secret,
   store: new RedisStore({ client: redisClient }),
   resave: false,
-  saveUnintialized: false,
+  saveUninitialized: false,
 };
 
 app.use(function (req, res, next) {

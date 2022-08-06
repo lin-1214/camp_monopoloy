@@ -13,14 +13,62 @@ mongoose.connect(process.env.MONGO_URL, {
 });
 
 const rows = [
-  { teamname: "第1小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第2小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第3小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第4小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第5小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第6小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第7小隊", occupation: "N/A", money: 100000 },
-  { teamname: "第8小隊", occupation: "N/A", money: 100000 },
+  {
+    teamname: "第1小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第2小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第3小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第4小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第5小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第6小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第7小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
+  {
+    teamname: "第8小隊",
+    occupation: "N/A",
+    money: 100000,
+    bonus: { value: 1.0, time: 0 },
+    soulgem: { value: false, time: 0 },
+  },
 ];
 
 const grounds = [
