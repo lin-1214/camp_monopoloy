@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 import dotenv from "dotenv-defaults";
 import Team from "../models/team.js";
 import Land from "../models/land.js";
+import User from "../models/user.js";
 
 dotenv.config();
 console.log(process.env.MONGO_URL);
@@ -11,6 +13,17 @@ mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+const users = [
+  {
+    username: "admin",
+    password: "admin",
+  },
+  {
+    username: "npc",
+    password: "npc",
+  },
+];
 
 const rows = [
   {
@@ -274,13 +287,21 @@ db.once("open", async () => {
   console.log("db connected");
   await Team.deleteMany({});
   await Land.deleteMany({});
+  await User.deleteMany({});
+
+  users.forEach(async (user) => {
+    const { username, password } = user;
+    const hash = await bcrypt.hash(password, 10);
+    await new User({
+      username,
+      password: hash,
+    }).save();
+  });
   grounds.forEach(async (ground) => {
-    const land = new Land(ground);
-    land.save();
+    await new Land(ground).save();
   });
   rows.forEach(async (row) => {
-    const team = new Team(row);
-    team.save();
+    await new Team(row).save();
   });
   console.log("finish saving data");
 });
