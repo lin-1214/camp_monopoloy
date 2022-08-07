@@ -9,19 +9,19 @@ import {
   Divider,
   SwipeableDrawer,
 } from "@mui/material";
-import {
-  LogInItems,
-  LogOutItems,
-  NavBarItems,
-  NPCItems,
-  adminItems,
-} from "./NavBarItem";
+import { NavBarItems, NPCItems, adminItems } from "./NavBarItem";
 import { NavBarStyles } from "./NavStyle";
 import RoleContext from "../useRole";
 
 const Navbar = ({ open }) => {
   const [currIndex, setIndex] = useState(0);
-  const { role, setRole } = useContext(RoleContext);
+  const { role } = useContext(RoleContext);
+  const navigate = useNavigate();
+  const handleClick = (index, name) => {
+    navigate(name);
+    setIndex(index);
+  };
+
   const mapping = (item) => (
     <ListItem
       button
@@ -33,12 +33,6 @@ const Navbar = ({ open }) => {
       <ListItemText sx={NavBarStyles.text} primary={item.label} />
     </ListItem>
   );
-
-  const navigate = useNavigate();
-  const handleClick = (index, name) => {
-    navigate(name);
-    setIndex(index);
-  };
 
   return (
     <SwipeableDrawer
@@ -53,7 +47,8 @@ const Navbar = ({ open }) => {
       <Divider />
       <List>
         {NavBarItems.map(mapping)}
-        {role === "NPC" && NPCItems.map(mapping)}
+        {(role === "NPC" || role === "admin") && NPCItems.map(mapping)}
+        {role === "admin" && adminItems.map(mapping)}
       </List>
     </SwipeableDrawer>
   );

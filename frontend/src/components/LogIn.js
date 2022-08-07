@@ -18,7 +18,7 @@ const LogIn = () => {
   const handleClick = () => {
     console.log(user);
     console.log(password);
-    setRole("NPC");
+    setRole("admin");
     navigate("/");
   };
 

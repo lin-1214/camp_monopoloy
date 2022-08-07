@@ -39,17 +39,23 @@ export const NPCItems = [
     label: "Set Ownership",
     route: "setownership",
   },
+  {
+    id: 6,
+    icon: <BuildIcon />,
+    label: "Transfer",
+    route: "transfer",
+  },
 ];
 
 export const adminItems = [
   {
-    id: 5,
+    id: 7,
     icon: <EventIcon />,
     label: "Event",
     route: "event",
   },
   {
-    id: 6,
+    id: 8,
     icon: <AddToQueueIcon />,
     label: "Additional",
     route: "additional",

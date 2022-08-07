@@ -58,15 +58,15 @@ const SetOwnership = () => {
             }}
           >
             <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={9}>無主地</MenuItem>
-            <MenuItem value={1}>第一小隊</MenuItem>
-            <MenuItem value={2}>第二小隊</MenuItem>
-            <MenuItem value={3}>第三小隊</MenuItem>
-            <MenuItem value={4}>第四小隊</MenuItem>
-            <MenuItem value={5}>第五小隊</MenuItem>
-            <MenuItem value={6}>第六小隊</MenuItem>
-            <MenuItem value={7}>第七小隊</MenuItem>
-            <MenuItem value={8}>第八小隊</MenuItem>
+            <MenuItem value={9}>N/A</MenuItem>
+            <MenuItem value={1}>第1小隊</MenuItem>
+            <MenuItem value={2}>第2小隊</MenuItem>
+            <MenuItem value={3}>第3小隊</MenuItem>
+            <MenuItem value={4}>第4小隊</MenuItem>
+            <MenuItem value={5}>第5小隊</MenuItem>
+            <MenuItem value={6}>第6小隊</MenuItem>
+            <MenuItem value={7}>第7小隊</MenuItem>
+            <MenuItem value={8}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>

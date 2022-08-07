@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  Stack,
-  SnackbarContent,
   Paper,
   Table,
   TableHead,
