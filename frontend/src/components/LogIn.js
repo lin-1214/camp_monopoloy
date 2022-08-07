@@ -9,17 +9,30 @@ import {
   FormControl,
 } from "@mui/material";
 import RoleContext from "./useRole";
+import axios from "./axios";
 
 const LogIn = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessages, setErrorMessages] = useState("");
+
   const navigate = useNavigate();
   const { setRole } = useContext(RoleContext);
+
   const handleClick = () => {
     console.log(user);
     console.log(password);
-    setRole("admin");
-    navigate("/");
+    // post /api/login
+    const payload = { username: user, password: password };
+    axios.post("/login", payload).then((res) => {
+      if (res.data !== "") {
+        setRole(res.data);
+        navigate("/");
+      } else {
+        console.log("login failed");
+        setErrorMessages("login failed");
+      }
+    });
   };
 
   return (
@@ -41,6 +54,7 @@ const LogIn = () => {
             label="Username"
             id="user"
             autoComplete="user"
+            type="text"
             sx={{ marginTop: 1, marginBottom: 1 }}
             autoFocus
             onChange={(e) => {
@@ -52,6 +66,7 @@ const LogIn = () => {
             label="Password"
             id="password"
             autoComplete="current-password"
+            type="password"
             sx={{ marginTop: 1, marginBottom: 1 }}
             onChange={(e) => {
               setPassword(e.target.value);
@@ -64,6 +79,7 @@ const LogIn = () => {
           >
             Log In
           </Button>
+          <div>{errorMessages}</div>
         </FormControl>
       </Box>
     </Container>

@@ -9,25 +9,25 @@ router.get("/", (req, res) => {
   res.json({ a: 1, b: 2 });
 });
 
-const requireAdmin = (req, res, next) => {
-  if (!req.session.user) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  if (req.session.user.username !== "admin") {
-    res.status(403).json({ error: "Forbidden" });
-    return;
-  }
-  next();
-};
+// const requireAdmin = (req, res, next) => {
+//   if (!req.session.user) {
+//     res.status(401).json({ error: "Unauthorized" });
+//     return;
+//   }
+//   if (req.session.user.username !== "admin") {
+//     res.status(403).json({ error: "Forbidden" });
+//     return;
+//   }
+//   next();
+// };
 
-const requireNPC = (req, res, next) => {
-  if (!req.session.user) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  next();
-};
+// const requireNPC = (req, res, next) => {
+//   if (!req.session.user) {
+//     res.status(401).json({ error: "Unauthorized" });
+//     return;
+//   }
+//   next();
+// };
 
 async function checkvalid(teamname) {
   const team = await Team.findOne({ teamname });
@@ -173,10 +173,11 @@ router.get("/checkvalid", async (req, res) => {
 
 // Login
 router.post("/login", async (req, res) => {
+  // console.log(req.body);
   const { username, password } = req.body;
   const user = await User.findAndValidate(username, password);
   if (!user) {
-    res.status(403).send(null);
+    res.status(200).send(null);
     console.log("login failed");
     return;
   }
@@ -185,17 +186,17 @@ router.post("/login", async (req, res) => {
   // null, npc, admin: String
 });
 
-router.post("/logout", async (req, res) => {
-  req.session.destroy();
-  res.status(200).send("logout success");
-});
+// router.post("/logout", async (req, res) => {
+//   req.session.destroy();
+//   res.status(200).send("logout success");
+// });
 
-router.get("/adminsecret", requireAdmin, async (req, res) => {
-  res.status(200).send("admin secret");
-});
+// router.get("/adminsecret", requireAdmin, async (req, res) => {
+//   res.status(200).send("admin secret");
+// });
 
-router.get("/npcsecret", requireNPC, async (req, res) => {
-  res.status(200).send("npc secret");
-});
+// router.get("/npcsecret", requireNPC, async (req, res) => {
+//   res.status(200).send("npc secret");
+// });
 
 export default router;

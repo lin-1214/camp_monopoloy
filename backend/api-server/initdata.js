@@ -290,12 +290,7 @@ db.once("open", async () => {
   await User.deleteMany({});
 
   users.forEach(async (user) => {
-    const { username, password } = user;
-    const hash = await bcrypt.hash(password, 10);
-    await new User({
-      username,
-      password: hash,
-    }).save();
+    await new User(user).save();
   });
   grounds.forEach(async (ground) => {
     await new Land(ground).save();
