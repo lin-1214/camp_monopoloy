@@ -79,6 +79,7 @@ const Notifications = () => {
           messages.map((item) => (
             <TimedComponent
               id={id}
+              key={id}
               duration={item.duration}
               title={item.title}
               content={item.content}

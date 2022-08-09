@@ -72,7 +72,7 @@ const Event = () => {
           >
             {data.map((item) => {
               return (
-                <MenuItem value={data.indexOf(item)}>{item.title}</MenuItem>
+                <MenuItem value={data.indexOf(item)} key={data.indexOf(item)}>{item.title}</MenuItem>
               );
             })}
           </Select>

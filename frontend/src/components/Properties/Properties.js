@@ -85,6 +85,7 @@ const Properties = () => {
     return (
       <Paper
         elevation={2}
+        key={id}
         sx={{
           height: "60px",
           borderLeft: 8,

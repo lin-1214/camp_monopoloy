@@ -136,7 +136,7 @@ const Additional = () => {
           <InputLabel id="title">Title</InputLabel>
           <Select
             value={event}
-            labelId="title"
+            id="title"
             onChange={(e) => {
               setEvent(e.target.value);
               setTitle(data[e.target.value].title);
@@ -149,7 +149,9 @@ const Additional = () => {
           >
             {data.map((item) => {
               return (
-                <MenuItem value={data.indexOf(item)}>{item.title}</MenuItem>
+                <MenuItem value={data.indexOf(item)} key={data.indexOf(item)}>
+                  {item.title}
+                </MenuItem>
               );
             })}
           </Select>
@@ -158,7 +160,7 @@ const Additional = () => {
           <InputLabel id="team-ownership">Team</InputLabel>
           <Select
             value={team}
-            labelId="team-ownership"
+            id="team-ownership"
             onChange={(e) => {
               setTeam(e.target.value);
             }}
@@ -178,7 +180,7 @@ const Additional = () => {
           <InputLabel id="trait">Trait</InputLabel>
           <Select
             value={trait}
-            labelId="trait"
+            id="trait"
             onChange={(e) => {
               setTrait(e.target.value);
             }}
@@ -209,7 +211,10 @@ const Additional = () => {
               setMessage(e.target.value);
             }}
           />
-          <Button disabled={!(message && team)} onClick={handleClick}>
+          <Button
+            disabled={!(message && team != "Select Team")}
+            onClick={handleClick}
+          >
             Submit
           </Button>
         </FormControl>

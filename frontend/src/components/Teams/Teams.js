@@ -54,12 +54,11 @@ const Teams = () => {
           <TableBody>
             {rows.map((item) => {
               return (
-                <TableRow>
+                <TableRow key={item.teamname}>
                   {columns.map((column) => {
-                    const val = item[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {val}
+                        {item[column.id]}
                       </TableCell>
                     );
                   })}
