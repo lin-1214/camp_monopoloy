@@ -12,12 +12,13 @@ import {
   FormControl,
 } from "@mui/material";
 const SetOwnership = () => {
-  const [team, setTeam] = useState(0);
+  const [team, setTeam] = useState("Select Team");
   const [building, setBuilding] = useState(0);
   const [num, setNum] = useState(0);
   const navigate = useNavigate();
   const handleClick = () => {
     console.log("Hi");
+    navigate("/");
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -57,16 +58,16 @@ const SetOwnership = () => {
               setTeam(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={9}>N/A</MenuItem>
-            <MenuItem value={1}>第1小隊</MenuItem>
-            <MenuItem value={2}>第2小隊</MenuItem>
-            <MenuItem value={3}>第3小隊</MenuItem>
-            <MenuItem value={4}>第4小隊</MenuItem>
-            <MenuItem value={5}>第5小隊</MenuItem>
-            <MenuItem value={6}>第6小隊</MenuItem>
-            <MenuItem value={7}>第7小隊</MenuItem>
-            <MenuItem value={8}>第8小隊</MenuItem>
+            <MenuItem value={"Select Team"}>Select Team</MenuItem>
+            <MenuItem value={"N/A"}>N/A</MenuItem>
+            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
+            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
+            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
+            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
+            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
+            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
+            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
+            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>

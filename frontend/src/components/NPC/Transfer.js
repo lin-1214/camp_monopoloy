@@ -18,14 +18,15 @@ import {
 import RoleContext from "../useRole";
 
 const Transfer = () => {
-  const [from, setFrom] = useState(0);
-  const [to, setTo] = useState(0);
+  const [from, setFrom] = useState("Select Team");
+  const [to, setTo] = useState("Select Team");
   const [amount, setAmount] = useState(0);
   const [isEstate, setIsEstate] = useState(true);
   const { role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = () => {
     console.log("Hi");
+    navigate("/");
   };
 
   const handlePercentMoney = () => {
@@ -77,15 +78,15 @@ const Transfer = () => {
               setFrom(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={1}>第1小隊</MenuItem>
-            <MenuItem value={2}>第2小隊</MenuItem>
-            <MenuItem value={3}>第3小隊</MenuItem>
-            <MenuItem value={4}>第4小隊</MenuItem>
-            <MenuItem value={5}>第5小隊</MenuItem>
-            <MenuItem value={6}>第6小隊</MenuItem>
-            <MenuItem value={7}>第7小隊</MenuItem>
-            <MenuItem value={8}>第8小隊</MenuItem>
+            <MenuItem value={"Select Team"}>Select Team</MenuItem>
+            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
+            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
+            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
+            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
+            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
+            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
+            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
+            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
@@ -98,15 +99,15 @@ const Transfer = () => {
               setTo(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={1}>第1小隊</MenuItem>
-            <MenuItem value={2}>第2小隊</MenuItem>
-            <MenuItem value={3}>第3小隊</MenuItem>
-            <MenuItem value={4}>第4小隊</MenuItem>
-            <MenuItem value={5}>第5小隊</MenuItem>
-            <MenuItem value={6}>第6小隊</MenuItem>
-            <MenuItem value={7}>第7小隊</MenuItem>
-            <MenuItem value={8}>第8小隊</MenuItem>
+            <MenuItem value={"Select Team"}>Select Team</MenuItem>
+            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
+            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
+            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
+            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
+            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
+            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
+            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
+            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
           <FormLabel>Is concerning estate</FormLabel>
           <RadioGroup

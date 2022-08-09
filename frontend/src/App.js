@@ -18,7 +18,25 @@ import theme from "./theme";
 
 const App = () => {
   const [role, setRole] = useState("");
-  const value = { role, setRole };
+  const [messages, setMessages] = useState([]);
+  const [eventMessage, setEventMessage] = useState({
+    title: "none",
+    content: "目前沒有事件正在發生...",
+  });
+  const [permMessages, setPermMessages] = useState([]);
+  const [id, setId] = useState(0);
+  const value = {
+    role,
+    setRole,
+    messages,
+    setMessages,
+    eventMessage,
+    setEventMessage,
+    id,
+    setId,
+    permMessages,
+    setPermMessages,
+  };
   return (
     <ThemeProvider theme={theme}>
       <RoleContext.Provider value={value}>

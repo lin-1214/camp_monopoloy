@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -11,11 +11,20 @@ import {
   Button,
   FormControl,
 } from "@mui/material";
+import RoleContext from "../useRole";
 
 const Event = () => {
   const [message, setMessage] = useState("");
   const [event, setEvent] = useState(0);
-  const handleClick = () => {};
+  const { setEventMessage } = useContext(RoleContext);
+  const navigate = useNavigate();
+  const handleClick = () => {
+    setEventMessage({
+      title: data[event].title,
+      content: message,
+    });
+    navigate("/notifications");
+  };
 
   const data = [
     {

@@ -173,16 +173,17 @@ router.get("/checkvalid", async (req, res) => {
 
 // Login
 router.post("/login", async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
   const { username, password } = req.body;
   const user = await User.findAndValidate(username, password);
+  console.log(user);
   if (!user) {
     res.status(200).send(null);
     console.log("login failed");
     return;
   }
   req.session.user = user;
-  res.status(200).send(user.username);
+  res.status(200).send({ username: user.username });
   // null, npc, admin: String
 });
 

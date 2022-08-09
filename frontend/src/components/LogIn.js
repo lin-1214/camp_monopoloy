@@ -7,6 +7,8 @@ import {
   Box,
   Button,
   FormControl,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import RoleContext from "./useRole";
 import axios from "./axios";
@@ -14,25 +16,36 @@ import axios from "./axios";
 const LogIn = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessages, setErrorMessages] = useState("");
-
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { setRole } = useContext(RoleContext);
 
-  const handleClick = () => {
-    console.log(user);
-    console.log(password);
+  const handleClick = async () => {
     // post /api/login
     const payload = { username: user, password: password };
-    axios.post("/login", payload).then((res) => {
-      if (res.data !== "") {
-        setRole(res.data);
-        navigate("/");
-      } else {
-        console.log("login failed");
-        setErrorMessages("login failed");
-      }
-    });
+    const {
+      data: { username },
+    } = await axios.post("/login", payload);
+    console.log(username);
+    if (username === "NPC" || username === "admin") {
+      //successed!
+      setMessage("Successfully login!");
+      setOpen(true);
+      setRole(username);
+      navigate("/");
+    } else {
+      //failed
+      setMessage("Wrong username or password.");
+      setOpen(true);
+    }
+  };
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   return (
@@ -79,9 +92,17 @@ const LogIn = () => {
           >
             Log In
           </Button>
-          <div>{errorMessages}</div>
         </FormControl>
       </Box>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          sx={{ width: "100%" }}
+          severity={message === "Successfully login!" ? "success" : "warning"}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

@@ -20,7 +20,7 @@ const users = [
     password: "admin",
   },
   {
-    username: "npc",
+    username: "NPC",
     password: "npc",
   },
 ];
@@ -149,7 +149,7 @@ const grounds = [
     owner: "N/A",
     level: 0,
   },
-  { id: 13, type: "Store", name: "商店", description: "1次可購買1張卡片" },
+  { id: 13, type: "Store", name: "商店", description: "可購買各種有力卡片！" },
   { id: 14, type: "Game", name: "吊死鬼", description: "細節略" },
   {
     id: 15,
@@ -247,7 +247,7 @@ const grounds = [
     owner: "N/A",
     level: 0,
   },
-  { id: 33, type: "Store", name: "商店", description: "1次可購買1張卡片" },
+  { id: 33, type: "Store", name: "商店", description: "可購買各種有力卡片！" },
   { id: 34, type: "Game", name: "記憶tempo 2.0", description: "細節略" },
   {
     id: 35,

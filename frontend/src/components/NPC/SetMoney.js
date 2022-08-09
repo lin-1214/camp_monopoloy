@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -12,9 +12,13 @@ import {
   Button,
   FormControl,
 } from "@mui/material";
+import axios from "../axios";
+import RoleContext from "../useRole";
+
 const SetMoney = () => {
-  const [team, setTeam] = useState(0);
+  const [team, setTeam] = useState("Select Team");
   const [amount, setAmount] = useState(0);
+  const { role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handlePercentMoney = () => {
     const money = 60000; //find the team's money
@@ -32,8 +36,9 @@ const SetMoney = () => {
     }
   };
 
-  const handleClick = () => {
-    console.log("Hi");
+  const handleClick = async () => {
+    const payload = { teamname: team, dollar: amount };
+    await axios.post("/add", payload);
   };
 
   const SimpleMoneyButton = ({ val }) => {
@@ -73,15 +78,15 @@ const SetMoney = () => {
               setTeam(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={1}>第一小隊</MenuItem>
-            <MenuItem value={2}>第二小隊</MenuItem>
-            <MenuItem value={3}>第三小隊</MenuItem>
-            <MenuItem value={4}>第四小隊</MenuItem>
-            <MenuItem value={5}>第五小隊</MenuItem>
-            <MenuItem value={6}>第六小隊</MenuItem>
-            <MenuItem value={7}>第七小隊</MenuItem>
-            <MenuItem value={8}>第八小隊</MenuItem>
+            <MenuItem value={"Select Team"}>Select Team</MenuItem>
+            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
+            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
+            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
+            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
+            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
+            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
+            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
+            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
           <TextField
             required

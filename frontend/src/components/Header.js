@@ -22,7 +22,7 @@ const Header = () => {
   const handleLogout = () => {
     console.log(role);
     setRole("");
-    navigate("notifications"); //set to home later
+    navigate("/"); //set to home later
   };
 
   return (

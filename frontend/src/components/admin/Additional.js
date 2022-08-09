@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   InputLabel,
@@ -9,13 +10,36 @@ import {
   Box,
   Button,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
+import RoleContext from "../useRole";
+
 const Additional = () => {
   const [event, setEvent] = useState(0);
+  const [title, setTitle] = useState("");
+  const [team, setTeam] = useState(0);
   const [trait, setTrait] = useState(0);
   const [duration, setDuration] = useState(0);
   const [message, setMessage] = useState("");
-  const handleClick = () => {};
+  const [open, setOpen] = useState(false);
+  const { messages, setMessages, id, setId } = useContext(RoleContext);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    let temp = messages.slice();
+    temp.push({
+      duration: duration,
+      title: title,
+      content: message,
+    });
+    setMessages(temp);
+    setId(id + 1);
+    setOpen(true);
+
+    navigate("/notifications");
+  };
   const data = [
     {
       title: "地產增值(I)",
@@ -78,6 +102,7 @@ const Additional = () => {
             labelId="title"
             onChange={(e) => {
               setEvent(e.target.value);
+              setTitle(data[e.target.value].title);
               setMessage(data[e.target.value].description);
               setTrait(data[e.target.value].trait);
               if (data[e.target.value].trait === 1) {
@@ -90,6 +115,26 @@ const Additional = () => {
                 <MenuItem value={data.indexOf(item)}>{item.title}</MenuItem>
               );
             })}
+          </Select>
+        </FormControl>
+        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+          <InputLabel id="team-ownership">Team</InputLabel>
+          <Select
+            value={team}
+            labelId="team-ownership"
+            onChange={(e) => {
+              setTeam(e.target.value);
+            }}
+          >
+            <MenuItem value={0}>Select Team</MenuItem>
+            <MenuItem value={1}>第1小隊</MenuItem>
+            <MenuItem value={2}>第2小隊</MenuItem>
+            <MenuItem value={3}>第3小隊</MenuItem>
+            <MenuItem value={4}>第4小隊</MenuItem>
+            <MenuItem value={5}>第5小隊</MenuItem>
+            <MenuItem value={6}>第6小隊</MenuItem>
+            <MenuItem value={7}>第7小隊</MenuItem>
+            <MenuItem value={8}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
@@ -127,10 +172,14 @@ const Additional = () => {
               setMessage(e.target.value);
             }}
           />
-          <Button disabled={!message} onClick={handleClick}>
+          <Button disabled={!(message && team)} onClick={handleClick}>
             Submit
           </Button>
         </FormControl>
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>Notification</DialogTitle>
+          <DialogContent>Add event successfully!</DialogContent>
+        </Dialog>
       </Box>
     </Container>
   );
