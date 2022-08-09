@@ -4,7 +4,7 @@ const TeamSchema = new Schema({
   teamname: String,
   occupation: String,
   money: Number,
-  bonus: { value: Number, time: Number },
+  bonus: { value: Number, time: Number, duration: Number },
   soulgem: { value: Boolean, time: Number },
 });
 

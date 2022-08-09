@@ -29,16 +29,15 @@ router.get("/", (req, res) => {
 //   next();
 // };
 
-async function checkvalid(teamname) {
+async function findAndCheckValid(teamname) {
   const team = await Team.findOne({ teamname });
   const currtime = Date.now() / 1000;
-  const duration = 10;
   console.log(currtime - team.bonus.time);
-  if (currtime - team.bonus.time > duration) {
+  if (currtime - team.bonus.time > team.bonus.duration) {
     console.log("bonus time over");
     team.bonus.value = 1.0;
   }
-  if (currtime - team.soulgem.time > duration) {
+  if (currtime - team.soulgem.time > team.bonus.duration) {
     console.log("soulgem time over");
     team.soulgem.value = false;
   }
@@ -65,7 +64,7 @@ async function calcmoney(teamname, money, estate) {
 
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
-  const team = await Team.findOne({ teamname: teamname });
+  const team = await Team.findAndCheckValid({ teamname: teamname });
   if (!team) {
     res.status(403).send();
     console.log("Team not found");
@@ -109,7 +108,7 @@ router.post("/add", async (req, res) => {
 
 router.post("/transfer", async (req, res) => {
   const { from, to, IsEstate, dollar } = req.body;
-  const team1 = await Team.findOne({ teamname: from });
+  const team1 = await Team.findAndCheckValid({ teamname: from });
   if (!team1) {
     res.status(403).send();
     console.log("Team not found");
@@ -229,11 +228,12 @@ router.post("/ownership", async (req, res) => {
 });
 
 router.post("/bonus", async (req, res) => {
-  const { teamname, bonus } = req.body;
+  console.log(req.body);
+  const { teamname, bonus, duration } = req.body;
   const time = Date.now() / 1000;
   const team = await Team.findOneAndUpdate(
     { teamname: teamname },
-    { bonus: { value: bonus, time: time } }
+    { bonus: { value: bonus, time: time, duration: duration } }
   );
   if (!team) {
     res.status(403).send();
@@ -260,7 +260,7 @@ router.post("/soulgem", async (req, res) => {
 
 router.get("/checkvalid", async (req, res) => {
   const { teamname } = req.query;
-  const team = await checkvalid(teamname);
+  const team = await findAndCheckValid(teamname);
   res.status(200).send(team);
 });
 
