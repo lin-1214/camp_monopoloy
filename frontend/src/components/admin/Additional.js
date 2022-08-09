@@ -15,31 +15,20 @@ import {
   DialogContent,
 } from "@mui/material";
 import RoleContext from "../useRole";
+import axios from "../axios";
 
 const Additional = () => {
   const [event, setEvent] = useState(0);
   const [title, setTitle] = useState("");
-  const [team, setTeam] = useState(0);
+  const [team, setTeam] = useState("Select Team");
   const [trait, setTrait] = useState(0);
   const [duration, setDuration] = useState(0);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const { messages, setMessages, id, setId } = useContext(RoleContext);
+  const { messages, setMessages, id, setId, permMessages, setPermMessages } =
+    useContext(RoleContext);
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    let temp = messages.slice();
-    temp.push({
-      duration: duration,
-      title: title,
-      content: message,
-    });
-    setMessages(temp);
-    setId(id + 1);
-    setOpen(true);
-
-    navigate("/notifications");
-  };
   const data = [
     {
       title: "地產增值(I)",
@@ -81,6 +70,54 @@ const Additional = () => {
       trait: 0,
     },
   ];
+  const handleClick = async () => {
+    if (trait === 1) {
+      //temporary messages
+      let temp = messages.slice();
+      temp.push({
+        duration: duration,
+        title: title,
+        content: message,
+      });
+      setMessages(temp);
+      setId(id + 1);
+    } else {
+      //permanaent messages
+      let temp = permMessages.slice();
+      temp.push({
+        title: title,
+        content: message,
+      });
+      setPermMessages(temp);
+    }
+    setOpen(true);
+
+    let payload;
+    let event_name = data[event].title;
+    switch (event_name) {
+      case "地產增值(I)":
+        payload = { teamname: team, bonus: 1.5, duration: duration };
+        await axios.post("/bonus", payload);
+        break;
+      case "財產凍結":
+        payload = { teamname: team, bonus: 0, duration: duration };
+        await axios.post("/bonus", payload);
+      case "量子領域":
+        break;
+      case "地產增值(II)":
+        payload = { teamname: team, bonus: 2, duration: duration };
+        await axios.post("/bonus", payload);
+        break;
+      case "double一下":
+        break;
+      case "靈魂寶石":
+        payload = { teamname: team };
+        await axios.post("/soulgem", payload);
+        break;
+    }
+    navigate("/notifications");
+    console.log(payload);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -126,15 +163,15 @@ const Additional = () => {
               setTeam(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select Team</MenuItem>
-            <MenuItem value={1}>第1小隊</MenuItem>
-            <MenuItem value={2}>第2小隊</MenuItem>
-            <MenuItem value={3}>第3小隊</MenuItem>
-            <MenuItem value={4}>第4小隊</MenuItem>
-            <MenuItem value={5}>第5小隊</MenuItem>
-            <MenuItem value={6}>第6小隊</MenuItem>
-            <MenuItem value={7}>第7小隊</MenuItem>
-            <MenuItem value={8}>第8小隊</MenuItem>
+            <MenuItem value={"Select Team"}>Select Team</MenuItem>
+            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
+            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
+            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
+            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
+            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
+            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
+            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
+            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>

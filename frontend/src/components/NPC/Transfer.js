@@ -16,6 +16,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 import RoleContext from "../useRole";
+import axios from "../axios";
 
 const Transfer = () => {
   const [from, setFrom] = useState("Select Team");
@@ -24,8 +25,9 @@ const Transfer = () => {
   const [isEstate, setIsEstate] = useState(true);
   const { role } = useContext(RoleContext);
   const navigate = useNavigate();
-  const handleClick = () => {
-    console.log("Hi");
+  const handleClick = async () => {
+    const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount };
+    await axios.post("/transfer", payload);
     navigate("/");
   };
 

@@ -11,12 +11,16 @@ import {
   Button,
   FormControl,
 } from "@mui/material";
+import axios from "../axios";
+
 const SetOwnership = () => {
   const [team, setTeam] = useState("Select Team");
-  const [building, setBuilding] = useState(0);
+  const [building, setBuilding] = useState("");
   const [num, setNum] = useState(0);
   const navigate = useNavigate();
-  const handleClick = () => {
+  const handleClick = async () => {
+    const payload = { team: team, land: building, level: num };
+    await axios.post("/ownership", payload);
     console.log("Hi");
     navigate("/");
   };
@@ -42,11 +46,13 @@ const SetOwnership = () => {
               setBuilding(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select the building</MenuItem>
-            <MenuItem value={2}>泰坦星</MenuItem>
-            <MenuItem value={3}>弗米爾星</MenuItem>
-            <MenuItem value={6}>航母總部</MenuItem>
-            <MenuItem value={7}>太空總部</MenuItem>
+            <MenuItem value={"Select the building"}>
+              Select the building
+            </MenuItem>
+            <MenuItem value={"泰坦星"}>泰坦星</MenuItem>
+            <MenuItem value={"弗米爾星"}>弗米爾星</MenuItem>
+            <MenuItem value={"航母總部"}>航母總部</MenuItem>
+            <MenuItem value={"太空總部"}>太空總部</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
