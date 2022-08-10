@@ -58,7 +58,8 @@ const Properties = () => {
         elevation={2}
         key={id}
         sx={{
-          height: "60px",
+          paddingTop: "0.5px",
+          paddingBottom: "0.5px",
           borderLeft: 8,
           borderColor: colorData,
         }}
@@ -81,7 +82,7 @@ const Properties = () => {
             </Grid>
             {type === "Building" || type === "SpecialBuilding" ? (
               <Grid item>
-                <Typography variant="body2">{owner}</Typography>
+                <Typography variant="caption">{(owner === "N/A") ? <br/> : owner}</Typography>
               </Grid>
             ) : (
               <Grid item>
@@ -109,28 +110,37 @@ const Properties = () => {
 
   return (
     <>
-      <Box
+      <Paper
+        elevation={0}
         sx={{
+          overflow: "hidden",
           paddingTop: "80px",
+          paddingBottom: "1vh",
           margin: "auto",
-        }}
-      />
-      <Stack
-        spacing={2}
-        sx={{
-          marginLeft: "20px",
-          marginRight: "20px",
-          width: "500px",
         }}
       >
-        {cardComponents}
-      </Stack>
-      <Box
-        sx={{
-          marginBottom: "80px",
-          margin: "auto",
-        }}
-      />
+        <Box
+          sx={{
+            margin: "auto",
+          }}
+        />
+        <Stack
+          spacing={2}
+          sx={{
+            marginLeft: "5vw",
+            marginRight: "5vw",
+            width: "90vw",
+          }}
+        >
+          {cardComponents}
+        </Stack>
+        <Box
+          sx={{
+            marginBottom: "80px",
+            margin: "auto",
+          }}
+        />
+      </Paper>
     </>
   );
 };
