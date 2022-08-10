@@ -8,6 +8,7 @@
     "express-session": "^1.17.3",
     "ioredis": "^5.2.2",
     "mongoose": "^6.5.1",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.19",
     "socket.io": "^4.5.1",
     "uuid": "^8.3.2",
@@ -21,8 +22,8 @@
     "@babel/preset-env": "^7.18.10"
   },
   "scripts": {
-    "server": "nodemon ./api-server/server.js --ext js --exec babel-node",
-    "initdata": "node ./api-server/initdata.js"
+    "server": "nodemon ./src/server.js --ext js --exec babel-node",
+    "initdata": "node ./src/initdata.js"
   },
   "type": "module"
 }
