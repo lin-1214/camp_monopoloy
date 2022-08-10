@@ -60,33 +60,33 @@ db.once("open", () => {
   });
   app.locals.io = io;
 
-  const redisClient = redis.createClient(6379, REDIS_URL);
-  redisClient.on("error", console.error);
+  // const redisClient = redis.createClient(6379, REDIS_URL);
+  // redisClient.on("error", console.error);
 
-  const RedisStore = connectRedis(session);
+  // const RedisStore = connectRedis(session);
 
-  const sessionOptions = {
-    cookie: {
-      path: "/",
-      httpOnly: true,
-      secure: true,
-      maxAge: null,
-    },
-    resave: false,
-    saveUninitialized: false,
-    secret: uuid_v4(),
-    unset: "destroy",
-    store: new RedisStore({
-      client: redisClient,
-      prefix: SESSION_PREFIX,
-    }),
-  };
+  // const sessionOptions = {
+  //   cookie: {
+  //     path: "/",
+  //     httpOnly: true,
+  //     secure: true,
+  //     maxAge: null,
+  //   },
+  //   resave: false,
+  //   saveUninitialized: false,
+  //   secret: uuid_v4(),
+  //   unset: "destroy",
+  //   store: new RedisStore({
+  //     client: redisClient,
+  //     prefix: SESSION_PREFIX,
+  //   }),
+  // };
 
-  sessionOptions.store.clear();
+  // sessionOptions.store.clear();
 
   if (NODE_ENV === "development" && !HTTPS) {
-    sessionOptions.cookie.secure = false;
-    console.log("Secure cookie is off");
+    // sessionOptions.cookie.secure = false;
+    // console.log("Secure cookie is off");
   }
   if (NODE_ENV === "production") {
     console.log("NODE_ENV = production");
@@ -94,7 +94,7 @@ db.once("open", () => {
     console.log("Trust proxy is on");
   }
 
-  const sessionMiddleware = session(sessionOptions);
+  // const sessionMiddleware = session(sessionOptions);
 
   io.use((socket, next) => {
     sessionMiddleware(socket.request, socket.request.res || {}, next);
@@ -114,16 +114,16 @@ db.once("open", () => {
     next();
   });
 
-  app.use(sessionMiddleware);
-
+  app.use(express.json());
+  // app.use(sessionMiddleware);
   app.use(morgan("dev"));
-  app.use(express.static(path.join(process.cwd(), "build")));
+  // app.use(express.static(path.join(process.cwd(), "build")));
 
   app.use("/api", apiRouter);
 
-  app.get("/*", (req, res) => {
-    res.sendFile(path.join(process.cwd(), "build", "index.html"));
-  });
+  // app.get("/*", (req, res) => {
+  //   res.sendFile(path.join(process.cwd(), "build", "index.html"));
+  // });
 
   socket(io);
 
