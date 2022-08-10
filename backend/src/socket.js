@@ -41,7 +41,7 @@ function updateSession(io) {
 export default function socket(io) {
   io.on("connection", (socket) => {
     console.log(`A user connected, id = ${socket.id}`);
-    updateSession(socket);
+    // updateSession(socket);
     updateTeam(socket);
     updateUser(socket);
     updateLand(socket);

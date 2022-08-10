@@ -7,7 +7,7 @@ const userSchema = new Schema({
 });
 
 userSchema.statics.findAndValidate = async function (username, password) {
-  const user = await User.findOne({ username });
+  const user = await this.findOne({ username });
   if (!user) {
     return null;
   }

@@ -24,7 +24,7 @@ const Properties = () => {
     Game: "rgb(51,153,255)",
   };
 
-  useEffect(() => {
+  const getProperties = async () => {
     axios
       .get("/land")
       .then((res) => {
@@ -33,6 +33,14 @@ const Properties = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    getProperties();
+    const id = setInterval(() => {
+      getProperties();
+    }, 5000);
+    return () => clearInterval(id);
   }, []);
 
   const cardComponent = ({

@@ -96,9 +96,9 @@ db.once("open", () => {
 
   // const sessionMiddleware = session(sessionOptions);
 
-  io.use((socket, next) => {
-    sessionMiddleware(socket.request, socket.request.res || {}, next);
-  });
+  // io.use((socket, next) => {
+  //   sessionMiddleware(socket.request, socket.request.res || {}, next);
+  // });
 
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");

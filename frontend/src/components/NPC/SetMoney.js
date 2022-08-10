@@ -39,6 +39,7 @@ const SetMoney = () => {
   const handleClick = async () => {
     const payload = { teamname: team, dollar: amount };
     await axios.post("/add", payload);
+    navigate("/teams");
   };
 
   const SimpleMoneyButton = ({ val }) => {
@@ -95,7 +96,7 @@ const SetMoney = () => {
             value={amount}
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
-              setAmount(e.target.value);
+              setAmount(parseInt(e.target.value));
             }}
           />
           <Box
