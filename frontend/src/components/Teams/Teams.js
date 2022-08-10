@@ -20,7 +20,7 @@ const Teams = () => {
     { id: "money", label: "Money", minWidth: 60, align: "center" },
   ];
 
-  useEffect(() => {
+  const getTeams = async () => {
     axios
       .get("/team")
       .then((res) => {
@@ -29,6 +29,14 @@ const Teams = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    getTeams();
+    const id = setInterval(() => {
+      getTeams();
+    }, 5000);
+    return () => clearInterval(id);
   }, []);
 
   return (

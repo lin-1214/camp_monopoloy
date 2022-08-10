@@ -15,6 +15,7 @@ import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
 import RoleContext from "./components/useRole";
 import theme from "./theme";
+// import { socket, SocketContext } from "./websocket";
 
 const App = () => {
   const [role, setRole] = useState("");
@@ -41,6 +42,7 @@ const App = () => {
     setPermMessages,
   };
   return (
+    // <SocketContext.Provider value={socket}>
     <ThemeProvider theme={theme}>
       <RoleContext.Provider value={value}>
         <BrowserRouter>
@@ -60,6 +62,7 @@ const App = () => {
         </BrowserRouter>
       </RoleContext.Provider>
     </ThemeProvider>
+    // </SocketContext.Provider>
   );
 };
 

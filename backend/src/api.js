@@ -29,22 +29,6 @@ router.get("/", (req, res) => {
 //   next();
 // };
 
-async function findAndCheckValid(teamname) {
-  const team = await Team.findOne({ teamname });
-  const currtime = Date.now() / 1000;
-  console.log(currtime - team.bonus.time);
-  if (currtime - team.bonus.time > team.bonus.duration) {
-    console.log("bonus time over");
-    team.bonus.value = 1.0;
-  }
-  if (currtime - team.soulgem.time > team.bonus.duration) {
-    console.log("soulgem time over");
-    team.soulgem.value = false;
-  }
-  await team.save();
-  return team;
-}
-
 async function calcmoney(teamname, money, estate) {
   const team = await Team.findOne({ teamname });
   if (money > 0) {
@@ -60,6 +44,12 @@ async function calcmoney(teamname, money, estate) {
     }
   }
   return money;
+}
+
+async function broadcastTeamsChange(io, teamname) {
+  let playersUpdate = await Team.findOne({ teamname }).exec();
+  playersUpdate = playersUpdate.filter((x) => Boolean(x));
+  io.emit("UPDATE_PLAYERS", playersUpdate);
 }
 
 router.get("/team", async (req, res) => {
@@ -84,7 +74,7 @@ router.get("/land/:landname", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
-  const team = await Team.findAndCheckValid({ teamname: teamname });
+  const team = await Team.findAndCheckValid({ teamname });
   if (!team) {
     res.status(403).send();
     console.log("Team not found");
@@ -93,7 +83,7 @@ router.post("/add", async (req, res) => {
   if (team.soulgem.value === true) {
     if (dollar < 0) {
       const newTeam = await Team.findOneAndUpdate(
-        { teamname: teamname },
+        { teamname },
         { money: team.money + dollar * 1.5 }
       );
       if (!newTeam) {
@@ -286,17 +276,17 @@ router.get("/checkvalid", async (req, res) => {
 
 // Login
 router.post("/login", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { username, password } = req.body;
-  console.log(username);
-  console.log(password);
+  // console.log(username);
+  // console.log(password);
   const user = await User.findAndValidate(username, password);
   if (!user) {
     res.status(200).send(null);
     console.log("login failed");
     return;
   }
-  //req.session.user = user;
+  // req.session.user = user;
   res.status(200).send({ username: user.username });
   // null, npc, admin: String
 });
