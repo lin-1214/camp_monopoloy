@@ -18,7 +18,7 @@ import RoleContext from "../useRole";
 const SetMoney = () => {
   const [team, setTeam] = useState("Select Team");
   const [amount, setAmount] = useState(0);
-  const { teams, setTeams } = useContext(RoleContext);
+  const { role, teams, setTeams } = useContext(RoleContext);
   const navigate = useNavigate();
   const handlePercentMoney = async () => {
     if (teams.length === 0) {
@@ -51,6 +51,9 @@ const SetMoney = () => {
   };
 
   useEffect(() => {
+    if (role === "") {
+      navigate("/permission");
+    }
     axios
       .get("/team")
       .then((res) => {

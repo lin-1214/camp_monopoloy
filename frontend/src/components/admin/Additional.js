@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -19,14 +19,23 @@ import axios from "../axios";
 
 const Additional = () => {
   const [event, setEvent] = useState(0);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("地產增值(I)");
   const [team, setTeam] = useState("Select Team");
   const [trait, setTrait] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    "使你的房地產租金提升至150%, 效果持續10分鐘。不可疊加使用"
+  );
   const [open, setOpen] = useState(false);
-  const { messages, setMessages, id, setId, permMessages, setPermMessages } =
-    useContext(RoleContext);
+  const {
+    messages,
+    setMessages,
+    id,
+    setId,
+    permMessages,
+    setPermMessages,
+    role,
+  } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const data = [
@@ -70,6 +79,7 @@ const Additional = () => {
       trait: 0,
     },
   ];
+
   const handleClick = async () => {
     if (trait === 1) {
       //temporary messages
@@ -120,6 +130,12 @@ const Additional = () => {
     navigate("/notifications");
     console.log(payload);
   };
+
+  useEffect(() => {
+    if (role !== "admin") {
+      navigate("/permission");
+    }
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">

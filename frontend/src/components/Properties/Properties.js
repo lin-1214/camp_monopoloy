@@ -58,10 +58,10 @@ const Properties = () => {
         elevation={2}
         key={id}
         sx={{
-          paddingTop: "0.5px",
-          paddingBottom: "0.5px",
           borderLeft: 8,
           borderColor: colorData,
+          paddingTop: 0.5,
+          paddingBottom: 0.5,
         }}
       >
         <Grid container spacing={2}>
@@ -74,15 +74,17 @@ const Properties = () => {
           >
             <Typography variant="h6">{id}</Typography>
           </Grid>
-          <Grid item xs={7} container direction="column">
+          <Grid item xs={7}>
             <Grid item>
-              <Typography marginTop="2px" variant="h6">
+              <Typography variant="h6" marginTop="1px">
                 {name}
               </Typography>
             </Grid>
             {type === "Building" || type === "SpecialBuilding" ? (
               <Grid item>
-                <Typography variant="caption">{(owner === "N/A") ? <br/> : owner}</Typography>
+                <Typography variant="caption">
+                  {owner === "N/A" ? <br /> : owner}
+                </Typography>
               </Grid>
             ) : (
               <Grid item>
@@ -137,7 +139,8 @@ const Properties = () => {
         <Box
           sx={{
             marginBottom: "80px",
-            margin: "auto",
+            marginLeft: "5vw",
+            marginRight: "5vw",
           }}
         />
       </Paper>

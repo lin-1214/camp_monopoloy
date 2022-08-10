@@ -13,6 +13,7 @@ import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
 import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
+import PermissionDenied from "./components/PermissionDenied";
 import RoleContext from "./components/useRole";
 import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="transfer" element={<Transfer />} />
               <Route path="event" element={<Event />} />
               <Route path="additional" element={<Additional />} />
+              <Route path="permission" element={<PermissionDenied />} />
             </Route>
           </Routes>
         </BrowserRouter>

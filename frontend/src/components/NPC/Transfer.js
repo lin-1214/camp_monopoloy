@@ -23,7 +23,7 @@ const Transfer = () => {
   const [to, setTo] = useState("Select Team");
   const [amount, setAmount] = useState(0);
   const [isEstate, setIsEstate] = useState(true);
-  const { teams, setTeams } = useContext(RoleContext);
+  const { teams, setTeams, role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = async () => {
     const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount };
@@ -45,6 +45,9 @@ const Transfer = () => {
   };
 
   useEffect(() => {
+    if (role === "") {
+      navigate("/permission");
+    }
     axios
       .get("/team")
       .then((res) => {
@@ -161,7 +164,10 @@ const Transfer = () => {
               10%
             </Button>
           </Box>
-          <Button disabled={!(from && to && amount)} onClick={handleClick}>
+          <Button
+            disabled={!(from && to && amount) || from !== to}
+            onClick={handleClick}
+          >
             Submit
           </Button>
         </FormControl>

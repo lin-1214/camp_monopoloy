@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -14,9 +14,11 @@ import {
 import RoleContext from "../useRole";
 
 const Event = () => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(
+    "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課"
+  );
   const [event, setEvent] = useState(0);
-  const { setEventMessage } = useContext(RoleContext);
+  const { setEventMessage, role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = () => {
     setEventMessage({
@@ -25,6 +27,12 @@ const Event = () => {
     });
     navigate("/notifications");
   };
+
+  useEffect(() => {
+    if (role !== "admin") {
+      navigate("/permission");
+    }
+  }, []);
 
   const data = [
     {
@@ -72,7 +80,9 @@ const Event = () => {
           >
             {data.map((item) => {
               return (
-                <MenuItem value={data.indexOf(item)} key={data.indexOf(item)}>{item.title}</MenuItem>
+                <MenuItem value={data.indexOf(item)} key={data.indexOf(item)}>
+                  {item.title}
+                </MenuItem>
               );
             })}
           </Select>
