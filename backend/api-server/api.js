@@ -62,6 +62,26 @@ async function calcmoney(teamname, money, estate) {
   return money;
 }
 
+router.get("/team", async (req, res) => {
+  const teams = await Team.find().sort({ teamname: 1 });
+  res.json(teams);
+});
+
+router.get("/team/:teamname", async (req, res) => {
+  const team = await Team.findOne({ teamname: req.params.teamname });
+  res.json(team);
+});
+
+router.get("/land", async (req, res) => {
+  const lands = await Land.find().sort({ id: 1 });
+  res.json(lands);
+});
+
+router.get("/land/:landname", async (req, res) => {
+  const land = await Land.findOne({ landname: req.params.landname });
+  res.json(land);
+});
+
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
   const team = await Team.findAndCheckValid({ teamname: teamname });

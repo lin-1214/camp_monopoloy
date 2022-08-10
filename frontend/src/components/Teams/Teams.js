@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   Table,
@@ -8,20 +8,27 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
+import axios from "../axios";
 
 const Teams = () => {
+  const [teams, setTeams] = useState([]);
+
   const columns = [
     { id: "teamname", label: "Team Name", minWidth: 90, align: "center" },
     { id: "occupation", label: "Occupation", minWidth: 70, align: "center" },
     { id: "money", label: "Money", minWidth: 60, align: "center" },
   ];
 
-  const rows = [
-    { teamname: "第1小隊", occupation: "N/A", money: 100000 },
-    { teamname: "第2小隊", occupation: "N/A", money: 100000 },
-    { teamname: "第3小隊", occupation: "N/A", money: 100000 },
-    { teamname: "第4小隊", occupation: "N/A", money: 100000 },
-  ];
+  useEffect(() => {
+    axios
+      .get("/team")
+      .then((res) => {
+        setTeams(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Paper
@@ -34,7 +41,7 @@ const Teams = () => {
     >
       <TableContainer
         sx={{
-          maxHeight: 400,
+          maxHeight: 800,
         }}
       >
         <Table stickyHeader aria-label="sticky table">
@@ -52,7 +59,7 @@ const Teams = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((item) => {
+            {teams.map((item) => {
               return (
                 <TableRow key={item.teamname}>
                   {columns.map((column) => {
