@@ -54,22 +54,22 @@ async function broadcastTeamsChange(io, teamname) {
 
 router.get("/team", async (req, res) => {
   const teams = await Team.find().sort({ teamname: 1 });
-  res.json(teams);
+  res.json(teams).status(200);
 });
 
 router.get("/team/:teamname", async (req, res) => {
   const team = await Team.findOne({ teamname: req.params.teamname });
-  res.json(team);
+  res.json(team).status(200);
 });
 
 router.get("/land", async (req, res) => {
   const lands = await Land.find().sort({ id: 1 });
-  res.json(lands);
+  res.json(lands).status(200);
 });
 
 router.get("/land/:landname", async (req, res) => {
   const land = await Land.findOne({ landname: req.params.landname });
-  res.json(land);
+  res.json(land.status(200));
 });
 
 router.post("/add", async (req, res) => {

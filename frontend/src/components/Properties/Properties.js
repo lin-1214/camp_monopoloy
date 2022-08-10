@@ -124,13 +124,13 @@ const Properties = () => {
         }}
       >
         {cardComponents}
-        <Box
-          sx={{
-            marginBottom: "80px",
-            margin: "auto",
-          }}
-        />
       </Stack>
+      <Box
+        sx={{
+          marginBottom: "80px",
+          margin: "auto",
+        }}
+      />
     </>
   );
 };
