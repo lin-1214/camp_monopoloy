@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Paper,
   Table,
@@ -8,10 +8,11 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
+import RoleContext from "../useRole";
 import axios from "../axios";
 
 const Teams = () => {
-  const [teams, setTeams] = useState([]);
+  const { teams, setTeams } = useContext(RoleContext);
 
   const columns = [
     { id: "teamname", label: "Team Name", minWidth: 90, align: "center" },

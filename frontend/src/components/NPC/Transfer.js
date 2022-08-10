@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -23,7 +23,7 @@ const Transfer = () => {
   const [to, setTo] = useState("Select Team");
   const [amount, setAmount] = useState(0);
   const [isEstate, setIsEstate] = useState(true);
-  const { role } = useContext(RoleContext);
+  const { teams, setTeams } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = async () => {
     const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount };
@@ -31,32 +31,29 @@ const Transfer = () => {
     navigate("/");
   };
 
-  const handlePercentMoney = () => {
-    const money = 60000; //find the team's money
-    setAmount(money * 0.05);
+  const handlePercentMoney = (percent) => {
+    const item = teams.find((element) => element.teamname === from);
+    const money = item.money; //find the team's money
+    setAmount(money * percent);
   };
 
   const handleEqualMoney = () => {
-    let money_from = 40000; //first team (using the card)
-    let money_to = 60000; //second team(passive)
+    let money_from = teams.find((element) => element.teamname === from).money; //first team (using the card)
+    let money_to = teams.find((element) => element.teamname === to).money; //second team(passive)
     let temp = (money_from - money_to) / 2;
     setAmount(temp);
   };
 
-  const SimpleMoneyButton = ({ val }) => {
-    return (
-      <Button
-        variant="contained"
-        disabled={!(to && from)}
-        sx={{ marginBottom: 1 }}
-        onClick={() => {
-          setAmount(val);
-        }}
-      >
-        {val}
-      </Button>
-    );
-  };
+  useEffect(() => {
+    axios
+      .get("/team")
+      .then((res) => {
+        setTeams(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -139,24 +136,29 @@ const Transfer = () => {
               justifyContent: "space-between",
             }}
           >
-            <SimpleMoneyButton val={10000} />
-            {role === "admin" && ( //change to admin later on
-              <Button
-                variant="contained"
-                sx={{ marginBottom: 1 }}
-                disabled={!(to && from)}
-                onClick={handleEqualMoney}
-              >
-                equal
-              </Button>
-            )}
             <Button
               variant="contained"
               sx={{ marginBottom: 1 }}
-              disabled={!(to && from)}
-              onClick={handlePercentMoney}
+              disabled={to === "Select Team" || from === "Select Team"}
+              onClick={handleEqualMoney}
+            >
+              equal
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ marginBottom: 1 }}
+              disabled={to === "Select Team" || from === "Select Team"}
+              onClick={() => handlePercentMoney(0.05)}
             >
               5%
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ marginBottom: 1 }}
+              disabled={to === "Select Team" || from === "Select Team"}
+              onClick={() => handlePercentMoney(0.1)}
+            >
+              10%
             </Button>
           </Box>
           <Button disabled={!(from && to && amount)} onClick={handleClick}>

@@ -18,6 +18,30 @@ const SetOwnership = () => {
   const [building, setBuilding] = useState("");
   const [num, setNum] = useState(0);
   const navigate = useNavigate();
+  const data = [
+    "太空總部",
+    "航母總部",
+    "帝國大廈",
+    "倫敦至聖所",
+    "泰坦星",
+    "弗米爾星",
+    "虛無之地",
+    "神盾局",
+    "香港至聖所",
+    "復聯總部",
+    "天劍局",
+    "瓦甘達",
+    "邊境部落",
+    "亞特蘭提斯",
+    "紐約至聖所",
+    "阿斯嘉",
+    "彩虹橋",
+    "英靈殿",
+    "史塔克總部",
+    "卡瑪泰姬",
+    "大羅",
+    "多摩",
+  ];
   const handleClick = async () => {
     const payload = { team: team, land: building, level: num };
     await axios.post("/ownership", payload);
@@ -49,10 +73,9 @@ const SetOwnership = () => {
             <MenuItem value={"Select the building"}>
               Select the building
             </MenuItem>
-            <MenuItem value={"泰坦星"}>泰坦星</MenuItem>
-            <MenuItem value={"弗米爾星"}>弗米爾星</MenuItem>
-            <MenuItem value={"航母總部"}>航母總部</MenuItem>
-            <MenuItem value={"太空總部"}>太空總部</MenuItem>
+            {data.map((item) => (
+              <MenuItem value={item}>{item}</MenuItem>
+            ))}
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
@@ -85,8 +108,7 @@ const SetOwnership = () => {
               setNum(e.target.value);
             }}
           >
-            <MenuItem value={0}>Select building number</MenuItem>
-            <MenuItem value={4}>0</MenuItem>
+            <MenuItem value={0}>0</MenuItem>
             <MenuItem value={1}>1</MenuItem>
             <MenuItem value={2}>2</MenuItem>
             <MenuItem value={3}>3</MenuItem>

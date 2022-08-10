@@ -23,11 +23,14 @@ const App = () => {
     title: "none",
     content: "目前沒有事件正在發生...",
   });
+  const [teams, setTeams] = useState([]);
   const [permMessages, setPermMessages] = useState([]);
-  const [id, setId] = useState(0);
+  const [id, setId] = useState(100);
   const value = {
     role,
     setRole,
+    teams,
+    setTeams,
     messages,
     setMessages,
     eventMessage,

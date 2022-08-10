@@ -6,7 +6,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: "0.875rem",
-          fontWeight: 600,
           borderRadius: 8.5,
           textTransform: "none",
           "&.MuiButton-contained": {
@@ -39,12 +38,17 @@ const theme = createTheme({
     },
   },
   typography: {
+    //fontFamily: "Playfair Display",
+    fontSize: 14,
     h1: {
       fontSize: "1.6rem",
       fontWeight: 600,
       color: "#fff",
       letterSpacing: "0.5px",
       textTransform: "capitalize",
+    },
+    h6: {
+      fontSize: "1.2rem",
     },
   },
 });

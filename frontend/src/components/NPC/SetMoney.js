@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -18,22 +18,15 @@ import RoleContext from "../useRole";
 const SetMoney = () => {
   const [team, setTeam] = useState("Select Team");
   const [amount, setAmount] = useState(0);
-  const { role } = useContext(RoleContext);
+  const { teams, setTeams } = useContext(RoleContext);
   const navigate = useNavigate();
-  const handlePercentMoney = () => {
-    const money = 60000; //find the team's money
-    setAmount(money * 0.1);
-  };
-
-  const handleGoMoney = (phase) => {
-    switch (phase) {
-      case 1:
-        return setAmount(20000);
-      case 2:
-        return setAmount(30000);
-      case 3:
-        return setAmount(40000);
+  const handlePercentMoney = async () => {
+    if (teams.length === 0) {
+      await axios.get("/team");
     }
+    const item = teams.find((element) => element.teamname === team); //find the team's money
+    const money = item.money;
+    setAmount(money * 0.1);
   };
 
   const handleClick = async () => {
@@ -45,7 +38,7 @@ const SetMoney = () => {
     return (
       <Button
         variant="contained"
-        disabled={!team}
+        disabled={team === "Select Team"}
         sx={{ marginBottom: 1 }}
         onClick={() => {
           setAmount(val);
@@ -55,6 +48,17 @@ const SetMoney = () => {
       </Button>
     );
   };
+
+  useEffect(() => {
+    axios
+      .get("/team")
+      .then((res) => {
+        setTeams(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -105,16 +109,9 @@ const SetMoney = () => {
               justifyContent: "space-between",
             }}
           >
-            <Button
-              variant="contained"
-              disabled={!team}
-              onClick={handlePercentMoney}
-              sx={{ marginBottom: 1 }}
-            >
-              10%
-            </Button>
             <SimpleMoneyButton val={1000} />
             <SimpleMoneyButton val={3000} />
+            <SimpleMoneyButton val={5000} />
           </Box>
           <Box
             sx={{
@@ -123,15 +120,22 @@ const SetMoney = () => {
               justifyContent: "space-between",
             }}
           >
-            <SimpleMoneyButton val={5000} />
-            <SimpleMoneyButton val={6000} />
+            <SimpleMoneyButton val={10000} />
             <Button
               variant="contained"
-              disabled={!team}
-              onClick={() => handleGoMoney(2)}
+              disabled={team === "Select Team"}
+              onClick={handlePercentMoney}
               sx={{ marginBottom: 1 }}
             >
-              GO
+              10%
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === "Select Team"}
+              onClick={() => setAmount(amount * -1)}
+              sx={{ marginBottom: 1 }}
+            >
+              neg
             </Button>
           </Box>
           <Button disabled={!(team && amount)} onClick={handleClick}>

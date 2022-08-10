@@ -7,7 +7,7 @@ import NavBar from "./NavBar/NavBar";
 import RoleContext from "./useRole";
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { role, setRole } = useContext(RoleContext);
+  const { role, setRole, messages, setMessages } = useContext(RoleContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleChange = () => {
@@ -24,6 +24,23 @@ const Header = () => {
     setRole("");
     navigate("/"); //set to home later
   };
+
+  useEffect(() => {
+    let task = setInterval(() => {
+      if (messages.length > 0) {
+        const temp = messages.slice();
+        temp.forEach((item) => {
+          if (item.duration >= 0) item.duration -= 1;
+        });
+        const temp2 = temp.filter((item) => item.duration > 0);
+        setMessages(temp2);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(task);
+    };
+  }, [messages]);
 
   return (
     <Grid container>

@@ -13,12 +13,13 @@ import {
 import RoleContext from "./useRole";
 
 const Notifications = () => {
-  const { messages, setMessages, eventMessage } = useContext(RoleContext);
+  const { messages, setMessages, eventMessage, permMessages } =
+    useContext(RoleContext);
   const [id, setId] = useState(0);
 
   const TimedComponent = ({ id, duration, title, content }) => {
     return (
-      <Card sx={{ display: "flex", flexDirection: "column" }}>
+      <Card key={id} sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={9}>
@@ -36,23 +37,6 @@ const Notifications = () => {
       </Card>
     );
   };
-
-  useEffect(() => {
-    let task = setInterval(() => {
-      if (messages.length > 0) {
-        const temp = messages.slice();
-        temp.forEach((item) => {
-          if (item.duration >= 0) item.duration -= 1;
-        });
-        const temp2 = temp.filter((item) => item.duration > 0);
-        setMessages(temp2);
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(task);
-    };
-  }, [messages]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -75,11 +59,18 @@ const Notifications = () => {
             <Typography variant="body2">{eventMessage.content}</Typography>
           </CardContent>
         </Card>
+        {permMessages.map((item) => (
+          <Card>
+            <CardContent>
+              <Typography variant="subtitle1">{item.title}</Typography>
+              <Typography variant="body2">{item.content}</Typography>
+            </CardContent>
+          </Card>
+        ))}
         {messages &&
           messages.map((item) => (
             <TimedComponent
               id={id}
-              key={id}
               duration={item.duration}
               title={item.title}
               content={item.content}

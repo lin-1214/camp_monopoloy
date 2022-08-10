@@ -296,7 +296,7 @@ router.post("/login", async (req, res) => {
     console.log("login failed");
     return;
   }
-  req.session.user = user;
+  //req.session.user = user;
   res.status(200).send({ username: user.username });
   // null, npc, admin: String
 });

@@ -73,8 +73,10 @@ const Additional = () => {
   const handleClick = async () => {
     if (trait === 1) {
       //temporary messages
+      console.log(messages);
       let temp = messages.slice();
       temp.push({
+        id: id,
         duration: duration,
         title: title,
         content: message,
