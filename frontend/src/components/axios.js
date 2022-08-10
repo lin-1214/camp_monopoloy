@@ -1,7 +1,7 @@
 import _axios from "axios";
 
 const instance = _axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: process.env.REACT_APP_API_URL,
   timeout: 1000,
 });
 
