@@ -1,19 +1,19 @@
-import { Server } from "socket.io";
+// import { Server } from "socket.io";
 import http from "http";
 import https from "https";
 import mongoose from "mongoose";
 import express from "express";
-import session from "express-session";
+// import session from "express-session";
 import dotenv from "dotenv-defaults";
 import fs from "fs";
 import path from "path";
-import redis from "ioredis";
-import connectRedis from "connect-redis";
-import { v4 as uuid_v4 } from "uuid";
+// import redis from "ioredis";
+// import connectRedis from "connect-redis";
+// import { v4 as uuid_v4 } from "uuid";
 import morgan from "morgan";
 
 import apiRouter from "./api.js";
-import socket from "./socket.js";
+// import socket from "./socket.js";
 
 dotenv.config();
 
@@ -52,13 +52,13 @@ db.once("open", () => {
     server = http.createServer(app);
   }
 
-  const io = new Server(server, {
-    cors: {
-      origin: "http://localhost:3000",
-      methods: ["GET", "POST"],
-    },
-  });
-  app.locals.io = io;
+  // const io = new Server(server, {
+  //   cors: {
+  //     origin: "http://localhost:3000",
+  //     methods: ["GET", "POST"],
+  //   },
+  // });
+  // app.locals.io = io;
 
   // const redisClient = redis.createClient(6379, REDIS_URL);
   // redisClient.on("error", console.error);
@@ -100,20 +100,20 @@ db.once("open", () => {
   //   sessionMiddleware(socket.request, socket.request.res || {}, next);
   // });
 
-  app.use(function (req, res, next) {
-    // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Origin", "http://trader.asuscomm.com");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "POST, GET, PUT, DELETE, OPTIONS"
-    );
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-  });
+  // app.use(function (req, res, next) {
+  //   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  //   // res.header("Access-Control-Allow-Origin", "http://trader.asuscomm.com");
+  //   res.header(
+  //     "Access-Control-Allow-Headers",
+  //     "Origin, X-Requested-With, Content-Type, Accept"
+  //   );
+  //   res.header(
+  //     "Access-Control-Allow-Methods",
+  //     "POST, GET, PUT, DELETE, OPTIONS"
+  //   );
+  //   res.header("Access-Control-Allow-Credentials", "true");
+  //   next();
+  // });
 
   app.use(express.json());
   // app.use(sessionMiddleware);
@@ -126,7 +126,7 @@ db.once("open", () => {
   //   res.sendFile(path.join(process.cwd(), "build", "index.html"));
   // });
 
-  socket(io);
+  // socket(io);
 
   server.listen(port, () =>
     console.log(`App listening at ${protocal}://localhost:${port}`)

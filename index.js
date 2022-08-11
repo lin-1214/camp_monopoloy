@@ -3,22 +3,15 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import path from "path";
+import cors from "cors";
 
 import db from "./backend/src/mongo.js";
 import apiRouter from "./backend/src/api.js";
 
 dotenv.config();
 
-// const db = mongoose.connection;
-
 const { PORT, MONGO_URL } = process.env;
-
 const port = PORT || 2022;
-
-// mongoose.connect(MONGO_URL, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
 
 db.once("open", () => {
   console.log(`MongoDB connected at ${MONGO_URL}`);
@@ -26,22 +19,8 @@ db.once("open", () => {
   const app = express();
   const server = http.createServer(app);
 
-  //   app.use(function (req, res, next) {
-  //     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  //     // res.header("Access-Control-Allow-Origin", "http://trader.asuscomm.com");
-  //     res.header(
-  //       "Access-Control-Allow-Headers",
-  //       "Origin, X-Requested-With, Content-Type, Accept"
-  //     );
-  //     res.header(
-  //       "Access-Control-Allow-Methods",
-  //       "POST, GET, PUT, DELETE, OPTIONS"
-  //     );
-  //     res.header("Access-Control-Allow-Credentials", "true");
-  //     next();
-  //   });
-
   app.use(express.json());
+  app.use(cors());
   app.use(morgan("dev"));
   app.use(express.static(path.join(process.cwd(), "frontend/build")));
 
