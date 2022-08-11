@@ -32,6 +32,7 @@ const Event = () => {
     if (role !== "admin") {
       navigate("/permission");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const data = [

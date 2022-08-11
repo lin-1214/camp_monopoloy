@@ -5,7 +5,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  TextField,
+  // TextField,
   Typography,
   Box,
   Button,
@@ -55,6 +55,7 @@ const SetOwnership = () => {
     if (role === "") {
       navigate("/permission");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

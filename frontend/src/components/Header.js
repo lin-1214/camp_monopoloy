@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavBar from "./NavBar/NavBar";
 import RoleContext from "./useRole";
+
 const Header = () => {
   const [open, setOpen] = useState(false);
   const { role, setRole, messages, setMessages } = useContext(RoleContext);
@@ -40,6 +41,7 @@ const Header = () => {
     return () => {
       clearInterval(task);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   return (

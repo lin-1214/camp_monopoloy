@@ -2,7 +2,6 @@ import express from "express";
 import Team from "../models/team.js";
 import Land from "../models/land.js";
 import User from "../models/user.js";
-import bcrypt from "bcryptjs";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -44,12 +43,6 @@ async function calcmoney(teamname, money, estate) {
     }
   }
   return money;
-}
-
-async function broadcastTeamsChange(io, teamname) {
-  let playersUpdate = await Team.findOne({ teamname }).exec();
-  playersUpdate = playersUpdate.filter((x) => Boolean(x));
-  io.emit("UPDATE_PLAYERS", playersUpdate);
 }
 
 router.get("/team", async (req, res) => {

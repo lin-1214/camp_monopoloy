@@ -1,10 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 import {
   Stack,
-  SnackbarContent,
+  // SnackbarContent,
   Container,
-  Paper,
+  // Paper,
   Grid,
   Card,
   CardContent,
@@ -13,9 +13,13 @@ import {
 import RoleContext from "./useRole";
 
 const Notifications = () => {
-  const { messages, setMessages, eventMessage, permMessages } =
-    useContext(RoleContext);
-  const [id, setId] = useState(0);
+  const {
+    messages,
+    setMessages, // eslint-disable-line no-unused-vars
+    eventMessage,
+    permMessages,
+  } = useContext(RoleContext);
+  const [id, setId] = useState(0); // eslint-disable-line no-unused-vars
 
   const TimedComponent = ({ id, duration, title, content }) => {
     return (

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
-  Grid,
+  // Grid,
   InputLabel,
   Select,
   MenuItem,
@@ -62,6 +62,7 @@ const SetMoney = () => {
       .catch((error) => {
         console.error(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

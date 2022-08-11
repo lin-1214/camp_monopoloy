@@ -114,6 +114,7 @@ const Additional = () => {
       case "財產凍結":
         payload = { teamname: team, bonus: 0, duration: duration };
         await axios.post("/bonus", payload);
+        break;
       case "量子領域":
         break;
       case "地產增值(II)":
@@ -126,6 +127,8 @@ const Additional = () => {
         payload = { teamname: team };
         await axios.post("/soulgem", payload);
         break;
+      default:
+        break;
     }
     navigate("/notifications");
     console.log(payload);
@@ -135,6 +138,7 @@ const Additional = () => {
     if (role !== "admin") {
       navigate("/permission");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -230,7 +234,7 @@ const Additional = () => {
             }}
           />
           <Button
-            disabled={!(message && team != "Select Team")}
+            disabled={!(message && team !== "Select Team")}
             onClick={handleClick}
           >
             Submit

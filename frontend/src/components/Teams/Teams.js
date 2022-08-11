@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   Paper,
   Table,
@@ -20,23 +20,24 @@ const Teams = () => {
     { id: "money", label: "Money", minWidth: 60, align: "center" },
   ];
 
-  const getTeams = async () => {
-    axios
-      .get("/team")
-      .then((res) => {
-        setTeams(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   useEffect(() => {
+    const getTeams = async () => {
+      axios
+        .get("/team")
+        .then((res) => {
+          setTeams(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
     getTeams();
     const id = setInterval(() => {
       getTeams();
     }, 5000);
     return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
