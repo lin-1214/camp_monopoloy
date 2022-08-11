@@ -11,6 +11,7 @@ import path from "path";
 // import connectRedis from "connect-redis";
 // import { v4 as uuid_v4 } from "uuid";
 import morgan from "morgan";
+import cors from "cors";
 
 import apiRouter from "./api.js";
 // import socket from "./socket.js";
@@ -116,6 +117,7 @@ db.once("open", () => {
   // });
 
   app.use(express.json());
+  app.use(cors());
   // app.use(sessionMiddleware);
   app.use(morgan("dev"));
   // app.use(express.static(path.join(process.cwd(), "build")));
