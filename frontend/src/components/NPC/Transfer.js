@@ -14,7 +14,10 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Stack,
 } from "@mui/material";
+import Switch from "@mui/material/Switch";
+
 import RoleContext from "../useRole";
 import axios from "../axios";
 
@@ -72,7 +75,10 @@ const Transfer = () => {
         <Typography component="h1" variant="h5">
           Transfer Money
         </Typography>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl
+          variant="standard"
+          sx={{ minWidth: "250px", marginTop: 2 }}
+        >
           <InputLabel id="from-team">From...</InputLabel>
           <Select
             value={from}
@@ -92,7 +98,10 @@ const Transfer = () => {
             <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl
+          variant="standard"
+          sx={{ minWidth: "250px", marginTop: 2 }}
+        >
           <InputLabel id="to-team">To...</InputLabel>
           <Select
             value={to}
@@ -112,17 +121,42 @@ const Transfer = () => {
             <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
             <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
-          <FormLabel>Is concerning estate</FormLabel>
+        </FormControl>
+        <FormControl
+          variant="standard"
+          sx={{ minWidth: "250px", marginTop: 1 }}
+        >
+          <FormLabel mx="auto">Is Concerning Estate?</FormLabel>
+          <Stack direction="row" spacing="auto" alignItems="center" mx={5} mt={2}>
+            <Typography>No</Typography>
+            <Switch
+              checked={isEstate}
+              onChange={(e) => {
+                setIsEstate(e.target.checked);
+              }}
+              label="Is concerning estate"
+              size="large"
+            />
+            <Typography>Yes</Typography>
+          </Stack>
+
+          {/* <FormLabel>Is concerning estate</FormLabel>
           <RadioGroup
             value={isEstate}
             row
+            display="flex"
             onChange={(e) => {
               setIsEstate(e.target.value);
             }}
           >
-            <FormControlLabel value={true} control={<Radio />} label="True" />
-            <FormControlLabel value={false} control={<Radio />} label="False" />
-          </RadioGroup>
+            <FormControlLabel value={true} control={<Radio />} label="Yes" />
+            <FormControlLabel value={false} control={<Radio />} label="No" />
+          </RadioGroup> */}
+        </FormControl>
+        <FormControl
+          variant="standard"
+          sx={{ minWidth: "250px", marginTop: 2 }}
+        >
           <TextField
             required
             label="Amount"
@@ -146,7 +180,7 @@ const Transfer = () => {
               disabled={to === "Select Team" || from === "Select Team"}
               onClick={handleEqualMoney}
             >
-              equal
+              Equal
             </Button>
             <Button
               variant="contained"

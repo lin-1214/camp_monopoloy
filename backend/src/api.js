@@ -65,6 +65,14 @@ router.get("/land/:landname", async (req, res) => {
   res.json(land.status(200));
 });
 
+router.post("/occupation", async (req, res) => {
+  const { teamname, occupation } = req.body;
+  const team = await Team.findOne({ teamname });
+  team.occupation = occupation;
+  await team.save();
+  res.json(team).status(200);
+});
+
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
   const team = await Team.findAndCheckValid({ teamname });

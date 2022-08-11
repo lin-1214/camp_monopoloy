@@ -71,7 +71,7 @@ const SetOwnership = () => {
         <Typography component="h1" variant="h5">
           Set Ownership
         </Typography>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="building">Building</InputLabel>
           <Select
             value={building}
@@ -88,7 +88,7 @@ const SetOwnership = () => {
             ))}
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="team-ownership">Team</InputLabel>
           <Select
             value={team}
@@ -109,7 +109,7 @@ const SetOwnership = () => {
             <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="num-building">Building Level</InputLabel>
           <Select
             value={num}

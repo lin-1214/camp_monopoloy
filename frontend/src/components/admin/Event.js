@@ -69,7 +69,7 @@ const Event = () => {
         <Typography component="h1" variant="h5">
           Event Settings
         </Typography>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="title">Trait</InputLabel>
           <Select
             value={event}

@@ -40,9 +40,9 @@ const SetMoney = () => {
       <Button
         variant="contained"
         disabled={team === "Select Team"}
-        sx={{ marginBottom: 1 }}
+        sx={{ marginBottom: 1, width: 80 }}
         onClick={() => {
-          setAmount(val);
+          setAmount(amount + val);
         }}
       >
         {val}
@@ -78,7 +78,7 @@ const SetMoney = () => {
         <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
           Set Money
         </Typography>
-        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250 }}>
           <InputLabel id="team-label">Team</InputLabel>
           <Select
             value={team}
@@ -114,8 +114,8 @@ const SetMoney = () => {
               justifyContent: "space-between",
             }}
           >
+            <SimpleMoneyButton val={100} />
             <SimpleMoneyButton val={1000} />
-            <SimpleMoneyButton val={3000} />
             <SimpleMoneyButton val={5000} />
           </Box>
           <Box
@@ -125,23 +125,34 @@ const SetMoney = () => {
               justifyContent: "space-between",
             }}
           >
-            <SimpleMoneyButton val={10000} />
+            <SimpleMoneyButton val={-100} />
+            <SimpleMoneyButton val={-1000} />
+            <SimpleMoneyButton val={-5000} />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            {/* <SimpleMoneyButton val={10000} /> */}
             <Button
               variant="contained"
               disabled={team === "Select Team"}
+              sx={{ marginBottom: 1, width: 80 }}
               onClick={handlePercentMoney}
-              sx={{ marginBottom: 1 }}
             >
               10%
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               disabled={team === "Select Team"}
               onClick={() => setAmount(amount * -1)}
               sx={{ marginBottom: 1 }}
             >
-              neg
-            </Button>
+              Negative
+            </Button> */}
           </Box>
           <Button disabled={!(team && amount)} onClick={handleClick}>
             Submit

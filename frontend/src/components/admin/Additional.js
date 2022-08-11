@@ -152,9 +152,9 @@ const Additional = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Additional bonus
+          Additional Bonus
         </Typography>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="title">Title</InputLabel>
           <Select
             value={event}
@@ -178,7 +178,7 @@ const Additional = () => {
             })}
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="team-ownership">Team</InputLabel>
           <Select
             value={team}
@@ -198,7 +198,7 @@ const Additional = () => {
             <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ minWidth: 215, marginTop: 2 }}>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="trait">Trait</InputLabel>
           <Select
             value={trait}

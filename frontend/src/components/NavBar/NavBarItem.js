@@ -60,4 +60,10 @@ export const adminItems = [
     label: "Additional",
     route: "additional",
   },
+  {
+    id: 9,
+    icon: <BuildIcon />,
+    label: "Set Occupation",
+    route: "setoccupation",
+  }
 ];
