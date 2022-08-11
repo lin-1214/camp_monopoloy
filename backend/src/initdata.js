@@ -7,6 +7,7 @@ import User from "../models/user.js";
 import Notification from "../models/notification.js";
 import Event from "../models/event.js";
 import Pair from "../models/pair.js";
+import Effect from "../models/effect.js";
 
 dotenv.config();
 console.log(process.env.MONGO_URL);
@@ -347,6 +348,61 @@ const events = [
   },
 ];
 
+const effects = [
+  {
+    id: 1,
+    title: "地產增值(I)",
+    description: "使你的房地產租金提升至150%, 效果持續10分鐘。不可疊加使用",
+    trait: 1,
+    duration: 600,
+    bonus: 1.5,
+  },
+  {
+    id: 2,
+    title: "財產凍結",
+    description:
+      "選擇一個小隊, 其他小隊踩到此小隊的房產無須付租金, 效果持續5分鐘",
+    trait: 1,
+    duration: 300,
+    bonus: 0,
+  },
+  {
+    id: 3,
+    title: "量子領域",
+    description:
+      "選擇一個區域, 若其他小隊停在此區域會損失10%手上的金錢, 效果持續10分鐘",
+    trait: 1,
+    duration: 600,
+    bonus: -1,
+  },
+  {
+    id: 4,
+    title: "靈魂寶石",
+    description:
+      "所需支付的金錢提升至150%, 但同時所獲得的金錢提升至200%, 效果持續10分鐘",
+    trait: 1,
+    duration: 600,
+    bonus: -1,
+  },
+  {
+    id: 5,
+    title: "地產增值(II)",
+    description: "使你的房地產租金提升至200%, 效果持續10分鐘。不可疊加使用",
+    trait: 1,
+    duration: 600,
+    bonus: 2,
+  },
+  {
+    id: 6,
+    title: "double一下",
+    description:
+      "選擇一個區域。若持有該區域數量-1的房產即可獲得double效果, 此效果沒有時間限制",
+    trait: 0,
+    duration: -1,
+    bonus: -1,
+  },
+];
+
 const notifications = [
   {
     id: 0,
@@ -358,6 +414,10 @@ const notifications = [
 const pairs = [
   {
     key: "currentEvent",
+    value: 0,
+  },
+  {
+    key: "lastNotificationId",
     value: 0,
   },
 ];
@@ -401,6 +461,11 @@ db.once("open", async () => {
     await new Notification(row).save();
   });
   console.log("notifications created");
+
+  effects.forEach(async (row) => {
+    await new Effect(row).save();
+  });
+  console.log("effects created");
 
   console.log("finish saving data");
 });

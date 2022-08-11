@@ -5,6 +5,7 @@ import User from "../models/user.js";
 import Notification from "../models/notification.js";
 import Event from "../models/event.js";
 import Pair from "../models/pair.js";
+import Effect from "../models/effect.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -68,7 +69,7 @@ router.get("/land/:landname", async (req, res) => {
   res.json(land.status(200));
 });
 
-router.get("/allevent", async (req, res) => {
+router.get("/allEvents", async (req, res) => {
   const events = await Event.find().sort({ id: 1 });
   res.json(events).status(200);
 });
@@ -265,36 +266,95 @@ router.post("/ownership", async (req, res) => {
   res.status(200).send("update succeeded");
 });
 
-router.post("/bonus", async (req, res) => {
-  console.log(req.body);
-  const { teamname, bonus, duration } = req.body;
-  const time = Date.now() / 1000;
-  const team = await Team.findOneAndUpdate(
-    { teamname: teamname },
-    { bonus: { value: bonus, time: time, duration: duration } }
-  );
-  if (!team) {
-    res.status(403).send();
-    console.log("Update failed");
-    return;
-  }
-  res.status(200).send("update succeeded");
+router.get("/allEffects", async (req, res) => {
+  const effects = await Effect.find({}).sort({ id: 1 });
+  res.json(effects).status(200);
 });
 
-router.post("/soulgem", async (req, res) => {
-  const { teamname } = req.body;
-  const time = Date.now() / 1000;
-  const team = await Team.findOneAndUpdate(
-    { teamname: teamname },
-    { soulgem: { value: true, time: time } }
-  );
-  if (!team) {
+router.post("/effect", async (req, res) => {
+  const { teamname, title } = req.body;
+  const effect = await Effect.findOne({ title });
+  if (!effect) {
     res.status(403).send();
-    console.log("Update failed");
+    console.log("Effect not found");
     return;
   }
-  res.status(200).send("update succeeded");
+  const { id, description, trait, duration, bonus } = effect;
+  const team = await Team.findOne({ teamname });
+  const time = Date.now() / 1000;
+  if (!team) {
+    res.status(403).send("Team not found");
+    console.log("Team not found");
+    return;
+  }
+  if (bonus !== -1) {
+    team.bonus = { value: bonus, duration, time };
+  }
+  if (id === 4) {
+    // soulgem
+    team.soulgem = { value: true, duration, time };
+  }
+
+  const pair = await Pair.findOne({ key: "lastNotificationId" });
+  const type = trait ? "temporary" : "permanent";
+  const notification = {
+    id: pair.value,
+    type,
+    teamname,
+    title,
+    description,
+    duration,
+    createdAt: time,
+  };
+  // delete timeout notifications
+  const notifications = await Notification.find({});
+  for (let i = 0; i < notifications.length; i++) {
+    if (notifications[i].createdAt + notifications[i].duration < time) {
+      await Notification.findByIdAndDelete(notifications[i]._id);
+      console.log("Deleted notification", notifications[i].id);
+    }
+  }
+  // save
+  await new Notification(notification).save();
+  await team.save();
+  res.status(200).send("Update succeeded");
 });
+
+router.get("/notifications", async (req, res) => {
+  const notifications = await Notification.find({});
+  res.json(notifications).status(200);
+});
+
+// router.post("/bonus", async (req, res) => {
+//   console.log(req.body);
+//   const { teamname, bonus, duration } = req.body;
+//   const time = Date.now() / 1000;
+//   const team = await Team.findOneAndUpdate(
+//     { teamname: teamname },
+//     { bonus: { value: bonus, time: time, duration: duration } }
+//   );
+//   if (!team) {
+//     res.status(403).send();
+//     console.log("Update failed");
+//     return;
+//   }
+//   res.status(200).send("update succeeded");
+// });
+
+// router.post("/soulgem", async (req, res) => {
+//   const { teamname } = req.body;
+//   const time = Date.now() / 1000;
+//   const team = await Team.findOneAndUpdate(
+//     { teamname: teamname },
+//     { soulgem: { value: true, time: time } }
+//   );
+//   if (!team) {
+//     res.status(403).send();
+//     console.log("Update failed");
+//     return;
+//   }
+//   res.status(200).send("update succeeded");
+// });
 
 router.get("/checkvalid", async (req, res) => {
   const { teamname } = req.query;

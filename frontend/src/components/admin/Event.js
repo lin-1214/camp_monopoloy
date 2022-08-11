@@ -12,17 +12,19 @@ import {
   FormControl,
 } from "@mui/material";
 import RoleContext from "../useRole";
+import axios from "../axios";
 
 const Event = () => {
   const [message, setMessage] = useState(
     "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課"
   );
   const [event, setEvent] = useState(0);
+  const [events, setEvents] = useState([]);
   const { setEventMessage, role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = () => {
     setEventMessage({
-      title: data[event].title,
+      title: events[event].title,
       content: message,
     });
     navigate("/notifications");
@@ -32,29 +34,16 @@ const Event = () => {
     if (role !== "admin") {
       navigate("/permission");
     }
+    axios
+      .get("/allEvents")
+      .then((res) => {
+        setEvents(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const data = [
-    {
-      title: "去上學",
-      description: "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課",
-    },
-    {
-      title: "黑豹過世",
-      description:
-        "面臨國喪，持有黑豹系列建築的隊伍可以選擇(1)在原地休息5分鐘默哀致意 或 (2)繳20000結束",
-    },
-    {
-      title: "都更",
-      description: "購買房地產與升級的金額減半",
-    },
-    {
-      title: "開啟傳送門",
-      description:
-        "至聖所的傳送門開啟了! 踩到至聖所格子的隊伍可以使用傳送門傳送至任意格子",
-    },
-  ];
 
   return (
     <Container component="main" maxWidth="xs">
@@ -76,12 +65,15 @@ const Event = () => {
             labelId="title"
             onChange={(e) => {
               setEvent(e.target.value);
-              setMessage(data[e.target.value].description);
+              setMessage(events[e.target.value].description);
             }}
           >
-            {data.map((item) => {
+            {events.map((item) => {
               return (
-                <MenuItem value={data.indexOf(item)} key={data.indexOf(item)}>
+                <MenuItem
+                  value={events.indexOf(item)}
+                  key={events.indexOf(item)}
+                >
                   {item.title}
                 </MenuItem>
               );

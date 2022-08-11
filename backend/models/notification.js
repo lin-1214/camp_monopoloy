@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const NotificationSchema = new Schema({
   id: Number,
   type: String,
+  teamname: String,
   title: String,
   description: String,
   duration: Number,

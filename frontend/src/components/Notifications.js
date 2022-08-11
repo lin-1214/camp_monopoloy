@@ -27,12 +27,12 @@ const Notifications = () => {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={9}>
-              <Typography variant="subtitle1">{title}</Typography>
+              <Typography variant="h6">{title}</Typography>
             </Grid>
             <Grid item xs={3} sx={{ alignItems: "flex-end" }}>
               <Typography variant="body1">
                 {Math.floor(duration / 60)} :{" "}
-                {duration % 60 > 9 ? duration % 60 : "0" + (duration % 60)} s
+                {duration % 60 > 9 ? duration % 60 : "0" + (duration % 60)}
               </Typography>
             </Grid>
           </Grid>
@@ -57,8 +57,8 @@ const Notifications = () => {
           sx={{ backgroundColor: "rgb(60,60,60)", color: "rgb(255,255,255)" }}
         >
           <CardContent>
-            <Typography variant="subtitle1">
-              事件：{eventMessage.title}
+            <Typography variant="h6">
+              事件：{eventMessage.title ? eventMessage.title : "無"}
             </Typography>
             <Typography variant="body2">{eventMessage.content}</Typography>
           </CardContent>
@@ -66,7 +66,7 @@ const Notifications = () => {
         {permMessages.map((item) => (
           <Card>
             <CardContent>
-              <Typography variant="subtitle1">{item.title}</Typography>
+              <Typography variant="h6">{item.title}</Typography>
               <Typography variant="body2">{item.content}</Typography>
             </CardContent>
           </Card>
