@@ -1,11 +1,12 @@
 import React from "react";
-import { Container } from "@mui/material";
-
+import { Container, Box } from "@mui/material";
+import image from "../temp.jpg";
 //put an great made after effect intro video!!
 const Home = () => {
   return (
     <Container>
-      <div>Hello......</div>
+      <Box sx={{ height: "80px" }} />
+      <img src={image} alt="Avengers" style={{ maxWidth: "100%" }} />
     </Container>
   );
 };

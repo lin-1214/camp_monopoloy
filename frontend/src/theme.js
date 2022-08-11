@@ -38,7 +38,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    // fontFamily: "Playfair Display",
+    fontFamily: "Merriweather",
     fontSize: 14,
     h1: {
       fontSize: "1.6rem",
@@ -52,7 +52,7 @@ const theme = createTheme({
     },
     body2: {
       fontSize: "1rem",
-    }
+    },
   },
 });
 export default theme;

@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import "./App.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
-
+import Home from "./components/Home";
 import Notifications from "./components/Notifications";
 import Teams from "./components/Teams/Teams";
 import Properties from "./components/Properties/Properties";
@@ -49,6 +49,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Header />}>
+              <Route path="/" element={<Home />} />
               <Route path="notifications" element={<Notifications />} />
               <Route path="teams" element={<Teams />} />
               <Route path="properties" element={<Properties />} />
