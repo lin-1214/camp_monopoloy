@@ -2,6 +2,9 @@ import express from "express";
 import Team from "../models/team.js";
 import Land from "../models/land.js";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
+import Event from "../models/event.js";
+import Pair from "../models/pair.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -64,6 +67,30 @@ router.get("/land/:landname", async (req, res) => {
   const land = await Land.findOne({ landname: req.params.landname });
   res.json(land.status(200));
 });
+
+router.get("/allevent", async (req, res) => {
+  const events = await Event.find().sort({ id: 1 });
+  res.json(events).status(200);
+});
+
+router
+  .post("/event", async (req, res) => {
+    const { id } = req.body;
+    const pair = await Pair.findOneAndUpdate(
+      { key: "currentEvent" },
+      { value: id }
+    );
+    if (pair) {
+      res.json({ success: true }).status(200);
+    } else {
+      res.json({ success: false }).status(403);
+    }
+  })
+  .get("/event", async (req, res) => {
+    const pair = await Pair.findOne({ key: "currentEvent" });
+    const event = await Event.findOne({ id: pair.value });
+    res.json(event).status(200);
+  });
 
 router.post("/occupation", async (req, res) => {
   const { teamname, occupation } = req.body;

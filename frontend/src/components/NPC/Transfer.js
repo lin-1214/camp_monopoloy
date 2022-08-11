@@ -11,9 +11,9 @@ import {
   Button,
   FormLabel,
   FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
+  // FormControlLabel,
+  // Radio,
+  // RadioGroup,
   Stack,
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
@@ -127,7 +127,13 @@ const Transfer = () => {
           sx={{ minWidth: "250px", marginTop: 1 }}
         >
           <FormLabel mx="auto">Is Concerning Estate?</FormLabel>
-          <Stack direction="row" spacing="auto" alignItems="center" mx={5} mt={2}>
+          <Stack
+            direction="row"
+            spacing="auto"
+            alignItems="center"
+            mx={5}
+            mt={2}
+          >
             <Typography>No</Typography>
             <Switch
               checked={isEstate}

@@ -4,6 +4,9 @@ import dotenv from "dotenv-defaults";
 import Team from "../models/team.js";
 import Land from "../models/land.js";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
+import Event from "../models/event.js";
+import Pair from "../models/pair.js";
 
 dotenv.config();
 console.log(process.env.MONGO_URL);
@@ -25,7 +28,7 @@ const users = [
   },
 ];
 
-const rows = [
+const teams = [
   {
     teamname: "第1小隊",
     occupation: "N/A",
@@ -84,7 +87,7 @@ const rows = [
   },
 ];
 
-const grounds = [
+const lands = [
   { id: 1, type: "Go", name: "GO 格", description: "真是夠格的啊！" },
   {
     id: 2,
@@ -283,12 +286,90 @@ const grounds = [
   { id: 40, type: "Game", name: "倒轉猜字", description: "細節略" },
 ];
 
+const events = [
+  {
+    id: 1,
+    title: "去上學",
+    description: "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課",
+  },
+  {
+    id: 2,
+    title: "黑豹過世",
+    description:
+      "面臨國喪，持有黑豹系列建築的隊伍可以選擇(1)在原地休息5分鐘默哀致意 或 (2)繳20000結束",
+  },
+  {
+    id: 3,
+    title: "都更",
+    description: "購買房地產與升級的金額減半",
+  },
+  {
+    id: 4,
+    title: "開啟傳送門",
+    description:
+      "至聖所的傳送門開啟了! 踩到至聖所格子的隊伍可以使用傳送門傳送至任意格子",
+  },
+  {
+    id: 5,
+    title: "金融風暴",
+    description: "所有小隊手中現金減少10000。支付不出來視同破產",
+  },
+  { id: 6, title: "地震來襲", description: "所有人的房產下降一星級" },
+  {
+    id: 7,
+    title: "復聯內鬨",
+    description: "復聯系列的房產(與過路費)將提升1.5倍",
+  },
+  {
+    id: 8,
+    title: "失控的多重宇宙",
+    description:
+      "場地內將生成傳送門，經過會無條件傳送(12到13 , 25到26 , 39到40)",
+  },
+  { id: 9, title: "都更(II)", description: "購買房地產與升級的金額減半" },
+  { id: 10, title: "政權顛覆", description: "財產前4的小隊全部入獄" },
+  {
+    id: 11,
+    title: "宇宙大爆炸",
+    description:
+      "地球以外的房產格強制拋售, 並獲得50%價值的金額(地球以外:太空總部、泰坦星、佛米爾星、虛無之地、天劍局、阿斯嘉、彩虹橋、英靈殿、多摩)",
+  },
+  {
+    id: 12,
+    title: "金融風暴(II)",
+    description: "所有小隊手中現金減少10000。支付不出來視同破產",
+  },
+  { id: 13, title: "央行升息", description: "手上持有現金翻倍" },
+  {
+    id: 14,
+    title: "時光流逝",
+    description: "往後每個小隊都將移動投擲兩個骰子後, 移動相當於兩次移動的和",
+  },
+];
+
+const notifications = [
+  {
+    id: 0,
+    title: "歡迎遊玩大富翁",
+    description: "衝啊",
+  },
+];
+
+const pairs = [
+  {
+    key: "currentEvent",
+    value: 0,
+  },
+];
+
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", async () => {
   console.log("db connected");
   await Team.deleteMany({});
   await Land.deleteMany({});
   await User.deleteMany({});
+  await Event.deleteMany({});
+  await Pair.deleteMany({});
   console.log("delete done");
 
   users.forEach(async (user) => {
@@ -296,15 +377,30 @@ db.once("open", async () => {
   });
   console.log("users created");
 
-  grounds.forEach(async (ground) => {
+  lands.forEach(async (ground) => {
     await new Land(ground).save();
   });
   console.log("lands created");
 
-  rows.forEach(async (row) => {
+  teams.forEach(async (row) => {
     await new Team(row).save();
   });
   console.log("teams created");
+
+  events.forEach(async (row) => {
+    await new Event(row).save();
+  });
+  console.log("events created");
+
+  pairs.forEach(async (row) => {
+    await new Pair(row).save();
+  });
+  console.log("pairs created");
+
+  notifications.forEach(async (row) => {
+    await new Notification(row).save();
+  });
+  console.log("notifications created");
 
   console.log("finish saving data");
 });

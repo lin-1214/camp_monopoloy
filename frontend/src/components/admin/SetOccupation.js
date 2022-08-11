@@ -4,7 +4,6 @@ import {
   Container,
   Select,
   MenuItem,
-  TextField,
   InputLabel,
   Typography,
   Box,
@@ -17,7 +16,7 @@ import axios from "../axios";
 const SetOccupation = () => {
   const [team, setTeam] = useState("Select Team");
   const [occupation, setOccupation] = useState("Select Occupation");
-  const { role, teams, setTeams } = useContext(RoleContext);
+  const { role, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -38,6 +37,7 @@ const SetOccupation = () => {
       .catch((error) => {
         console.error(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTeam, setOccupation]);
 
   return (
