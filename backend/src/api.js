@@ -56,7 +56,7 @@ async function deleteTimeoutNotification() {
   // console.log(notifications);
   for (let i = 0; i < notifications.length; i++) {
     // console.log(notifications[i]);
-    if (notifications[i].createdAt + notifications[i].duration < time) {
+    if (notifications[i].createdAt + notifications[i].duration < time && notifications[i].duration > 0) {
       await Notification.findByIdAndDelete(notifications[i]._id);
       // console.log("Deleted notification", notifications[i].id);
     }
@@ -78,9 +78,9 @@ router.get("/land", async (req, res) => {
   res.json(lands).status(200);
 });
 
-router.get("/land/:landname", async (req, res) => {
-  const land = await Land.findOne({ landname: req.params.landname });
-  res.json(land.status(200));
+router.get("/land/:id", async (req, res) => {
+  const land = await Land.findOne({ id: req.params.id });
+  res.json(land).status(200);
 });
 
 router.get("/allEvents", async (req, res) => {
@@ -340,7 +340,7 @@ router.post("/effect", async (req, res) => {
     duration,
     createdAt: time,
   };
-  await deleteTimeoutNotification();
+  // await deleteTimeoutNotification();
   // save
   await new Notification(notification).save();
   await team.save();
@@ -385,11 +385,11 @@ router.get("/notifications", async (req, res) => {
 //   res.status(200).send("update succeeded");
 // });
 
-router.get("/checkvalid", async (req, res) => {
-  const { teamname } = req.query;
-  const team = await findAndCheckValid(teamname);
-  res.status(200).send(team);
-});
+// router.get("/checkvalid", async (req, res) => {
+//   const { teamname } = req.query;
+//   const team = await findAndCheckValid(teamname);
+//   res.status(200).send(team);
+// });
 
 // Login
 router.post("/login", async (req, res) => {

@@ -1,59 +1,65 @@
 import React, { useState, useEffect, useContext } from "react";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
   InputLabel,
   Select,
   MenuItem,
-  // TextField,
   Typography,
   Box,
   Button,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
+import PropertyCard from "../Properties/PropertyCard";
 import RoleContext from "../useRole";
 import axios from "../axios";
 
 const SetOwnership = () => {
   const [team, setTeam] = useState("Select Team");
-  const [building, setBuilding] = useState("Select Building");
-  const [num, setNum] = useState(0);
-  const { role } = useContext(RoleContext);
+  const [building, setBuilding] = useState(-1);
+  const [buildingData, setBuildingData] = useState({});
+  const [level, setLevel] = useState(0);
+  const { role, buildings, setBuildings } = useContext(RoleContext);
+  const [data, setData] = useState(
+    buildings.filter((building) => building.type === "Building")
+  );
   const navigate = useNavigate();
-  const data = [
-    { id: 2, title: "太空總部" },
-    { id: 3, title: "航母總部" },
-    { id: 5, title: "帝國大廈" },
-    { id: 6, title: "倫敦至聖所" },
-    { id: 8, title: "泰坦星" },
-    { id: 9, title: "弗米爾星" },
-    { id: 12, title: "虛無之地" },
-    { id: 15, title: "神盾局" },
-    { id: 16, title: "香港至聖所" },
-    { id: 18, title: "復聯總部" },
-    { id: 19, title: "天劍局" },
-    { id: 22, title: "瓦甘達" },
-    { id: 23, title: "邊境部落" },
-    { id: 25, title: "亞特蘭提斯" },
-    { id: 26, title: "紐約至聖所" },
-    { id: 28, title: "阿斯嘉" },
-    { id: 29, title: "彩虹橋" },
-    { id: 32, title: "英靈殿" },
-    { id: 35, title: "史塔克總部" },
-    { id: 36, title: "卡瑪泰姬" },
-    { id: 38, title: "大羅" },
-    { id: 39, title: "多摩" },
-  ];
+
   const handleClick = async () => {
-    const payload = { team: team, land: building, level: num };
+    const payload = { team, land: buildingData.name, level };
     await axios.post("/ownership", payload);
-    console.log("Hi");
     navigate("/properties");
+  };
+
+  const handleTeam = async (team) => {
+    if (team === "N/A") {
+      setLevel(0);
+    }
+    setTeam(team);
+  };
+
+  const handleBuilding = async (building) => {
+    const { data } = await axios.get("/land/" + building);
+    setBuilding(building);
+    setBuildingData(data);
   };
 
   useEffect(() => {
     if (role === "") {
       navigate("/permission");
+    }
+    if (buildings.length === 0) {
+      axios
+        .get("/land")
+        .then((res) => {
+          setBuildings(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      setData(buildings.filter((building) => building.type === "building"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -77,13 +83,13 @@ const SetOwnership = () => {
             value={building}
             labelId="building"
             onChange={(e) => {
-              setBuilding(e.target.value);
+              handleBuilding(e.target.value);
             }}
           >
-            <MenuItem value={"Select Building"}>Select Building</MenuItem>
+            <MenuItem value={-1}>Select Building</MenuItem>
             {data.map((item) => (
-              <MenuItem value={item.title}>
-                {item.id} {item.title}
+              <MenuItem value={item.id} key={item.id}>
+                {item.id} {item.name}
               </MenuItem>
             ))}
           </Select>
@@ -94,7 +100,7 @@ const SetOwnership = () => {
             value={team}
             labelId="team-ownership"
             onChange={(e) => {
-              setTeam(e.target.value);
+              handleTeam(e.target.value);
             }}
           >
             <MenuItem value={"Select Team"}>Select Team</MenuItem>
@@ -108,14 +114,18 @@ const SetOwnership = () => {
             <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
             <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
           </Select>
+          {team !== buildingData.owner && team !== "Select Team" ? (
+            <FormHelperText>Owner has Change!!!</FormHelperText>
+          ) : null}
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
-          <InputLabel id="num-building">Building Level</InputLabel>
+          <InputLabel id="level-building">Building Level</InputLabel>
           <Select
-            value={num}
-            labelId="num-building"
+            value={level}
+            labelId="level-building"
+            disabled={team === "N/A"}
             onChange={(e) => {
-              setNum(e.target.value);
+              setLevel(e.target.value);
             }}
           >
             <MenuItem value={0}>0</MenuItem>
@@ -124,13 +134,23 @@ const SetOwnership = () => {
             <MenuItem value={3}>3</MenuItem>
           </Select>
           <Button
-            disabled={team === "Select Team"}
+            disabled={team === "Select Team" || building === -1}
             onClick={handleClick}
             sx={{ marginTop: 2 }}
           >
             Submit
           </Button>
         </FormControl>
+        {!(team === "Select Team" || building === -1) ? (
+          <>
+            <Typography component="h2" variant="h6" sx={{ marginBottom: 2 }}>
+              Preview
+            </Typography>
+            <PropertyCard {...buildingData} />
+            <KeyboardDoubleArrowDownIcon />
+            <PropertyCard {...buildingData} level={level} owner={team} />
+          </>
+        ) : null}
       </Box>
     </Container>
   );

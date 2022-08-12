@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Stack,
   Container,
@@ -6,23 +6,19 @@ import {
   Card,
   CardContent,
   Typography,
+  // Box,
 } from "@mui/material";
+import Loading from "./Loading";
 import axios from "./axios";
-import RoleContext from "./useRole";
 
 const Notifications = () => {
-  const {
-    messages,
-    setMessages, // eslint-disable-line no-unused-vars
-    eventMessage,
-    setEventMessage,
-    permMessages,
-    setPermMessages,
-  } = useContext(RoleContext);
-  const [id, setId] = useState(0); // eslint-disable-line no-unused-vars
+  const [messages, setMessages] = useState([]);
+  const [eventMessage, setEventMessage] = useState({});
+  const [permMessages, setPermMessages] = useState([]);
 
   const FetchEvent = async () => {
     const { data } = await axios.get("/event");
+    // console.log(data);
     if (data !== null) setEventMessage(data); //avoid 0 state
   };
 
@@ -40,6 +36,14 @@ const Notifications = () => {
     //fetch messages from backend
     FetchMessages();
     //assign data to the messages
+    // refresh every 10 seconds
+    const interval = setInterval(() => {
+      FetchEvent();
+      FetchMessages();
+    }, 5000);
+    return () => clearInterval(interval);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const TimedComponent = ({ id, duration, title, content, createdAt }) => {
@@ -47,7 +51,7 @@ const Notifications = () => {
 
     useEffect(() => {
       const calculate = () => {
-        const temp = duration - Math.floor(((Date.now() / 1000) - createdAt));
+        const temp = duration - Math.floor(Date.now() / 1000 - createdAt);
         console.log(temp);
         setElapsed(temp);
       };
@@ -56,6 +60,7 @@ const Notifications = () => {
         calculate();
       }, 1000);
       return () => clearInterval(task);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -78,48 +83,54 @@ const Notifications = () => {
     );
   };
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <Stack
-        spacing={1}
-        sx={{
-          maxWidth: 700,
-          marginTop: "80px",
-          marginLeft: "20px",
-          marginRight: "20px",
-        }}
-      >
-        <Card
-          sx={{ backgroundColor: "rgb(60,60,60)", color: "rgb(255,255,255)" }}
+  if (eventMessage.title === undefined) {
+    return <Loading />;
+  } else {
+    return (
+      <Container component="main" maxWidth="xs">
+        <Stack
+          spacing={1}
+          sx={{
+            maxWidth: 700,
+            marginTop: "80px",
+            marginLeft: "20px",
+            marginRight: "20px",
+          }}
         >
-          <CardContent>
-            <Typography variant="h6">
-              事件：{eventMessage ? eventMessage.title : "無"}
-            </Typography>
-            <Typography variant="body2">{eventMessage.description}</Typography>
-          </CardContent>
-        </Card>
-        {permMessages &&
-          permMessages.map((item) => (
-            <Card>
-              <CardContent>
-                <Typography variant="subtitle1">{item.title}</Typography>
-                <Typography variant="body2">{item.description}</Typography>
-              </CardContent>
-            </Card>
-          ))}
-        {messages &&
-          messages.map((item) => (
-            <TimedComponent
-              id={id}
-              duration={item.duration}
-              title={item.title}
-              content={item.description}
-              createdAt={item.createdAt}
-            />
-          ))}
-      </Stack>
-    </Container>
-  );
+          <Card
+            sx={{ backgroundColor: "rgb(60,60,60)", color: "rgb(255,255,255)" }}
+          >
+            <CardContent>
+              <Typography variant="h6">
+                事件：{eventMessage ? eventMessage.title : "無"}
+              </Typography>
+              <Typography variant="body2">
+                {eventMessage.description}
+              </Typography>
+            </CardContent>
+          </Card>
+          {permMessages &&
+            permMessages.map((item) => (
+              <Card key={item.id}>
+                <CardContent>
+                  <Typography variant="subtitle1">{item.title}</Typography>
+                  <Typography variant="body2">{item.description}</Typography>
+                </CardContent>
+              </Card>
+            ))}
+          {messages &&
+            messages.map((item) => (
+              <TimedComponent
+                id={item.id}
+                duration={item.duration}
+                title={item.title}
+                content={item.description}
+                createdAt={item.createdAt}
+              />
+            ))}
+        </Stack>
+      </Container>
+    );
+  }
 };
 export default Notifications;

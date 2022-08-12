@@ -289,6 +289,11 @@ const lands = [
 
 const events = [
   {
+    id: 0,
+    title: "無",
+    description: "",
+  },
+  {
     id: 1,
     title: "去上學",
     description: "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課",
@@ -441,6 +446,8 @@ db.once("open", async () => {
   await User.deleteMany({});
   await Event.deleteMany({});
   await Pair.deleteMany({});
+  await Notification.deleteMany({});
+  await Effect.deleteMany({});
   console.log("delete done");
 
   users.forEach(async (user) => {

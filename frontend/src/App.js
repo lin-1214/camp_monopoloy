@@ -16,32 +16,21 @@ import Additional from "./components/admin/Additional";
 import SetOccupation from "./components/admin/SetOccupation";
 import PermissionDenied from "./components/PermissionDenied";
 import RoleContext from "./components/useRole";
+import Loading from "./components/Loading";
 import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
   const [role, setRole] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [eventMessage, setEventMessage] = useState({
-    title: "none",
-    content: "目前沒有事件正在發生...",
-  });
-  const [permMessages, setPermMessages] = useState([]);
   const [teams, setTeams] = useState([]);
-  const [id, setId] = useState(100);
+  const [buildings, setBuildings] = useState([]);
   const value = {
     role,
     setRole,
     teams,
     setTeams,
-    messages,
-    setMessages,
-    eventMessage,
-    setEventMessage,
-    id,
-    setId,
-    permMessages,
-    setPermMessages,
+    buildings,
+    setBuildings,
   };
   return (
     // <SocketContext.Provider value={socket}>
@@ -62,6 +51,7 @@ const App = () => {
               <Route path="additional" element={<Additional />} />
               <Route path="setoccupation" element={<SetOccupation />} />
               <Route path="permission" element={<PermissionDenied />} />
+              <Route path="loading" element={<Loading />} />
             </Route>
           </Routes>
         </BrowserRouter>

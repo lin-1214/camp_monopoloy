@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 import RoleContext from "../useRole";
+import Loading from "../Loading";
 import axios from "../axios";
 
 const Teams = () => {
@@ -40,54 +41,58 @@ const Teams = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <Paper
-      elevation={0}
-      sx={{
-        overflow: "hidden",
-        paddingTop: "80px",
-        margin: "auto",
-      }}
-    >
-      <TableContainer
+  if (teams.length === 0) {
+    return <Loading />;
+  } else {
+    return (
+      <Paper
+        elevation={0}
         sx={{
-          maxHeight: 800,
+          overflow: "hidden",
+          paddingTop: "80px",
+          margin: "auto",
         }}
       >
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((item) => (
-                <TableCell
-                  key={item.id}
-                  align={item.align}
-                  style={{ minWidth: item.minWidth }}
-                >
-                  {item.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {teams.map((item) => {
-              return (
-                <TableRow key={item.teamname}>
-                  {columns.map((column) => {
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.id === "money"
-                          ? Math.round(item[column.id])
-                          : item[column.id]}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  );
+        <TableContainer
+          sx={{
+            maxHeight: 800,
+          }}
+        >
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((item) => (
+                  <TableCell
+                    key={item.id}
+                    align={item.align}
+                    style={{ minWidth: item.minWidth }}
+                  >
+                    {item.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teams.map((item) => {
+                return (
+                  <TableRow key={item.teamname}>
+                    {columns.map((column) => {
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.id === "money"
+                            ? Math.round(item[column.id])
+                            : item[column.id]}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    );
+  }
 };
 export default Teams;

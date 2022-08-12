@@ -17,22 +17,40 @@ import RoleContext from "../useRole";
 
 const SetMoney = () => {
   const [team, setTeam] = useState("Select Team");
+  const [teamData, setTeamData] = useState({});
   const [amount, setAmount] = useState("0");
   const [errorMessage, setErrorMessage] = useState("");
-  const { role, teams, setTeams } = useContext(RoleContext);
+  const [showPreview, setShowPreview] = useState(false);
+  const { role } = useContext(RoleContext);
   const navigate = useNavigate();
-  // with parameter ratio
+
+  const handleTeam = async (team) => {
+    const { data } = await axios.get("/team/" + team);
+    // console.log(data);
+    setTeamData(data);
+    setTeam(team);
+  };
+
+  const handleAmount = async (amount) => {
+    setShowPreview(true);
+    setAmount(amount);
+  };
+
   const handlePercentMoney = async () => {
-    if (teams.length === 0) {
-      await axios.get("/team");
+    if (teamData.teamname !== team) {
+      const { data } = await axios.get("/team/" + team);
+      console.log(data);
+      setTeamData(data);
     }
-    const item = teams.find((element) => element.teamname === team); //find the team's money
-    const money = item.money;
-    setAmount(Math.round(money * -0.1));
+    const money = teamData.money;
+    handleAmount(Math.round(money * -0.1));
   };
 
   const handleClick = async () => {
-    const payload = { teamname: team, dollar: parseInt(amount) ? parseInt(amount) : 0 };
+    const payload = {
+      teamname: team,
+      dollar: parseInt(amount) ? parseInt(amount) : 0,
+    };
     await axios.post("/add", payload);
     navigate("/teams");
   };
@@ -45,9 +63,9 @@ const SetMoney = () => {
         sx={{ marginBottom: 1, width: 80 }}
         onClick={() => {
           if (!amount) {
-            setAmount(val);
+            handleAmount(val);
           } else {
-            setAmount(parseInt(amount) + val);
+            handleAmount(parseInt(amount) + val);
           }
         }}
       >
@@ -61,14 +79,14 @@ const SetMoney = () => {
     if (role === "") {
       navigate("/permission");
     }
-    axios
-      .get("/team")
-      .then((res) => {
-        setTeams(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // axios
+    //   .get("/team")
+    //   .then((res) => {
+    //     setTeams(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -91,7 +109,7 @@ const SetMoney = () => {
             value={team}
             id="team-label"
             onChange={(e) => {
-              setTeam(e.target.value);
+              handleTeam(e.target.value);
             }}
           >
             <MenuItem value={"Select Team"}>Select Team</MenuItem>
@@ -112,8 +130,12 @@ const SetMoney = () => {
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
               const re = /^-?[0-9\b]+$/;
-              if (e.target.value === "-" || e.target.value === "" || re.test(e.target.value)) {
-                setAmount(e.target.value ? e.target.value : "");
+              if (
+                e.target.value === "-" ||
+                e.target.value === "" ||
+                re.test(e.target.value)
+              ) {
+                handleAmount(e.target.value ? e.target.value : "");
                 setErrorMessage("");
               } else {
                 setErrorMessage("Please enter a valid number");
@@ -163,6 +185,20 @@ const SetMoney = () => {
             Submit
           </Button>
         </FormControl>
+        {showPreview ? (
+          <>
+            <Typography component="h1" variant="h6" sx={{ marginBottom: 2 }}>
+              Preview
+            </Typography>
+            <Typography
+              component="body1"
+              variant="body2"
+              sx={{ marginBottom: 2 }}
+            >
+              {teamData.money} &gt;&gt; {teamData.money + amount}
+            </Typography>
+          </>
+        ) : null}
       </Box>
     </Container>
   );

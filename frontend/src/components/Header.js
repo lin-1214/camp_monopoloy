@@ -8,7 +8,7 @@ import RoleContext from "./useRole";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { role, setRole, messages, setMessages } = useContext(RoleContext);
+  const { role, setRole } = useContext(RoleContext);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleChange = () => {
@@ -16,33 +16,19 @@ const Header = () => {
   };
 
   const handleLogin = () => {
-    console.log(role);
+    // console.log(role);
     navigate("login");
   };
 
   const handleLogout = () => {
-    console.log(role);
+    // console.log(role);
     setRole("");
     navigate("/"); //set to home later
   };
 
   useEffect(() => {
-    // let task = setInterval(() => {
-    //   if (messages.length > 0) {
-    //     const temp = messages.slice();
-    //     temp.forEach((item) => {
-    //       if (item.duration >= 0) item.duration -= 1;
-    //     });
-    //     const temp2 = temp.filter((item) => item.duration > 0);
-    //     setMessages(temp2);
-    //   }
-    // }, 1000);
-
-    // return () => {
-    //   clearInterval(task);
-    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, []);
 
   return (
     <Grid container>

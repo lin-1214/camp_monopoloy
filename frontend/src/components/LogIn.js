@@ -27,7 +27,7 @@ const LogIn = () => {
     const {
       data: { username },
     } = await axios.post("/login", payload);
-    console.log(username);
+    // console.log(username);
     if (username === "NPC" || username === "admin") {
       //successed!
       setMessage("Successfully login!");
