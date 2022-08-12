@@ -113,7 +113,7 @@ router.post("/add", async (req, res) => {
     if (dollar < 0) {
       const newTeam = await Team.findOneAndUpdate(
         { teamname },
-        { money: team.money + dollar * 1.5 }
+        { money: Math.round(team.money + dollar * 1.5) }
       );
       if (!newTeam) {
         res.status(403).send();
@@ -178,12 +178,12 @@ router.post("/transfer", async (req, res) => {
     res.status(200).send("Update succeeded");
     return;
   }
-  
+
   if (!IsEstate) {
     if (team1.soulgem.value === true) {
       const newTeam1 = await Team.findOneAndUpdate(
         { teamname: from },
-        { money: team1.money - dollar * 1.5 }
+        { money: Math.round(team1.money - dollar * 1.5) }
       );
       if (!newTeam1) {
         res.status(403).send();
@@ -226,7 +226,7 @@ router.post("/transfer", async (req, res) => {
     if (team1.soulgem.value === true) {
       const newTeam1 = await Team.findOneAndUpdate(
         { teamname: from },
-        { money: team1.money - dollar * 1.5 * team2.bonus.value }
+        { money: Math.round(team1.money - dollar * 1.5 * team2.bonus.value) }
       );
       if (!newTeam1) {
         res.status(403).send();

@@ -17,7 +17,8 @@ import RoleContext from "../useRole";
 
 const SetMoney = () => {
   const [team, setTeam] = useState("Select Team");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("0");
+  const [errorMessage, setErrorMessage] = useState("");
   const { role, teams, setTeams } = useContext(RoleContext);
   const navigate = useNavigate();
   // with parameter ratio
@@ -31,7 +32,7 @@ const SetMoney = () => {
   };
 
   const handleClick = async () => {
-    const payload = { teamname: team, dollar: amount };
+    const payload = { teamname: team, dollar: parseInt(amount) ? parseInt(amount) : 0 };
     await axios.post("/add", payload);
     navigate("/teams");
   };
@@ -46,7 +47,7 @@ const SetMoney = () => {
           if (!amount) {
             setAmount(val);
           } else {
-            setAmount(amount + val);
+            setAmount(parseInt(amount) + val);
           }
         }}
       >
@@ -110,8 +111,15 @@ const SetMoney = () => {
             value={amount}
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
-              setAmount(e.target.value ? parseInt(e.target.value) : "");
+              const re = /^-?[0-9\b]+$/;
+              if (e.target.value === "-" || e.target.value === "" || re.test(e.target.value)) {
+                setAmount(e.target.value ? e.target.value : "");
+                setErrorMessage("");
+              } else {
+                setErrorMessage("Please enter a valid number");
+              }
             }}
+            helperText={errorMessage}
           />
           <Box
             sx={{

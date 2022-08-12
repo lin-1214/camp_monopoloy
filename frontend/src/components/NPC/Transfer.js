@@ -25,12 +25,19 @@ const Transfer = () => {
   const [from, setFrom] = useState("Select Team");
   const [to, setTo] = useState("Select Team");
   const [amount, setAmount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState("");
   const [equal, setEqual] = useState(false);
   const [isEstate, setIsEstate] = useState(true);
   const { teams, setTeams, role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = async () => {
-    const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount, equal };
+    const payload = {
+      from: from,
+      to: to,
+      IsEstate: isEstate,
+      dollar: parseInt(amount),
+      equal,
+    };
     await axios.post("/transfer", payload);
     navigate("/teams");
   };
@@ -153,7 +160,7 @@ const Transfer = () => {
           variant="standard"
           sx={{ minWidth: "250px", marginTop: 2 }}
         >
-          <TextField
+          {/* <TextField
             required
             label="Amount"
             id="amount"
@@ -163,6 +170,26 @@ const Transfer = () => {
               setAmount(e.target.value);
               setEqual(false);
             }}
+          /> */}
+          <TextField
+            required
+            label="Amount"
+            id="amount"
+            value={amount}
+            sx={{ marginTop: 3, marginBottom: 2 }}
+            onChange={(e) => {
+              const re = /^[0-9\b]+$/;
+              if (
+                e.target.value === "" ||
+                re.test(e.target.value)
+              ) {
+                setAmount(e.target.value ? e.target.value : "");
+                setErrorMessage("");
+              } else {
+                setErrorMessage("Please enter a valid number");
+              }
+            }}
+            helperText={errorMessage}
           />
           <Box
             sx={{
