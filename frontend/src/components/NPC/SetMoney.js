@@ -20,13 +20,14 @@ const SetMoney = () => {
   const [amount, setAmount] = useState(0);
   const { role, teams, setTeams } = useContext(RoleContext);
   const navigate = useNavigate();
+  // with parameter ratio
   const handlePercentMoney = async () => {
     if (teams.length === 0) {
       await axios.get("/team");
     }
     const item = teams.find((element) => element.teamname === team); //find the team's money
     const money = item.money;
-    setAmount(money * 0.1);
+    setAmount(Math.round(money * -0.1));
   };
 
   const handleClick = async () => {
@@ -42,9 +43,14 @@ const SetMoney = () => {
         disabled={team === "Select Team"}
         sx={{ marginBottom: 1, width: 80 }}
         onClick={() => {
-          setAmount(amount + val);
+          if (!amount) {
+            setAmount(val);
+          } else {
+            setAmount(amount + val);
+          }
         }}
       >
+        {val > 0 ? "+" : ""}
         {val}
       </Button>
     );
@@ -76,7 +82,7 @@ const SetMoney = () => {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
-          Set Money
+          Add Money
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
           <InputLabel id="team-label">Team</InputLabel>
@@ -104,7 +110,7 @@ const SetMoney = () => {
             value={amount}
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
-              setAmount(parseInt(e.target.value));
+              setAmount(e.target.value ? parseInt(e.target.value) : "");
             }}
           />
           <Box
@@ -114,9 +120,9 @@ const SetMoney = () => {
               justifyContent: "space-between",
             }}
           >
-            <SimpleMoneyButton val={100} />
-            <SimpleMoneyButton val={1000} />
-            <SimpleMoneyButton val={5000} />
+            <SimpleMoneyButton val={+100} />
+            <SimpleMoneyButton val={+1000} />
+            <SimpleMoneyButton val={+5000} />
           </Box>
           <Box
             sx={{
@@ -136,23 +142,14 @@ const SetMoney = () => {
               justifyContent: "center",
             }}
           >
-            {/* <SimpleMoneyButton val={10000} /> */}
             <Button
               variant="contained"
               disabled={team === "Select Team"}
-              sx={{ marginBottom: 1, width: 80 }}
+              sx={{ marginBottom: 1, width: 80, mx: 2 }}
               onClick={handlePercentMoney}
             >
-              10%
+              -10%
             </Button>
-            {/* <Button
-              variant="contained"
-              disabled={team === "Select Team"}
-              onClick={() => setAmount(amount * -1)}
-              sx={{ marginBottom: 1 }}
-            >
-              Negative
-            </Button> */}
           </Box>
           <Button disabled={!(team && amount)} onClick={handleClick}>
             Submit

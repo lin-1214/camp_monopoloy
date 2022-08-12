@@ -103,7 +103,7 @@ router.post("/occupation", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
-  const team = await Team.findAndCheckValid({ teamname });
+  const team = await Team.findAndCheckValid(teamname);
   if (!team) {
     res.status(403).send();
     console.log("Team not found");
@@ -122,7 +122,7 @@ router.post("/add", async (req, res) => {
       }
     } else {
       const newTeam = await Team.findOneAndUpdate(
-        { teamname: teamname },
+        { teamname },
         { money: team.money + dollar * 2 }
       );
       if (!newTeam) {
@@ -133,9 +133,10 @@ router.post("/add", async (req, res) => {
     }
   } else {
     const newTeam = await Team.findOneAndUpdate(
-      { teamname: teamname },
+      { teamname },
       { money: team.money + dollar }
     );
+    console.log(team, newTeam);
     if (!newTeam) {
       res.status(403).send();
       console.log("Update failed");
@@ -146,8 +147,8 @@ router.post("/add", async (req, res) => {
 });
 
 router.post("/transfer", async (req, res) => {
-  const { from, to, IsEstate, dollar } = req.body;
-  const team1 = await Team.findAndCheckValid({ teamname: from });
+  const { from, to, IsEstate, dollar, equal } = req.body;
+  const team1 = await Team.findAndCheckValid(from);
   if (!team1) {
     res.status(403).send();
     console.log("Team not found");
@@ -159,6 +160,25 @@ router.post("/transfer", async (req, res) => {
     console.log("Team not found");
     return;
   }
+  if (equal) {
+    const equalmoney = Math.round((team1.money + team2.money) / 2);
+    const newTeam1 = await Team.findOneAndUpdate(
+      { teamname: from },
+      { money: equalmoney }
+    );
+    const newTeam2 = await Team.findOneAndUpdate(
+      { teamname: to },
+      { money: equalmoney }
+    );
+    if (!newTeam1 || !newTeam2) {
+      res.status(403).send();
+      console.log("Update failed");
+      return;
+    }
+    res.status(200).send("Update succeeded");
+    return;
+  }
+  
   if (!IsEstate) {
     if (team1.soulgem.value === true) {
       const newTeam1 = await Team.findOneAndUpdate(

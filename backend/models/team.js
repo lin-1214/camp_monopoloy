@@ -8,9 +8,9 @@ const TeamSchema = new Schema({
   soulgem: { value: Boolean, time: Number },
 });
 
-TeamSchema.statics.findAndCheckValid = async function (name) {
-  console.log(name);
-  const team = await this.findOne({ name });
+TeamSchema.statics.findAndCheckValid = async function (teamname) {
+  console.log(teamname);
+  const team = await this.findOne({ teamname });
   console.log(team);
   if (!team) {
     return null;

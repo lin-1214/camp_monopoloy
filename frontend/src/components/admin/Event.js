@@ -27,6 +27,7 @@ const Event = () => {
       title: events[event].title,
       content: message,
     });
+    axios.post("/event", { id: event + 1 });
     navigate("/notifications");
   };
 
@@ -59,7 +60,7 @@ const Event = () => {
           Event Settings
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
-          <InputLabel id="title">Trait</InputLabel>
+          <InputLabel id="title">Title</InputLabel>
           <Select
             value={event}
             labelId="title"

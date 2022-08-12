@@ -25,26 +25,29 @@ const Transfer = () => {
   const [from, setFrom] = useState("Select Team");
   const [to, setTo] = useState("Select Team");
   const [amount, setAmount] = useState(0);
+  const [equal, setEqual] = useState(false);
   const [isEstate, setIsEstate] = useState(true);
   const { teams, setTeams, role } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = async () => {
-    const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount };
+    const payload = { from: from, to: to, IsEstate: isEstate, dollar: amount, equal };
     await axios.post("/transfer", payload);
-    navigate("/");
+    navigate("/teams");
   };
 
   const handlePercentMoney = (percent) => {
     const item = teams.find((element) => element.teamname === from);
     const money = item.money; //find the team's money
-    setAmount(money * percent);
+    setAmount(Math.round(money * percent));
+    setEqual(false);
   };
 
   const handleEqualMoney = () => {
     let money_from = teams.find((element) => element.teamname === from).money; //first team (using the card)
     let money_to = teams.find((element) => element.teamname === to).money; //second team(passive)
-    let temp = (money_from - money_to) / 2;
+    let temp = Math.round((money_from - money_to) / 2);
     setAmount(temp);
+    setEqual(true);
   };
 
   useEffect(() => {
@@ -145,19 +148,6 @@ const Transfer = () => {
             />
             <Typography>Yes</Typography>
           </Stack>
-
-          {/* <FormLabel>Is concerning estate</FormLabel>
-          <RadioGroup
-            value={isEstate}
-            row
-            display="flex"
-            onChange={(e) => {
-              setIsEstate(e.target.value);
-            }}
-          >
-            <FormControlLabel value={true} control={<Radio />} label="Yes" />
-            <FormControlLabel value={false} control={<Radio />} label="No" />
-          </RadioGroup> */}
         </FormControl>
         <FormControl
           variant="standard"
@@ -171,6 +161,7 @@ const Transfer = () => {
             sx={{ marginTop: 2, marginBottom: 2 }}
             onChange={(e) => {
               setAmount(e.target.value);
+              setEqual(false);
             }}
           />
           <Box
@@ -206,7 +197,7 @@ const Transfer = () => {
             </Button>
           </Box>
           <Button
-            disabled={!(from && to && amount) || from !== to}
+            disabled={!(from && to && amount) || from === to}
             onClick={handleClick}
           >
             Submit

@@ -30,7 +30,7 @@ export const NPCItems = [
   {
     id: 4,
     icon: <BuildIcon />,
-    label: "Set Money",
+    label: "Add Money",
     route: "setmoney",
   },
   {
