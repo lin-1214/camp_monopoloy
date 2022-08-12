@@ -22,12 +22,12 @@ const Event = () => {
   const [events, setEvents] = useState([]);
   const { setEventMessage, role } = useContext(RoleContext);
   const navigate = useNavigate();
-  const handleClick = () => {
-    setEventMessage({
-      title: events[event].title,
-      content: message,
-    });
-    axios.post("/event", { id: event + 1 });
+  const handleClick = async () => {
+    // setEventMessage({
+    //   title: events[event].title,
+    //   content: message,
+    // });
+    await axios.post("/event", { id: event + 1 });
     navigate("/notifications");
   };
 

@@ -408,7 +408,18 @@ const notifications = [
     id: 0,
     title: "歡迎遊玩大富翁",
     description: "衝啊",
+    type: "permenant",
+    duration: -1,
+    createdAt: 0,
   },
+  // {
+  //   id: 1,
+  //   title: "Test temporary",
+  //   description: "temporary",
+  //   type: "temporary",
+  //   duration: 10,
+  //   createdAt: Date.now() / 1000,
+  // },
 ];
 
 const pairs = [

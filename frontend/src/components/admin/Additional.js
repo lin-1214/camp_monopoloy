@@ -38,31 +38,31 @@ const Additional = () => {
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    var effect = effects[event];
-    if (effect.trait === 1) {
-      //temporary messages
-      console.log(messages);
-      let temp = messages.slice();
-      temp.push({
-        id: id,
-        duration: effect.duration,
-        title: title,
-        content: message,
-      });
-      setMessages(temp);
-      setId(id + 1);
-    } else {
-      //permanaent messages
-      let temp = permMessages.slice();
-      temp.push({
-        title: title,
-        content: message,
-      });
-      setPermMessages(temp);
-    }
-    setOpen(true);
+    // var effect = effects[event];
+    // if (effect.trait === 1) {
+    //   //temporary messages
+    //   console.log(messages);
+    //   let temp = messages.slice();
+    //   temp.push({
+    //     id: id,
+    //     duration: effect.duration,
+    //     title: title,
+    //     description: message,
+    //   });
+    //   setMessages(temp);
+    //   setId(id + 1);
+    // } else {
+    //   //permanaent messages
+    //   let temp = permMessages.slice();
+    //   temp.push({
+    //     title: title,
+    //     content: message,
+    //   });
+    //   setPermMessages(temp);
+    // }
+    // setOpen(true);
     const payload = { teamname: team, title };
-    axios.post("/effect", payload);
+    await axios.post("/effect", payload);
     navigate("/notifications");
   };
 

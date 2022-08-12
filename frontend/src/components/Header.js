@@ -27,20 +27,20 @@ const Header = () => {
   };
 
   useEffect(() => {
-    let task = setInterval(() => {
-      if (messages.length > 0) {
-        const temp = messages.slice();
-        temp.forEach((item) => {
-          if (item.duration >= 0) item.duration -= 1;
-        });
-        const temp2 = temp.filter((item) => item.duration > 0);
-        setMessages(temp2);
-      }
-    }, 1000);
+    // let task = setInterval(() => {
+    //   if (messages.length > 0) {
+    //     const temp = messages.slice();
+    //     temp.forEach((item) => {
+    //       if (item.duration >= 0) item.duration -= 1;
+    //     });
+    //     const temp2 = temp.filter((item) => item.duration > 0);
+    //     setMessages(temp2);
+    //   }
+    // }, 1000);
 
-    return () => {
-      clearInterval(task);
-    };
+    // return () => {
+    //   clearInterval(task);
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 

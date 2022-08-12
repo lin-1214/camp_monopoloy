@@ -49,6 +49,20 @@ async function calcmoney(teamname, money, estate) {
   return money;
 }
 
+async function deleteTimeoutNotification() {
+  // delete timeout notifications
+  const notifications = await Notification.find();
+  const time = Date.now() / 1000;
+  // console.log(notifications);
+  for (let i = 0; i < notifications.length; i++) {
+    // console.log(notifications[i]);
+    if (notifications[i].createdAt + notifications[i].duration < time) {
+      await Notification.findByIdAndDelete(notifications[i]._id);
+      // console.log("Deleted notification", notifications[i].id);
+    }
+  }
+}
+
 router.get("/team", async (req, res) => {
   const teams = await Team.find().sort({ teamname: 1 });
   res.json(teams).status(200);
@@ -326,14 +340,7 @@ router.post("/effect", async (req, res) => {
     duration,
     createdAt: time,
   };
-  // delete timeout notifications
-  const notifications = await Notification.find({});
-  for (let i = 0; i < notifications.length; i++) {
-    if (notifications[i].createdAt + notifications[i].duration < time) {
-      await Notification.findByIdAndDelete(notifications[i]._id);
-      console.log("Deleted notification", notifications[i].id);
-    }
-  }
+  await deleteTimeoutNotification();
   // save
   await new Notification(notification).save();
   await team.save();
@@ -341,8 +348,10 @@ router.post("/effect", async (req, res) => {
 });
 
 router.get("/notifications", async (req, res) => {
-  const notifications = await Notification.find({});
-  res.json(notifications).status(200);
+  await deleteTimeoutNotification();
+  // save
+  const newNotifications = await Notification.find();
+  res.json(newNotifications).status(200);
 });
 
 // router.post("/bonus", async (req, res) => {

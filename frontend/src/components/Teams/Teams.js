@@ -75,7 +75,9 @@ const Teams = () => {
                   {columns.map((column) => {
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {item[column.id]}
+                        {column.id === "money"
+                          ? Math.round(item[column.id])
+                          : item[column.id]}
                       </TableCell>
                     );
                   })}
