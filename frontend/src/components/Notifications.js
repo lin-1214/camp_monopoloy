@@ -37,22 +37,24 @@ const Notifications = () => {
     FetchMessages();
     //assign data to the messages
     // refresh every 10 seconds
-    const interval = setInterval(() => {
-      FetchEvent();
-      FetchMessages();
-    }, 5000);
+    const interval = setInterval(async () => {
+      await FetchEvent();
+      await FetchMessages();
+    }, 10000);
     return () => clearInterval(interval);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const TimedComponent = ({ id, duration, title, content, createdAt }) => {
-    const [elapsed, setElapsed] = useState(0);
+    const [elapsed, setElapsed] = useState(
+      duration - Math.floor(Date.now() / 1000 - createdAt)
+    );
 
     useEffect(() => {
       const calculate = () => {
         const temp = duration - Math.floor(Date.now() / 1000 - createdAt);
-        console.log(temp);
+        // console.log(temp);
         setElapsed(temp);
       };
 
@@ -111,9 +113,18 @@ const Notifications = () => {
           </Card>
           {permMessages &&
             permMessages.map((item) => (
-              <Card key={item.id}>
+              // <Card key={item.id}>
+              //   <CardContent>
+              //     <Typography variant="subtitle1">{item.title}</Typography>
+              //     <Typography variant="body2">{item.description}</Typography>
+              //   </CardContent>
+              // </Card>
+              <Card
+                key={item.id}
+                sx={{ display: "flex", flexDirection: "column" }}
+              >
                 <CardContent>
-                  <Typography variant="subtitle1">{item.title}</Typography>
+                  <Typography variant="h6">{item.title}</Typography>
                   <Typography variant="body2">{item.description}</Typography>
                 </CardContent>
               </Card>
