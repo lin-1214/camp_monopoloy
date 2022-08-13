@@ -43,8 +43,9 @@ const Properties = () => {
       const offset = window.innerHeight / 2;
       window.scrollTo({
         top: position - offset,
-        behavior: "smooth",
+        // behavior: "smooth",
       });
+      window.focus();
       setScrolled(true);
       console.log("scrolled");
     }

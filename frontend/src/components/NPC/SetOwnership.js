@@ -11,19 +11,30 @@ import {
   Button,
   FormControl,
   FormHelperText,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
+import SendIcon from "@mui/icons-material/Send";
 import PropertyCard from "../Properties/PropertyCard";
 import Loading from "../Loading";
 import RoleContext from "../useRole";
 import axios from "../axios";
 
 const SetOwnership = () => {
-  const [team, setTeam] = useState("Select Team");
+  const [team, setTeam] = useState(-1);
   const [building, setBuilding] = useState(-1);
   const [buildingData, setBuildingData] = useState({});
-  const [level, setLevel] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [prefill, setPrefill] = useState(false);
+  const [open, setOpen] = useState(false);
   const { role, filteredBuildings } = useContext(RoleContext);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams(); // eslint-disable-line no-unused-vars
+  const prefillTeams = searchParams.get("team");
+  const prefillBuilding = searchParams.get("id");
+  // console.log(prefillBuilding);
+  // console.log(prefillTeams);
 
   const handleClick = async () => {
     const payload = { teamId: team, land: buildingData.name, level };
@@ -32,7 +43,7 @@ const SetOwnership = () => {
   };
 
   const handleTeam = async (team) => {
-    if (team === "N/A") {
+    if (team === 0) {
       setLevel(0);
     }
     setTeam(team);
@@ -42,14 +53,30 @@ const SetOwnership = () => {
     const { data } = await axios.get("/land/" + building);
     setBuilding(building);
     setBuildingData(data);
+    setLevel(data.level + 1);
+  };
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   useEffect(() => {
     if (role === "") {
       navigate("/permission");
     }
+    if (!prefill && prefillBuilding !== null && prefillTeams !== null) {
+      handleTeam(parseInt(prefillTeams));
+      handleBuilding(parseInt(prefillBuilding));
+      setPrefill(true);
+      console.log("prefilled");
+    } else {
+      setOpen(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [prefillBuilding, prefillTeams]);
 
   if (filteredBuildings.length === 0) {
     return <Loading />;
@@ -93,7 +120,7 @@ const SetOwnership = () => {
                 handleTeam(e.target.value);
               }}
             >
-              <MenuItem value={"Select Team"}>Select Team</MenuItem>
+              <MenuItem value={-1}>Select Team</MenuItem>
               <MenuItem value={0}>N/A</MenuItem>
               <MenuItem value={1}>第1小隊</MenuItem>
               <MenuItem value={2}>第2小隊</MenuItem>
@@ -104,7 +131,7 @@ const SetOwnership = () => {
               <MenuItem value={7}>第7小隊</MenuItem>
               <MenuItem value={8}>第8小隊</MenuItem>
             </Select>
-            {team !== buildingData.owner && team !== "Select Team" ? (
+            {team !== buildingData.owner && team !== -1 ? (
               <FormHelperText>Owner has Change!!!</FormHelperText>
             ) : null}
           </FormControl>
@@ -123,15 +150,27 @@ const SetOwnership = () => {
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
             </Select>
-            <Button
-              disabled={team === "Select Team" || building === -1}
+            {level - buildingData.level !== 1 && team !== -1 ? (
+              <FormHelperText>Not Upgrading 1 level!!!</FormHelperText>
+            ) : null}
+            {/* <Button
+              disabled={team === -1 || building === -1}
               onClick={handleClick}
               sx={{ marginTop: 2 }}
             >
               Submit
-            </Button>
+            </Button> */}
+            <Button
+                  variant="contained"
+                  disabled={team === -1 || building === -1}
+                  onClick={handleClick}
+                  fullWidth
+                  sx={{ marginTop: 2 }}
+                >
+                  <SendIcon />
+                </Button>
           </FormControl>
-          {!(team === "Select Team" || building === -1) ? (
+          {!(team === -1 || building === -1) ? (
             <>
               <Typography component="h2" variant="h6" sx={{ marginBottom: 2 }}>
                 Preview
@@ -147,6 +186,15 @@ const SetOwnership = () => {
             </>
           ) : null}
         </Box>
+        <Snackbar open={open} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            sx={{ width: "100%" }}
+            severity={"warning"}
+          >
+            Not from Add Money!
+          </Alert>
+        </Snackbar>
       </Container>
     );
   }

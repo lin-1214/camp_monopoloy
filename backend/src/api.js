@@ -71,8 +71,8 @@ router.get("/team", async (req, res) => {
   res.json(teams).status(200);
 });
 
-router.get("/team/:teamname", async (req, res) => {
-  const team = await Team.findOne({ teamname: req.params.teamname });
+router.get("/team/:teamId", async (req, res) => {
+  const team = await Team.findOne({ teamId: req.params.teamId });
   res.json(team).status(200);
 });
 

@@ -16,14 +16,17 @@ import {
   TableCell,
   Table,
   Paper,
-  Divider,
+  Grid,
   TableBody,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import AddIcon from "@mui/icons-material/Add";
 import axios from "../axios";
 import RoleContext from "../useRole";
 
 const SetMoney = () => {
-  const [team, setTeam] = useState("Select Team");
+  const [team, setTeam] = useState(-1);
   const [teamData, setTeamData] = useState({});
 
   const [amount, setAmount] = useState("0");
@@ -37,7 +40,7 @@ const SetMoney = () => {
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
-    if (amount !== "-" && amount !== "" && team !== "Select Team") {
+    if (amount !== "-" && amount !== "" && team !== -1) {
       setShowPreview(true);
     } else {
       setShowPreview(false);
@@ -49,7 +52,7 @@ const SetMoney = () => {
   };
 
   const handleAmount = async (amount) => {
-    if (amount !== "-" && amount !== "" && team !== "Select Team") {
+    if (amount !== "-" && amount !== "" && team !== -1) {
       setShowPreview(true);
     } else {
       setShowPreview(false);
@@ -79,20 +82,29 @@ const SetMoney = () => {
     handleAmount(Math.round(money * -0.1));
   };
 
-  const handleClick = async () => {
+  const handleSubmit = async () => {
     const payload = {
-      teamname: team,
+      teamname: `第${team}小隊`,
       dollar: parseInt(amount) ? parseInt(amount) : 0,
     };
     await axios.post("/add", payload);
     navigate("/teams");
   };
 
+  const handleSubmitAndSetOwnership = async () => {
+    const payload = {
+      teamname: `第${team}小隊`,
+      dollar: parseInt(amount) ? parseInt(amount) : 0,
+    };
+    await axios.post("/add", payload);
+    navigate("/setownership?id=" + building + "&team=" + team);
+  };
+
   const SimpleMoneyButton = ({ val }) => {
     return (
       <Button
         variant="contained"
-        disabled={team === "Select Team"}
+        disabled={team === -1}
         sx={{ marginBottom: 1, width: 80 }}
         onClick={() => {
           if (!amount) {
@@ -145,15 +157,15 @@ const SetMoney = () => {
               handleTeam(e.target.value);
             }}
           >
-            <MenuItem value={"Select Team"}>Select Team</MenuItem>
-            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
-            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
-            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
-            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
-            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
-            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
-            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
-            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
+            <MenuItem value={-1}>Select Team</MenuItem>
+            <MenuItem value={1}>第1小隊</MenuItem>
+            <MenuItem value={2}>第2小隊</MenuItem>
+            <MenuItem value={3}>第3小隊</MenuItem>
+            <MenuItem value={4}>第4小隊</MenuItem>
+            <MenuItem value={5}>第5小隊</MenuItem>
+            <MenuItem value={6}>第6小隊</MenuItem>
+            <MenuItem value={7}>第7小隊</MenuItem>
+            <MenuItem value={8}>第8小隊</MenuItem>
           </Select>
           <TextField
             required
@@ -212,7 +224,7 @@ const SetMoney = () => {
           >
             <Button
               variant="contained"
-              disabled={team === "Select Team"}
+              disabled={team === -1}
               sx={{ marginBottom: 1, width: 80 }}
               onClick={handlePercentMoney}
             >
@@ -220,7 +232,7 @@ const SetMoney = () => {
             </Button>
             <Button
               variant="contained"
-              disabled={team === "Select Team" || !price.buy}
+              disabled={team === -1 || !price.buy}
               sx={{ marginBottom: 1, width: 80 }}
               onClick={() => handleAmount(-1 * price.buy)}
             >
@@ -228,26 +240,45 @@ const SetMoney = () => {
             </Button>
             <Button
               variant="contained"
-              disabled={team === "Select Team" || !price.upgrade}
+              disabled={team === -1 || !price.upgrade}
               sx={{ marginBottom: 1, width: 80 }}
               onClick={() => handleAmount(-1 * price.upgrade)}
             >
               Upgrade
             </Button>
           </Box>
-          <Button
-            disabled={team === "Select Team" || amount === ""}
-            onClick={handleClick}
-            // variant="outlined"
-            // color="secondary"
-          >
-            Submit
-          </Button>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <Box display="flex" flexDirection="row" justifyContent="center">
+                <Button
+                  variant="contained"
+                  disabled={team === -1 || amount === ""}
+                  onClick={handleSubmit}
+                  fullWidth
+                >
+                  <SendIcon />
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box display="flex" flexDirection="row" justifyContent="center">
+                <Button
+                  variant="contained"
+                  disabled={team === -1 || amount === ""}
+                  onClick={handleSubmitAndSetOwnership}
+                  fullWidth
+                >
+                  <SendIcon />
+                  <AddIcon />
+                  <RequestQuoteIcon />
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </FormControl>
-        <Divider color="primary"/>
         <Box
           sx={{
-            marginTop: 0,
+            marginTop: 2,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mui/material";
 import Switch from "@mui/material/Switch";
-
+import SendIcon from "@mui/icons-material/Send";
 import RoleContext from "../useRole";
 import axios from "../axios";
 
@@ -224,11 +224,20 @@ const Transfer = () => {
               10%
             </Button>
           </Box>
-          <Button
+          {/* <Button
             disabled={!(from && to && amount) || from === to}
             onClick={handleClick}
           >
             Submit
+          </Button> */}
+          <Button
+            variant="contained"
+            disabled={!(from && to && amount) || from === to}
+            onClick={handleClick}
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            <SendIcon />
           </Button>
         </FormControl>
       </Box>

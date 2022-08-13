@@ -39,6 +39,9 @@ const theme = createTheme({
     primary: {
       main: "#009be5",
     },
+    secondary: {
+      main: "#006db3",
+    },
   },
   typography: {
     //fontFamily: "Merriweather",

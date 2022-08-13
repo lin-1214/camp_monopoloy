@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "./components/Header";
 import "./App.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
@@ -23,7 +23,7 @@ import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState(1);
   const [buildings, setBuildings] = useState([]);
@@ -40,10 +40,6 @@ const App = () => {
     filteredBuildings,
     setFilteredBuildings,
   };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     // <SocketContext.Provider value={socket}>

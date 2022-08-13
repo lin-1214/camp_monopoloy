@@ -134,7 +134,14 @@ const lands = [
     level: 0,
     price: { buy: 8000, upgrade: 4000 },
   },
-  { id: 6, type: "SpecialBuilding", name: "倫敦至聖所", owner: 0, hawkEye: 0 },
+  {
+    id: 6,
+    type: "SpecialBuilding",
+    name: "倫敦至聖所",
+    owner: 0,
+    hawkEye: 0,
+    price: { buy: 1000, upgrade: 0 },
+  },
   { id: 7, type: "Game", name: "跳左跳右", description: "細節略" },
   {
     id: 8,
@@ -144,6 +151,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 9,
@@ -153,6 +161,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 10,
@@ -169,6 +178,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   { id: 13, type: "Store", name: "商店", description: "可購買各種有力卡片！" },
   { id: 14, type: "Game", name: "吊死鬼", description: "細節略" },
@@ -180,8 +190,16 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
-  { id: 16, type: "SpecialBuilding", name: "香港至聖所", owner: 0, hawkEye: 0 },
+  {
+    id: 16,
+    type: "SpecialBuilding",
+    name: "香港至聖所",
+    owner: 0,
+    hawkEye: 0,
+    price: { buy: 1000, upgrade: 0 },
+  },
   {
     id: 17,
     type: "Chance",
@@ -196,6 +214,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 19,
@@ -205,6 +224,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   { id: 20, type: "Game", name: "含水猜歌", description: "細節略" },
   { id: 21, type: "Event", name: "事件", description: "有大事要發生的樣子..." },
@@ -216,6 +236,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 23,
@@ -225,6 +246,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 24,
@@ -240,8 +262,16 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
-  { id: 26, type: "SpecialBuilding", name: "紐約至聖所", owner: 0, hawkEye: 0 },
+  {
+    id: 26,
+    type: "SpecialBuilding",
+    name: "紐約至聖所",
+    owner: 0,
+    hawkEye: 0,
+    price: { buy: 1000, upgrade: 0 },
+  },
   { id: 27, type: "Game", name: "各自表述", description: "細節略" },
   {
     id: 28,
@@ -251,6 +281,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 29,
@@ -260,6 +291,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 30,
@@ -276,6 +308,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   { id: 33, type: "Store", name: "商店", description: "可購買各種有力卡片！" },
   { id: 34, type: "Game", name: "記憶tempo 2.0", description: "細節略" },
@@ -287,8 +320,16 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
-  { id: 36, type: "SpecialBuilding", name: "卡瑪泰姬", owner: 0, hawkEye: 0 },
+  {
+    id: 36,
+    type: "SpecialBuilding",
+    name: "卡瑪泰姬",
+    owner: 0,
+    hawkEye: 0,
+    price: { buy: 1000, upgrade: 0 },
+  },
   {
     id: 37,
     type: "Chance",
@@ -303,6 +344,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   {
     id: 39,
@@ -312,6 +354,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 1000, upgrade: 1000 },
   },
   { id: 40, type: "Game", name: "倒轉猜字", description: "細節略" },
 ];
@@ -468,6 +511,10 @@ const pairs = [
   {
     key: "hawkEyeTeam",
     value: 0,
+  },
+  {
+    key: "stage",
+    value: 1,
   },
 ];
 
