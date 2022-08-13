@@ -27,6 +27,7 @@ const Transfer = () => {
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [equal, setEqual] = useState(false);
+  const [error, setError] = useState(false);
   const [isEstate, setIsEstate] = useState(true);
   const { teams, setTeams, role } = useContext(RoleContext);
   const navigate = useNavigate();
@@ -173,6 +174,7 @@ const Transfer = () => {
           /> */}
           <TextField
             required
+            error={error}
             label="Amount"
             id="amount"
             value={amount}
@@ -182,8 +184,10 @@ const Transfer = () => {
               if (e.target.value === "" || re.test(e.target.value)) {
                 setAmount(e.target.value ? e.target.value : "");
                 setErrorMessage("");
+                setError(false);
               } else {
                 setErrorMessage("Please enter a valid number");
+                setError(true);
               }
             }}
             helperText={errorMessage}
