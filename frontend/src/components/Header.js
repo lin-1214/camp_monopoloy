@@ -5,10 +5,20 @@ import { Outlet } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavBar from "./NavBar/NavBar";
 import RoleContext from "./useRole";
+import axios from "./axios";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { role, setRole } = useContext(RoleContext);
+
+  const {
+    role,
+    setRole,
+    buildings,
+    setBuildings,
+    filteredBuildings,
+    setFilteredBuildings,
+  } = useContext(RoleContext);
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleChange = () => {
@@ -26,7 +36,29 @@ const Header = () => {
     navigate("/"); //set to home later
   };
 
+  const getProperties = async () => {
+    await axios
+      .get("/land")
+      .then((res) => {
+        setBuildings(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
+    console.log(buildings);
+    console.log(filteredBuildings);
+    if (buildings.length === 0 || filteredBuildings.length === 0) {
+      console.log("get properties");
+      getProperties();
+      setFilteredBuildings(
+        buildings.filter((building) => building.type === "Building")
+      );
+    }
+    console.log(buildings);
+    console.log(filteredBuildings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

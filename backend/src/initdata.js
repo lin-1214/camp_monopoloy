@@ -106,6 +106,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 10000, upgrade: 5000 },
   },
   {
     id: 3,
@@ -115,6 +116,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 12000, upgrade: 6000 },
   },
   {
     id: 4,
@@ -130,6 +132,7 @@ const lands = [
     owner: 0,
     hawkEye: 0,
     level: 0,
+    price: { buy: 8000, upgrade: 4000 },
   },
   { id: 6, type: "SpecialBuilding", name: "倫敦至聖所", owner: 0, hawkEye: 0 },
   { id: 7, type: "Game", name: "跳左跳右", description: "細節略" },

@@ -22,7 +22,7 @@ const SetOwnership = () => {
   const [building, setBuilding] = useState(-1);
   const [buildingData, setBuildingData] = useState({});
   const [level, setLevel] = useState(0);
-  const { role, buildings, filteredBuildings } = useContext(RoleContext);
+  const { role, filteredBuildings } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -113,7 +113,7 @@ const SetOwnership = () => {
             <Select
               value={level}
               labelId="level-building"
-              disabled={team === "N/A"}
+              disabled={team === 0}
               onChange={(e) => {
                 setLevel(e.target.value);
               }}

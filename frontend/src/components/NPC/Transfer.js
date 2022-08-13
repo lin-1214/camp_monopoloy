@@ -179,10 +179,7 @@ const Transfer = () => {
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
               const re = /^[0-9\b]+$/;
-              if (
-                e.target.value === "" ||
-                re.test(e.target.value)
-              ) {
+              if (e.target.value === "" || re.test(e.target.value)) {
                 setAmount(e.target.value ? e.target.value : "");
                 setErrorMessage("");
               } else {

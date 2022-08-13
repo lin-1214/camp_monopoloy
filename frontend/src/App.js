@@ -38,22 +38,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (buildings.length === 0 || filteredBuildings.length === 0) {
-      const getProperties = async () => {
-        await axios
-          .get("/land")
-          .then((res) => {
-            setBuildings(res.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
-      getProperties();
-      setFilteredBuildings(
-        buildings.filter((building) => building.type === "Building")
-      );
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

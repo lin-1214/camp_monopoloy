@@ -18,10 +18,14 @@ import RoleContext from "../useRole";
 const SetMoney = () => {
   const [team, setTeam] = useState("Select Team");
   const [teamData, setTeamData] = useState({});
+
   const [amount, setAmount] = useState("0");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [building, setBuilding] = useState(-1);
+
   const [showPreview, setShowPreview] = useState(false);
-  const { role } = useContext(RoleContext);
+  const { role, filteredBuildings } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
@@ -103,13 +107,13 @@ const SetMoney = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 10,
+          marginTop: 9,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ marginBottom: 2 }}>
+        <Typography component="h1" variant="h5" sx={{ marginBottom: 1 }}>
           Add Money
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
@@ -200,10 +204,34 @@ const SetMoney = () => {
           </Button>
         </FormControl>
 
-        <Box sx={{ marginTop: 2 }}>
-          <Typography component="h1" variant="h6" sx={{ marginBottom: 2 }}>
+        <Box
+          sx={{
+            marginTop: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h6" sx={{ marginBottom: 1 }}>
             Query Price
           </Typography>
+          <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 0 }}>
+            <InputLabel id="building">Building</InputLabel>
+            <Select
+              value={building}
+              labelId="building"
+              onChange={(e) => {
+                setBuilding(e.target.value);
+              }}
+            >
+              <MenuItem value={-1}>Select Building</MenuItem>
+              {filteredBuildings.map((item) => (
+                <MenuItem value={item.id} key={item.id}>
+                  {item.id} {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
 
         {showPreview ? (
