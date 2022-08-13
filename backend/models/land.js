@@ -9,6 +9,7 @@ const LandSchema = new Schema({
   hawkEye: Number,
   description: String,
   level: Number,
+  price: { buy: Number, upgrade: Number },
 });
 
 const Land = mongoose.model("Land", LandSchema);

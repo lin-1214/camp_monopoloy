@@ -18,7 +18,6 @@ import PermissionDenied from "./components/PermissionDenied";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
 import theme from "./theme";
-import axios from "./components/axios";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {

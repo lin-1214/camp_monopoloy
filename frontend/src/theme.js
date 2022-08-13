@@ -36,6 +36,9 @@ const theme = createTheme({
     white: {
       main: "#fff",
     },
+    primary: {
+      main: "#009be5",
+    },
   },
   typography: {
     fontFamily: "Merriweather",

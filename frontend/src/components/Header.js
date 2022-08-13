@@ -52,7 +52,7 @@ const Header = () => {
 
   useEffect(() => {
     if (buildings.length === 0 || filteredBuildings.length === 0) {
-      console.log("get properties");
+      // console.log("get properties");
       getProperties();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

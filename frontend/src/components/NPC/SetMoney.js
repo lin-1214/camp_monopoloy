@@ -11,6 +11,13 @@ import {
   Box,
   Button,
   FormControl,
+  TableContainer,
+  TableRow,
+  TableCell,
+  Table,
+  Paper,
+  Divider,
+  TableBody,
 } from "@mui/material";
 import axios from "../axios";
 import RoleContext from "../useRole";
@@ -23,6 +30,7 @@ const SetMoney = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [building, setBuilding] = useState(-1);
+  const [price, setPrice] = useState({});
 
   const [showPreview, setShowPreview] = useState(false);
   const { role, filteredBuildings } = useContext(RoleContext);
@@ -47,6 +55,18 @@ const SetMoney = () => {
       setShowPreview(false);
     }
     setAmount(amount);
+  };
+
+  const handleBuilding = async (building) => {
+    if (building > 0) {
+      const { data } = await axios.get("/land/" + building);
+      setBuilding(building);
+      setPrice(data.price);
+    } else {
+      setBuilding(-1);
+      setPrice({});
+    }
+    // console.log(data);
   };
 
   const handlePercentMoney = async () => {
@@ -187,23 +207,44 @@ const SetMoney = () => {
             sx={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "center",
+              justifyContent: "space-between",
             }}
           >
             <Button
               variant="contained"
               disabled={team === "Select Team"}
-              sx={{ marginBottom: 1, width: 80, mx: 2 }}
+              sx={{ marginBottom: 1, width: 80 }}
               onClick={handlePercentMoney}
             >
               -10%
             </Button>
+            <Button
+              variant="contained"
+              disabled={team === "Select Team" || !price.buy}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handleAmount(-1 * price.buy)}
+            >
+              Buy
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === "Select Team" || !price.upgrade}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handleAmount(-1 * price.upgrade)}
+            >
+              Upgrade
+            </Button>
           </Box>
-          <Button disabled={!(team && amount)} onClick={handleClick}>
+          <Button
+            disabled={team === "Select Team" || amount === ""}
+            onClick={handleClick}
+            // variant="outlined"
+            // color="secondary"
+          >
             Submit
           </Button>
         </FormControl>
-
+        <Divider color="primary"/>
         <Box
           sx={{
             marginTop: 0,
@@ -221,7 +262,7 @@ const SetMoney = () => {
               value={building}
               labelId="building"
               onChange={(e) => {
-                setBuilding(e.target.value);
+                handleBuilding(e.target.value);
               }}
             >
               <MenuItem value={-1}>Select Building</MenuItem>
@@ -232,6 +273,24 @@ const SetMoney = () => {
               ))}
             </Select>
           </FormControl>
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left">Buy</TableCell>
+                  <TableCell align="right">
+                    {price.buy !== null ? price.buy : ""}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="left">Upgrade</TableCell>
+                  <TableCell align="right">
+                    {(price.upgrade !== null) !== 0 ? price.upgrade : ""}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
 
         {showPreview ? (
