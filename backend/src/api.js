@@ -56,7 +56,10 @@ async function deleteTimeoutNotification() {
   // console.log(notifications);
   for (let i = 0; i < notifications.length; i++) {
     // console.log(notifications[i]);
-    if (notifications[i].createdAt + notifications[i].duration < time && notifications[i].duration > 0) {
+    if (
+      notifications[i].createdAt + notifications[i].duration < time &&
+      notifications[i].duration > 0
+    ) {
       await Notification.findByIdAndDelete(notifications[i]._id);
       // console.log("Deleted notification", notifications[i].id);
     }
@@ -112,6 +115,13 @@ router.post("/occupation", async (req, res) => {
   const team = await Team.findOne({ teamname });
   team.occupation = occupation;
   await team.save();
+
+  if (occupation === "鷹眼") {
+    const pair = await Pair.findOneAndUpdate(
+      { key: "hawkEyeTeam" },
+      { value: team.id }
+    );
+  }
   res.json(team).status(200);
 });
 
@@ -283,9 +293,29 @@ router.post("/transfer", async (req, res) => {
   res.status(200).send("Update succeeded");
 });
 
+async function updateHawkEye(land) {
+  const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
+  const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
+  console.log(hawkEyeBuildings);
+  for (let i = 0; i < hawkEyeBuildings.length; i++) {
+    await Land.findOneAndUpdate(
+      { id: hawkEyeBuildings[i].id - 1 },
+      { hawkEye: 1 }
+    );
+    await Land.findOneAndUpdate(
+      { id: hawkEyeBuildings[i].id + 1 },
+      { hawkEye: 1 }
+    );
+  }
+  for (let i = 0; i < hawkEyeBuildings.length; i++) {
+    await Land.findOneAndUpdate({ id: hawkEyeBuildings[i].id }, { hawkEye: 2 });
+  }
+  console.log("hawkEye updated");
+}
+
 router.post("/ownership", async (req, res) => {
-  const { team, land, level } = req.body;
-  const tmp1 = await Land.findOneAndUpdate({ name: land }, { owner: team });
+  const { teamId, land, level } = req.body;
+  const tmp1 = await Land.findOneAndUpdate({ name: land }, { owner: teamId });
   if (!tmp1) {
     res.status(403).send();
     console.log("Update failed");
@@ -297,6 +327,7 @@ router.post("/ownership", async (req, res) => {
     console.log("Update failed");
     return;
   }
+  await updateHawkEye(land);
   res.status(200).send("update succeeded");
 });
 

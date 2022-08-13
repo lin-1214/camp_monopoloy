@@ -25,6 +25,11 @@ const SetMoney = () => {
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
+    if (amount !== "-" && amount !== "" && team !== "Select Team") {
+      setShowPreview(true);
+    } else {
+      setShowPreview(false);
+    }
     const { data } = await axios.get("/team/" + team);
     // console.log(data);
     setTeamData(data);
@@ -32,7 +37,11 @@ const SetMoney = () => {
   };
 
   const handleAmount = async (amount) => {
-    setShowPreview(true);
+    if (amount !== "-" && amount !== "" && team !== "Select Team") {
+      setShowPreview(true);
+    } else {
+      setShowPreview(false);
+    }
     setAmount(amount);
   };
 
@@ -130,13 +139,18 @@ const SetMoney = () => {
             sx={{ marginTop: 3, marginBottom: 2 }}
             onChange={(e) => {
               const re = /^-?[0-9\b]+$/;
+              console.log(e.target.value);
               if (
                 e.target.value === "-" ||
                 e.target.value === "" ||
                 re.test(e.target.value)
               ) {
-                handleAmount(e.target.value ? e.target.value : "");
-                setErrorMessage("");
+                if (Math.abs(parseInt(e.target.value)) > 1000000) {
+                  setErrorMessage("Amount must be less than 1,000,000");
+                } else {
+                  handleAmount(e.target.value ? e.target.value : "");
+                  setErrorMessage("");
+                }
               } else {
                 setErrorMessage("Please enter a valid number");
               }
@@ -191,11 +205,11 @@ const SetMoney = () => {
               Preview
             </Typography>
             <Typography
-              component="body1"
+              component="h2"
               variant="body2"
               sx={{ marginBottom: 2 }}
             >
-              {teamData.money} &gt;&gt; {teamData.money + amount}
+              {teamData.money} &gt;&gt; {teamData.money + parseInt(amount)}
             </Typography>
           </>
         ) : null}

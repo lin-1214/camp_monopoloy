@@ -21,16 +21,16 @@ const SetOwnership = () => {
   const [building, setBuilding] = useState(-1);
   const [buildingData, setBuildingData] = useState({});
   const [level, setLevel] = useState(0);
-  const { role, buildings, setBuildings } = useContext(RoleContext);
+  const { role, buildings } = useContext(RoleContext);
   const [data, setData] = useState(
     buildings.filter((building) => building.type === "Building")
   );
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    const payload = { team, land: buildingData.name, level };
+    const payload = { teamId: team, land: buildingData.name, level };
     await axios.post("/ownership", payload);
-    navigate("/properties");
+    navigate("/properties?id=" + buildingData.id);
   };
 
   const handleTeam = async (team) => {
@@ -50,15 +50,17 @@ const SetOwnership = () => {
     if (role === "") {
       navigate("/permission");
     }
-    if (buildings.length === 0) {
-      axios
-        .get("/land")
-        .then((res) => {
-          setBuildings(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    // if (buildings.length === 0) {
+    //   axios
+    //     .get("/land")
+    //     .then((res) => {
+    //       setBuildings(res.data);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
+    if (data.length === 0) {
       setData(buildings.filter((building) => building.type === "building"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,15 +106,15 @@ const SetOwnership = () => {
             }}
           >
             <MenuItem value={"Select Team"}>Select Team</MenuItem>
-            <MenuItem value={"N/A"}>N/A</MenuItem>
-            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
-            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
-            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
-            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
-            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
-            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
-            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
-            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
+            <MenuItem value={0}>N/A</MenuItem>
+            <MenuItem value={1}>第1小隊</MenuItem>
+            <MenuItem value={2}>第2小隊</MenuItem>
+            <MenuItem value={3}>第3小隊</MenuItem>
+            <MenuItem value={4}>第4小隊</MenuItem>
+            <MenuItem value={5}>第5小隊</MenuItem>
+            <MenuItem value={6}>第6小隊</MenuItem>
+            <MenuItem value={7}>第7小隊</MenuItem>
+            <MenuItem value={8}>第8小隊</MenuItem>
           </Select>
           {team !== buildingData.owner && team !== "Select Team" ? (
             <FormHelperText>Owner has Change!!!</FormHelperText>
@@ -146,9 +148,14 @@ const SetOwnership = () => {
             <Typography component="h2" variant="h6" sx={{ marginBottom: 2 }}>
               Preview
             </Typography>
-            <PropertyCard {...buildingData} />
+            <PropertyCard {...buildingData} hawkEye={-1} />
             <KeyboardDoubleArrowDownIcon />
-            <PropertyCard {...buildingData} level={level} owner={team} />
+            <PropertyCard
+              {...buildingData}
+              level={level}
+              owner={team}
+              hawkEye={-1}
+            />
           </>
         ) : null}
       </Box>

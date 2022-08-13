@@ -5,7 +5,8 @@ const LandSchema = new Schema({
   type: String,
   name: String,
   area: Number,
-  owner: String,
+  owner: Number,
+  hawkEye: Number,
   description: String,
   level: Number,
 });

@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <Grid container>
-      <AppBar position="absolute">
+      <AppBar position="fixed" sticky="top">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton onClick={handleChange}>
             <MenuIcon />

@@ -80,7 +80,9 @@ const Teams = () => {
                       return (
                         <TableCell key={column.id} align={column.align}>
                           {column.id === "money"
-                            ? Math.round(item[column.id])
+                            ? Math.round(item[column.id]) > 0
+                              ? Math.round(item[column.id])
+                              : "破產"
                             : item[column.id]}
                         </TableCell>
                       );

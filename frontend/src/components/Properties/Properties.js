@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Stack, Paper, Box } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 import RoleContext from "../useRole";
 import PropertyCard from "./PropertyCard";
 import Loading from "../Loading";
@@ -7,6 +8,15 @@ import axios from "../axios";
 
 const Properties = () => {
   const { buildings, setBuildings } = useContext(RoleContext);
+  const [scrolled, setScrolled] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams(); // eslint-disable-line no-unused-vars
+  const id = parseInt(searchParams.get("id"));
+  const refs = React.useMemo(
+    () => Array.from({ length: 41 }, (x) => React.createRef()),
+    []
+  );
+  // console.log(id);
+  // console.log(refs[id]);
 
   const getProperties = async () => {
     await axios
@@ -28,7 +38,23 @@ const Properties = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const cardComponents = buildings.map((item) => PropertyCard(item));
+  useEffect(() => {
+    if (!isNaN(id) && !scrolled && refs[id].current !== null) {
+      const position = refs[id].current.getBoundingClientRect().top;
+      const offset = window.innerHeight / 2;
+      window.scrollTo({
+        top: position - offset,
+        behavior: "smooth",
+      });
+      setScrolled(true);
+      console.log("scrolled");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refs[id], scrolled]);
+
+  const cardComponents = buildings.map((item) =>
+    PropertyCard({ ...item, ref: refs[item.id] })
+  );
 
   if (buildings.length === 0) {
     return <Loading />;

@@ -59,7 +59,7 @@ const LogIn = () => {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ marginBottom: 1 }}>
-          Log in
+          Login
         </Typography>
         <FormControl variant="standard">
           <TextField

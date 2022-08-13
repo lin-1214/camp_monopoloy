@@ -29,14 +29,14 @@ const SetOccupation = () => {
     if (role === "" || role === "NPC") {
       navigate("/permission");
     }
-    axios
-      .get("/team")
-      .then((res) => {
-        setTeams(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // axios
+    //   .get("/team")
+    //   .then((res) => {
+    //     setTeams(res.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTeam, setOccupation]);
 

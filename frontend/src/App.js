@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import "./App.css";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
@@ -18,6 +18,7 @@ import PermissionDenied from "./components/PermissionDenied";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
 import theme from "./theme";
+import axios from "./components/axios";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
@@ -32,6 +33,21 @@ const App = () => {
     buildings,
     setBuildings,
   };
+
+  useEffect(() => {
+    if (buildings.length === 0) {
+      axios
+        .get("/land")
+        .then((res) => {
+          setBuildings(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     // <SocketContext.Provider value={socket}>
     <ThemeProvider theme={theme}>
