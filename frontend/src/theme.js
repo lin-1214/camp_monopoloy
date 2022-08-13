@@ -41,7 +41,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Merriweather",
+    //fontFamily: "Merriweather",
     fontSize: 14,
     h1: {
       fontSize: "1.6rem",

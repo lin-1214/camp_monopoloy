@@ -20,11 +20,17 @@ const Event = () => {
     "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課"
   );
   const [event, setEvent] = useState(0);
+  const [temp, setTemp] = useState(1);
   const [events, setEvents] = useState([]);
-  const { role } = useContext(RoleContext);
+  const { role, setPhase } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = async () => {
     await axios.post("/event", { id: event + 1 });
+    navigate("/notifications");
+  };
+
+  const handleClick2 = () => {
+    setPhase(temp);
     navigate("/notifications");
   };
 
@@ -92,6 +98,29 @@ const Event = () => {
               }}
             />
             <Button disabled={!message} onClick={handleClick}>
+              Submit
+            </Button>
+          </FormControl>
+        </Box>
+        <Box
+          sx={{
+            marginTop: 5,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Phase Settings
+          </Typography>
+          <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
+            <InputLabel id="title">Select Phase</InputLabel>
+            <Select value={temp} onChange={(e) => setTemp(e.target.value)}>
+              <MenuItem value={1}>1</MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+            </Select>
+            <Button onClick={handleClick2} sx={{ marginTop: 2 }}>
               Submit
             </Button>
           </FormControl>

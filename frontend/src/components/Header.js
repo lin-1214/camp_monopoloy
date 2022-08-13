@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { AppBar, Toolbar, IconButton, Grid, Button } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Grid,
+  Button,
+  Typography,
+} from "@mui/material";
 import { Outlet } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavBar from "./NavBar/NavBar";
@@ -13,6 +20,7 @@ const Header = () => {
   const {
     role,
     setRole,
+    phase,
     buildings,
     setBuildings,
     filteredBuildings,
@@ -66,6 +74,7 @@ const Header = () => {
             <MenuIcon />
             <NavBar open={open} />
           </IconButton>
+          <Typography variant="body2">Phase {phase}</Typography>
           <Button
             sx={{ display: pathname === "/login" && "none" }}
             color="inherit"

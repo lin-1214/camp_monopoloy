@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Toolbar,
+  Typography,
   List,
   ListItem,
   ListItemText,
@@ -47,8 +48,24 @@ const Navbar = ({ open }) => {
       <Divider />
       <List>
         {NavBarItems.map(mapping)}
-        {(role === "NPC" || role === "admin") && NPCItems.map(mapping)}
-        {role === "admin" && adminItems.map(mapping)}
+        {(role === "NPC" || role === "admin") && (
+          <>
+            <Divider />
+            <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
+              NPC
+            </Typography>
+            {NPCItems.map(mapping)}
+          </>
+        )}
+        {role === "admin" && (
+          <>
+            <Divider />
+            <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
+              admin
+            </Typography>
+            {adminItems.map(mapping)}
+          </>
+        )}
       </List>
     </SwipeableDrawer>
   );

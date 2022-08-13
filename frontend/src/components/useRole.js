@@ -5,6 +5,8 @@ const RoleContext = createContext({
   setRole: () => {},
   teams: [],
   setTeams: () => {},
+  phase: 1,
+  setPhase: () => {},
   buildings: [],
   setBuildings: () => {},
   filteredBuildings: [],

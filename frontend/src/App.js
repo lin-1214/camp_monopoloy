@@ -11,10 +11,12 @@ import LogIn from "./components/LogIn";
 import SetMoney from "./components/NPC/SetMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
+import SetShopLevel from "./components/NPC/SetShopLevel";
 import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
 import SetOccupation from "./components/admin/SetOccupation";
 import PermissionDenied from "./components/PermissionDenied";
+import Footer from "./components/Footer";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
 import theme from "./theme";
@@ -23,6 +25,7 @@ import theme from "./theme";
 const App = () => {
   const [role, setRole] = useState("");
   const [teams, setTeams] = useState([]);
+  const [phase, setPhase] = useState(1);
   const [buildings, setBuildings] = useState([]);
   const [filteredBuildings, setFilteredBuildings] = useState([]);
   const value = {
@@ -30,6 +33,8 @@ const App = () => {
     setRole,
     teams,
     setTeams,
+    phase,
+    setPhase,
     buildings,
     setBuildings,
     filteredBuildings,
@@ -55,6 +60,7 @@ const App = () => {
               <Route path="setmoney" element={<SetMoney />} />
               <Route path="setownership" element={<SetOwnership />} />
               <Route path="transfer" element={<Transfer />} />
+              <Route path="setshop" element={<SetShopLevel />} />
               <Route path="event" element={<Event />} />
               <Route path="additional" element={<Additional />} />
               <Route path="setoccupation" element={<SetOccupation />} />
@@ -62,6 +68,7 @@ const App = () => {
               <Route path="loading" element={<Loading />} />
             </Route>
           </Routes>
+          <Footer />
         </BrowserRouter>
       </RoleContext.Provider>
     </ThemeProvider>
