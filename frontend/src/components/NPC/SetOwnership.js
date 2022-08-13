@@ -49,7 +49,7 @@ const SetOwnership = () => {
       navigate("/permission");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filteredBuildings]);
 
   if (filteredBuildings.length === 0) {
     return <Loading />;

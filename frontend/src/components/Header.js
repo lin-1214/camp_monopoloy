@@ -45,22 +45,18 @@ const Header = () => {
       .catch((error) => {
         console.error(error);
       });
+    setFilteredBuildings(
+      buildings.filter((building) => building.type === "Building")
+    );
   };
 
   useEffect(() => {
-    console.log(buildings);
-    console.log(filteredBuildings);
     if (buildings.length === 0 || filteredBuildings.length === 0) {
       console.log("get properties");
       getProperties();
-      setFilteredBuildings(
-        buildings.filter((building) => building.type === "Building")
-      );
     }
-    console.log(buildings);
-    console.log(filteredBuildings);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filteredBuildings, buildings]);
 
   return (
     <Grid container>
