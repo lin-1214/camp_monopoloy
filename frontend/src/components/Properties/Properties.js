@@ -18,18 +18,17 @@ const Properties = () => {
   // console.log(id);
   // console.log(refs[id]);
 
-  const getProperties = async () => {
-    await axios
-      .get("/land")
-      .then((res) => {
-        setBuildings(res.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   useEffect(() => {
+    const getProperties = async () => {
+      await axios
+        .get("/land")
+        .then((res) => {
+          setBuildings(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getProperties();
     const id = setInterval(() => {
       getProperties();

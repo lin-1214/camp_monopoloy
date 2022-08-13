@@ -25,6 +25,7 @@ const App = () => {
   const [role, setRole] = useState("");
   const [teams, setTeams] = useState([]);
   const [buildings, setBuildings] = useState([]);
+  const [filteredBuildings, setFilteredBuildings] = useState([]);
   const value = {
     role,
     setRole,
@@ -32,18 +33,26 @@ const App = () => {
     setTeams,
     buildings,
     setBuildings,
+    filteredBuildings,
+    setFilteredBuildings,
   };
 
   useEffect(() => {
-    if (buildings.length === 0) {
-      axios
-        .get("/land")
-        .then((res) => {
-          setBuildings(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    if (buildings.length === 0 || filteredBuildings.length === 0) {
+      const getProperties = async () => {
+        await axios
+          .get("/land")
+          .then((res) => {
+            setBuildings(res.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+      getProperties();
+      setFilteredBuildings(
+        buildings.filter((building) => building.type === "Building")
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

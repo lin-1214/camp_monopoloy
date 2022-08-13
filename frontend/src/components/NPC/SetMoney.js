@@ -199,19 +199,28 @@ const SetMoney = () => {
             Submit
           </Button>
         </FormControl>
+
+        <Box sx={{ marginTop: 2 }}>
+          <Typography component="h1" variant="h6" sx={{ marginBottom: 2 }}>
+            Query Price
+          </Typography>
+        </Box>
+
         {showPreview ? (
-          <>
+          <Box
+            sx={{ marginTop: 2 }}
+            justifyContent="center"
+            alignItems="center"
+            display="flex"
+            flexDirection="column"
+          >
             <Typography component="h1" variant="h6" sx={{ marginBottom: 2 }}>
               Preview
             </Typography>
-            <Typography
-              component="h2"
-              variant="body2"
-              sx={{ marginBottom: 2 }}
-            >
+            <Typography component="h2" variant="body2" sx={{ marginBottom: 2 }}>
               {teamData.money} &gt;&gt; {teamData.money + parseInt(amount)}
             </Typography>
-          </>
+          </Box>
         ) : null}
       </Box>
     </Container>

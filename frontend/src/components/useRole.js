@@ -7,6 +7,8 @@ const RoleContext = createContext({
   setTeams: () => {},
   buildings: [],
   setBuildings: () => {},
+  filteredBuildings: [],
+  setFilteredBuildings: () => {},
 });
 
 export default RoleContext;
