@@ -41,12 +41,6 @@ const Footer = () => {
           setValue(newValue);
           navigate(items[newValue].route);
         }}
-        sx={{
-          "& .MuiBottomNavigationAction-root, .Mui-selected, svg": {
-            color: "#fff",
-          },
-          backgroundColor: "#009be5",
-        }}
       >
         {items.map(mapping)}
       </BottomNavigation>

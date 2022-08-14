@@ -4,7 +4,6 @@ import ReactLoading from "react-loading";
 
 const Loading = () => {
   return (
-    // center of screen
     <Box
       display="flex"
       justifyContent="center"
@@ -12,7 +11,7 @@ const Loading = () => {
       mx="auto"
       minHeight="100vh"
     >
-      <ReactLoading type="spinningBubbles" color="#006db3" />
+      {/* <ReactLoading type="spinningBubbles" color="#006db3" /> */}
     </Box>
   );
 };

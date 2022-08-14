@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Header from "./components/Header";
 import "./App.css";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { ThemeProvider } from "@mui/material/styles";
 import Home from "./components/Home";
 import Notifications from "./components/Notifications";
@@ -41,13 +42,23 @@ const App = () => {
     setFilteredBuildings,
   };
 
+  const location = useLocation();
+
   return (
     // <SocketContext.Provider value={socket}>
     <ThemeProvider theme={theme}>
       <RoleContext.Provider value={value}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Header />}>
+        <Header />
+        <TransitionGroup>
+          <CSSTransition
+            key={location.key}
+            timeout={300}
+            classNames="fade"
+            unmountOnExit
+            in={true}
+            appear={true}
+          >
+            <Routes location={location}>
               <Route path="/" element={<Home />} />
               <Route path="notifications" element={<Notifications />} />
               <Route path="teams" element={<Teams />} />
@@ -62,14 +73,16 @@ const App = () => {
               <Route path="setoccupation" element={<SetOccupation />} />
               <Route path="permission" element={<PermissionDenied />} />
               <Route path="loading" element={<Loading />} />
-            </Route>
-          </Routes>
-          <Footer />
-        </BrowserRouter>
+            </Routes>
+          </CSSTransition>
+        </TransitionGroup>
+        <Footer />
       </RoleContext.Provider>
     </ThemeProvider>
     // </SocketContext.Provider>
   );
 };
 
-export default App;
+const Root = () => <BrowserRouter><App /></BrowserRouter>; // prettier-ignore
+
+export default Root;

@@ -131,8 +131,8 @@ const SetOwnership = () => {
               <MenuItem value={7}>第7小隊</MenuItem>
               <MenuItem value={8}>第8小隊</MenuItem>
             </Select>
-            {team !== buildingData.owner && team !== -1 ? (
-              <FormHelperText>Owner has Change!!!</FormHelperText>
+            {team !== buildingData.owner && team !== -1 && building !== -1 ? (
+              <FormHelperText error={true}>Owner has Change!!!</FormHelperText>
             ) : null}
           </FormControl>
           <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
@@ -150,8 +150,12 @@ const SetOwnership = () => {
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
             </Select>
-            {level - buildingData.level !== 1 && team !== -1 ? (
-              <FormHelperText>Not Upgrading 1 level!!!</FormHelperText>
+            {level - buildingData.level !== 1 &&
+            team !== -1 &&
+            building !== -1 ? (
+              <FormHelperText error={true}>
+                Not Upgrading 1 level!!!
+              </FormHelperText>
             ) : null}
             {/* <Button
               disabled={team === -1 || building === -1}
@@ -191,6 +195,8 @@ const SetOwnership = () => {
             onClose={handleClose}
             sx={{ width: "100%" }}
             severity={"warning"}
+            elevation={6}
+            variant="filled"
           >
             Not from Add Money!
           </Alert>

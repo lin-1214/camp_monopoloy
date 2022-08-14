@@ -1,6 +1,43 @@
 import { createTheme } from "@mui/material";
 
+// const palette = {
+//   primary: {
+//     main: "#009be5",
+//   },
+//   secondary: {
+//     main: "#006db3",
+//   },
+//   error: {
+//     main: "#f44336",
+//   },
+//   success: {
+//     main: "#4caf50",
+//   },
+//   warning: {
+//     main: "#ffeb3b",
+//   },
+// };
+
+const palette = {
+  primary: {
+    main: "#D93D27",
+  },
+  secondary: {
+    main: "#EFA53A",
+  },
+  error: {
+    main: "#f44336",
+  },
+  success: {
+    main: "#4caf50",
+  },
+  warning: {
+    main: "#EFA53A",
+  },
+};
+
 const theme = createTheme({
+  palette,
   components: {
     MuiButton: {
       styleOverrides: {
@@ -8,19 +45,12 @@ const theme = createTheme({
           fontSize: "0.875rem",
           borderRadius: 8.5,
           textTransform: "none",
-          "&.MuiButton-contained": {
-            backgroundColor: "#009be5",
-            "&:hover": {
-              backgroundColor: "#006db3",
-            },
-          },
-          "&.MuiButton-outlined": {
-            color: "#fff",
-            borderColor: "rgba(255, 255, 255, 0.7)",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.04)",
-            },
-          },
+          // "&.MuiButton-contained": {
+          //   backgroundColor: palette.primary.main,
+          //   "&:hover": {
+          //     backgroundColor: palette.secondary.main,
+          //   },
+          // },
         },
       },
     },
@@ -31,16 +61,15 @@ const theme = createTheme({
         },
       },
     },
-  },
-  palette: {
-    white: {
-      main: "#fff",
-    },
-    primary: {
-      main: "#009be5",
-    },
-    secondary: {
-      main: "#006db3",
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: {
+          "& .MuiBottomNavigationAction-root, .Mui-selected, svg": {
+            color: "#fff",
+          },
+          backgroundColor: palette.primary.main,
+        },
+      },
     },
   },
   typography: {

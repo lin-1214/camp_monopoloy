@@ -183,7 +183,7 @@ const SetMoney = () => {
                 re.test(e.target.value)
               ) {
                 if (Math.abs(parseInt(e.target.value)) > 1000000) {
-                  setErrorMessage("Amount must be less than 1,000,000");
+                  setErrorMessage("Too Large");
                 } else {
                   handleAmount(e.target.value ? e.target.value : "");
                   setErrorMessage("");
@@ -193,6 +193,7 @@ const SetMoney = () => {
               }
             }}
             helperText={errorMessage}
+            FormHelperTextProps={{ error: true }}
           />
           <Box
             sx={{
@@ -265,7 +266,7 @@ const SetMoney = () => {
               <Box display="flex" flexDirection="row" justifyContent="center">
                 <Button
                   variant="contained"
-                  disabled={team === -1 || amount === ""}
+                  disabled={team === -1 || amount === "" || building === -1}
                   onClick={handleSubmitAndSetOwnership}
                   fullWidth
                 >

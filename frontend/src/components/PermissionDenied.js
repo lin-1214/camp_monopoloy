@@ -1,8 +1,10 @@
 import React from "react";
 import { Container, Box } from "@mui/system";
-import { Typography, Button, Grid } from "@mui/material";
+import { Typography, Button, Grid, useTheme } from "@mui/material";
+// import {useTheme} from "@mui/core/styles";
 import LockIcon from "@mui/icons-material/Lock";
 const PermissionDenied = () => {
+  const theme = useTheme();
   return (
     <Box
       display="flex"
@@ -12,7 +14,7 @@ const PermissionDenied = () => {
       minHeight="100vh"
     >
       <Container align="center">
-        <LockIcon style={{ color: "#006db3", fontSize: 60 }} />
+        <LockIcon style={{ color: theme.palette.primary.main, fontSize: 60 }} />
         <Typography variant="h6" sx={{ marginBottom: 2 }}>
           You do not have permission to access this page.
         </Typography>
