@@ -23,9 +23,9 @@ import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("");
   const [teams, setTeams] = useState([]);
-  const [phase, setPhase] = useState(1);
+  const [phase, setPhase] = useState("");
   const [buildings, setBuildings] = useState([]);
   const [filteredBuildings, setFilteredBuildings] = useState([]);
   const value = {

@@ -1,40 +1,55 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { NPCItems } from "./NavBar/NavBarItem";
+import { NPCItems, NavBarItems, adminItems } from "./NavBar/NavBarItem";
 import {
   AppBar,
-  List,
-  ListItem,
-  ListItemIcon,
-  Typography,
+  BottomNavigation,
+  BottomNavigationAction,
 } from "@mui/material";
 import RoleContext from "./useRole";
 
 const Footer = () => {
   const { role } = useContext(RoleContext);
+  const [value, setValue] = useState(0);
+  const [items, setItems] = useState([]);
   const navigate = useNavigate();
-  const handleClick = (name) => {
-    navigate(name);
-  };
+
   const mapping = (item) => (
-    <ListItem
-      button
+    <BottomNavigationAction
       key={item.id}
-      sx={{ display: "flex", flexDirection: "column", alignContent: "center" }}
-      onClick={() => handleClick(item.route)}
-    >
-      <ListItemIcon
-        sx={{ color: "rgb(255,255,255)" }}
-        children={item.icon}
-      ></ListItemIcon>
-      <Typography variant="caption">{item.label}</Typography>
-    </ListItem>
+      label={item.shortLabel}
+      icon={item.icon}
+      route={item.route}
+    />
   );
+  useEffect(() => {
+    if (role === "") {
+      setItems(NavBarItems);
+    } else if (role === "admin") {
+      setItems(adminItems);
+    } else if (role === "NPC") {
+      setItems(NPCItems);
+    }
+  }, [role]);
+
   return (
     <AppBar position="fixed" sx={{ top: "auto", bottom: 0 }}>
-      <List sx={{ display: "flex", flexDirection: "row", padding: 0 }}>
-        {(role === "NPC" || role === "admin") && NPCItems.map(mapping)}
-      </List>
+      <BottomNavigation
+        showLabels
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+          navigate(items[newValue].route);
+        }}
+        sx={{
+          "& .MuiBottomNavigationAction-root, .Mui-selected, svg": {
+            color: "#fff",
+          },
+          backgroundColor: "#009be5",
+        }}
+      >
+        {items.map(mapping)}
+      </BottomNavigation>
     </AppBar>
   );
 };

@@ -140,12 +140,13 @@ const SetMoney = () => {
       <Box
         sx={{
           marginTop: 9,
+          marginBottom: 9,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
         }}
       >
-        <Typography component="h1" variant="h5" sx={{ marginBottom: 1 }}>
+        <Typography component="h1" variant="h5" sx={{ marginBottom: 0 }}>
           Add Money
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
@@ -172,7 +173,7 @@ const SetMoney = () => {
             label="Amount"
             id="amount"
             value={amount}
-            sx={{ marginTop: 3, marginBottom: 2 }}
+            sx={{ marginTop: 2, marginBottom: 1 }}
             onChange={(e) => {
               const re = /^-?[0-9\b]+$/;
               console.log(e.target.value);
@@ -278,13 +279,13 @@ const SetMoney = () => {
         </FormControl>
         <Box
           sx={{
-            marginTop: 2,
+            marginTop: 1,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h6" sx={{ marginBottom: 1 }}>
+          <Typography component="h1" variant="h6" sx={{ marginBottom: 0 }}>
             Query Price
           </Typography>
           <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 0 }}>
@@ -305,7 +306,7 @@ const SetMoney = () => {
             </Select>
           </FormControl>
           <TableContainer component={Paper}>
-            <Table aria-label="simple table">
+            <Table aria-label="simple table" size="small">
               <TableBody>
                 <TableRow>
                   <TableCell align="left">Buy</TableCell>
@@ -332,10 +333,10 @@ const SetMoney = () => {
             display="flex"
             flexDirection="column"
           >
-            <Typography component="h1" variant="h6" sx={{ marginBottom: 2 }}>
+            <Typography component="h1" variant="h6" sx={{ marginBottom: 1 }}>
               Preview
             </Typography>
-            <Typography component="h2" variant="body2" sx={{ marginBottom: 2 }}>
+            <Typography component="h2" variant="body2" sx={{ marginBottom: 1 }}>
               {teamData.money} &gt;&gt; {teamData.money + parseInt(amount)}
             </Typography>
           </Box>

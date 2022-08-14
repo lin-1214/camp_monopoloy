@@ -5,6 +5,7 @@ const TeamSchema = new Schema({
   teamname: String,
   occupation: String,
   money: Number,
+  level: Number,
   bonus: { value: Number, time: Number, duration: Number },
   soulgem: { value: Boolean, time: Number },
 });

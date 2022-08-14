@@ -66,10 +66,14 @@ async function deleteTimeoutNotification() {
   }
 }
 
-router.get("/team", async (req, res) => {
-  const teams = await Team.find().sort({ teamname: 1 });
-  res.json(teams).status(200);
-});
+router.get("/phase", async (req, res) => {
+  const phase = await Pair.findOne({ key: "phase" });
+  res.json({ phase: phase.value }).status(200);
+}),
+  router.get("/team", async (req, res) => {
+    const teams = await Team.find().sort({ teamname: 1 });
+    res.json(teams).status(200);
+  });
 
 router.get("/team/:teamId", async (req, res) => {
   const team = await Team.findOne({ teamId: req.params.teamId });
@@ -295,6 +299,7 @@ router.post("/transfer", async (req, res) => {
 
 async function updateHawkEye(land) {
   const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
+  if (hawkEyeTeam === 0) return;
   const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
   console.log(hawkEyeBuildings);
   for (let i = 0; i < hawkEyeBuildings.length; i++) {

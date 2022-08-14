@@ -21,6 +21,7 @@ const Header = () => {
     role,
     setRole,
     phase,
+    setPhase,
     buildings,
     setBuildings,
     filteredBuildings,
@@ -58,11 +59,29 @@ const Header = () => {
     );
   };
 
+  const getPhase = async () => {
+    await axios
+      .get("/phase")
+      .then((res) => {
+        setPhase(res.data.phase);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   useEffect(() => {
     if (buildings.length === 0 || filteredBuildings.length === 0) {
       // console.log("get properties");
       getProperties();
     }
+    if (phase === "") {
+      getPhase();
+    }
+    const timer = setInterval(() => {
+      getPhase();
+    }, 30000);
+    return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredBuildings, buildings]);
 

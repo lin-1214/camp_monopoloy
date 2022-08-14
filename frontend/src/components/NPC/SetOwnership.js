@@ -161,14 +161,14 @@ const SetOwnership = () => {
               Submit
             </Button> */}
             <Button
-                  variant="contained"
-                  disabled={team === -1 || building === -1}
-                  onClick={handleClick}
-                  fullWidth
-                  sx={{ marginTop: 2 }}
-                >
-                  <SendIcon />
-                </Button>
+              variant="contained"
+              disabled={team === -1 || building === -1}
+              onClick={handleClick}
+              fullWidth
+              sx={{ marginTop: 2 }}
+            >
+              <SendIcon />
+            </Button>
           </FormControl>
           {!(team === -1 || building === -1) ? (
             <>
@@ -186,7 +186,7 @@ const SetOwnership = () => {
             </>
           ) : null}
         </Box>
-        <Snackbar open={open} onClose={handleClose}>
+        <Snackbar open={open} onClose={handleClose} sx={{ marginBottom: 10 }}>
           <Alert
             onClose={handleClose}
             sx={{ width: "100%" }}
