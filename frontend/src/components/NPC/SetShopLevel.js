@@ -20,15 +20,28 @@ const SetShopLevel = () => {
   const { role } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
+  const handleTeam = async (team) => {
+    const getTeamLevel = async (team) => {
+      const { data } = await axios.get("/team/" + team);
+      return data.level;
+    };
+    const teamLevel = await getTeamLevel(team);
+    if (teamLevel === 3) {
+      setLevel(3);
+    } else {
+      setLevel(teamLevel + 1);
+    }
+    setTeam(team);
+  };
+
   const handleClick = async () => {
-    const payload = { id: team, level: level };
-    console.log(payload);
+    const payload = { teamId: team, level };
     await axios.post("/level", payload); //api
     navigate("/teams");
   };
 
   useEffect(() => {
-    if (role === "" || role === "NPC") {
+    if (role === "") {
       navigate("/permission");
     }
   }, [setTeam, setLevel]);
@@ -50,7 +63,7 @@ const SetShopLevel = () => {
           <TeamSelect
             label="Team"
             team={team}
-            handleTeam={setTeam}
+            handleTeam={handleTeam}
             hasZero={false}
           />
         </FormControl>

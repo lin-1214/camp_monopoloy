@@ -10,6 +10,7 @@ const LandSchema = new Schema({
   description: String,
   level: Number,
   price: { buy: Number, upgrade: Number },
+  rent: [Number],
 });
 
 const Land = mongoose.model("Land", LandSchema);

@@ -115,6 +115,7 @@ const lands = [
     hawkEye: 0,
     level: 0,
     price: { buy: 10000, upgrade: 5000 },
+    rent: [1000, 2000, 3000],
   },
   {
     id: 3,
@@ -125,6 +126,7 @@ const lands = [
     hawkEye: 0,
     level: 0,
     price: { buy: 12000, upgrade: 6000 },
+    rent: [1000, 2000, 3000],
   },
   {
     id: 4,
@@ -141,6 +143,7 @@ const lands = [
     hawkEye: 0,
     level: 0,
     price: { buy: 8000, upgrade: 4000 },
+    rent: [1000, 2000, 3000],
   },
   {
     id: 6,

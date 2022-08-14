@@ -131,11 +131,10 @@ router.post("/occupation", async (req, res) => {
 });
 
 router.post("/level", async (req, res) => {
-  console.log(req.body);
-  const { id, level } = req.body;
-  const team = await Team.findOneAndUpdate({ id: id }, { level: level });
+  const { teamId, level } = req.body;
+  const team = await Team.findOneAndUpdate({ id: teamId }, { level: level });
   console.log(team);
-  res.status(200).send();
+  res.json(team).status(200);
 });
 
 router.post("/add", async (req, res) => {

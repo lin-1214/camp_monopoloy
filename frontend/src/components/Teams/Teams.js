@@ -84,6 +84,10 @@ const Teams = () => {
                             ? Math.round(item[column.id]) > 0
                               ? Math.round(item[column.id])
                               : "破產"
+                            : column.id === "occupation"
+                            ? item[column.id] !== "N/A"
+                              ? item[column.id] + ` (${"I".repeat(item.level)})`
+                              : "N/A"
                             : item[column.id]}
                         </TableCell>
                       );
