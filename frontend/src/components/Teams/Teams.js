@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Paper,
   Table,
@@ -22,18 +22,18 @@ const Teams = () => {
     //{id: "level", label: "Level", minWidth: 40, align: "center"},
   ];
 
-  useEffect(() => {
-    const getTeams = async () => {
-      axios
-        .get("/team")
-        .then((res) => {
-          setTeams(res.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
+  const getTeams = async () => {
+    axios
+      .get("/team")
+      .then((res) => {
+        setTeams(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
+  useEffect(() => {
     getTeams();
     const id = setInterval(() => {
       getTeams();

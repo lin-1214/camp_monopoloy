@@ -69,11 +69,12 @@ async function deleteTimeoutNotification() {
 router.get("/phase", async (req, res) => {
   const phase = await Pair.findOne({ key: "phase" });
   res.json({ phase: phase.value }).status(200);
-}),
-  router.get("/team", async (req, res) => {
-    const teams = await Team.find().sort({ teamname: 1 });
-    res.json(teams).status(200);
-  });
+});
+
+router.get("/team", async (req, res) => {
+  const teams = await Team.find().sort({ teamname: 1 });
+  res.json(teams).status(200);
+});
 
 router.get("/team/:teamId", async (req, res) => {
   const team = await Team.findOne({ teamId: req.params.teamId });
@@ -129,9 +130,17 @@ router.post("/occupation", async (req, res) => {
   res.json(team).status(200);
 });
 
+router.post("/level", async (req, res) => {
+  console.log(req.body);
+  const { id, level } = req.body;
+  const team = await Team.findOneAndUpdate({ id: id }, { level: level });
+  console.log(team);
+  res.status(200).send();
+});
+
 router.post("/add", async (req, res) => {
-  const { teamname, dollar } = req.body;
-  const team = await Team.findAndCheckValid(teamname);
+  const { id, teamname, dollar } = req.body;
+  const team = await Team.findAndCheckValid(id);
   if (!team) {
     res.status(403).send();
     console.log("Team not found");
@@ -140,7 +149,7 @@ router.post("/add", async (req, res) => {
   if (team.soulgem.value === true) {
     if (dollar < 0) {
       const newTeam = await Team.findOneAndUpdate(
-        { teamname },
+        { id: id },
         { money: Math.round(team.money + dollar * 1.5) }
       );
       if (!newTeam) {
@@ -150,7 +159,7 @@ router.post("/add", async (req, res) => {
       }
     } else {
       const newTeam = await Team.findOneAndUpdate(
-        { teamname },
+        { id: id },
         { money: team.money + dollar * 2 }
       );
       if (!newTeam) {
@@ -161,7 +170,7 @@ router.post("/add", async (req, res) => {
     }
   } else {
     const newTeam = await Team.findOneAndUpdate(
-      { teamname },
+      { id: id },
       { money: team.money + dollar }
     );
     console.log(team, newTeam);
@@ -182,7 +191,7 @@ router.post("/transfer", async (req, res) => {
     console.log("Team not found");
     return;
   }
-  const team2 = await Team.findOne({ teamname: to });
+  const team2 = await Team.findOne({ id: to });
   if (!team2) {
     res.status(403).send();
     console.log("Team not found");
@@ -191,11 +200,11 @@ router.post("/transfer", async (req, res) => {
   if (equal) {
     const equalmoney = Math.round((team1.money + team2.money) / 2);
     const newTeam1 = await Team.findOneAndUpdate(
-      { teamname: from },
+      { id: from },
       { money: equalmoney }
     );
     const newTeam2 = await Team.findOneAndUpdate(
-      { teamname: to },
+      { id: to },
       { money: equalmoney }
     );
     if (!newTeam1 || !newTeam2) {
@@ -210,7 +219,7 @@ router.post("/transfer", async (req, res) => {
   if (!IsEstate) {
     if (team1.soulgem.value === true) {
       const newTeam1 = await Team.findOneAndUpdate(
-        { teamname: from },
+        { id: from },
         { money: Math.round(team1.money - dollar * 1.5) }
       );
       if (!newTeam1) {
@@ -220,7 +229,7 @@ router.post("/transfer", async (req, res) => {
       }
     } else {
       const newTeam1 = await Team.findOneAndUpdate(
-        { teamname: from },
+        { id: from },
         { money: team1.money - dollar }
       );
       if (!newTeam1) {
@@ -231,7 +240,7 @@ router.post("/transfer", async (req, res) => {
     }
     if (team2.soulgem.value === true) {
       const newTeam2 = await Team.findOneAndUpdate(
-        { teamname: to },
+        { id: to },
         { money: team2.money + dollar * 2 }
       );
       if (!newTeam2) {
@@ -241,7 +250,7 @@ router.post("/transfer", async (req, res) => {
       }
     } else {
       const newTeam2 = await Team.findOneAndUpdate(
-        { teamname: to },
+        { id: to },
         { money: team2.money + dollar }
       );
       if (!newTeam2) {
@@ -253,7 +262,7 @@ router.post("/transfer", async (req, res) => {
   } else {
     if (team1.soulgem.value === true) {
       const newTeam1 = await Team.findOneAndUpdate(
-        { teamname: from },
+        { id: from },
         { money: Math.round(team1.money - dollar * 1.5 * team2.bonus.value) }
       );
       if (!newTeam1) {
@@ -263,7 +272,7 @@ router.post("/transfer", async (req, res) => {
       }
     } else {
       const newTeam1 = await Team.findOneAndUpdate(
-        { teamname: from },
+        { id: from },
         { money: team1.money - dollar * team2.bonus.value }
       );
       if (!newTeam1) {
@@ -274,7 +283,7 @@ router.post("/transfer", async (req, res) => {
     }
     if (team2.soulgem.value === true) {
       const newTeam2 = await Team.findOneAndUpdate(
-        { teamname: to },
+        { id: to },
         { money: team2.money + dollar * 2 * team2.bonus.value }
       );
       if (!newTeam2) {
@@ -284,7 +293,7 @@ router.post("/transfer", async (req, res) => {
       }
     } else {
       const newTeam2 = await Team.findOneAndUpdate(
-        { teamname: to },
+        { id: to },
         { money: team2.money + dollar * team2.bonus.value }
       );
       if (!newTeam2) {

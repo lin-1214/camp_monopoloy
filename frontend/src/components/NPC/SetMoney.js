@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
-  // Grid,
   InputLabel,
   Select,
   MenuItem,
@@ -24,6 +23,7 @@ import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "../axios";
 import RoleContext from "../useRole";
+import TeamSelect from "../TeamSelect";
 
 const SetMoney = () => {
   const [team, setTeam] = useState(-1);
@@ -84,6 +84,7 @@ const SetMoney = () => {
 
   const handleSubmit = async () => {
     const payload = {
+      id: team,
       teamname: `第${team}小隊`,
       dollar: parseInt(amount) ? parseInt(amount) : 0,
     };
@@ -150,24 +151,13 @@ const SetMoney = () => {
           Add Money
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
-          <InputLabel id="team-label">Team</InputLabel>
-          <Select
-            value={team}
-            id="team-label"
-            onChange={(e) => {
-              handleTeam(e.target.value);
-            }}
-          >
-            <MenuItem value={-1}>Select Team</MenuItem>
-            <MenuItem value={1}>第1小隊</MenuItem>
-            <MenuItem value={2}>第2小隊</MenuItem>
-            <MenuItem value={3}>第3小隊</MenuItem>
-            <MenuItem value={4}>第4小隊</MenuItem>
-            <MenuItem value={5}>第5小隊</MenuItem>
-            <MenuItem value={6}>第6小隊</MenuItem>
-            <MenuItem value={7}>第7小隊</MenuItem>
-            <MenuItem value={8}>第8小隊</MenuItem>
-          </Select>
+          <TeamSelect
+            label="Team"
+            team={team}
+            handleTeam={handleTeam}
+            hasZero={false}
+          />
+
           <TextField
             required
             label="Amount"

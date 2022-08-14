@@ -12,16 +12,18 @@ import {
 } from "@mui/material";
 import RoleContext from "../useRole";
 import axios from "../axios";
+import TeamSelect from "../TeamSelect";
 
 const SetShopLevel = () => {
-  const [team, setTeam] = useState("Select Team");
+  const [team, setTeam] = useState(-1);
   const [level, setLevel] = useState(1);
-  const { role, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const { role } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    const payload = { teamname: team, level: level };
-    await axios.post("/..", payload); //api
+    const payload = { id: team, level: level };
+    console.log(payload);
+    await axios.post("/level", payload); //api
     navigate("/teams");
   };
 
@@ -29,15 +31,6 @@ const SetShopLevel = () => {
     if (role === "" || role === "NPC") {
       navigate("/permission");
     }
-    // axios
-    //   .get("/team")
-    //   .then((res) => {
-    //     setTeams(res.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setTeam, setLevel]);
 
   return (
@@ -54,24 +47,12 @@ const SetShopLevel = () => {
           Set Shop Level
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
-          <InputLabel id="team-label">Team</InputLabel>
-          <Select
-            value={team}
-            id="team-label"
-            onChange={(e) => {
-              setTeam(e.target.value);
-            }}
-          >
-            <MenuItem value={"Select Team"}>Select Team</MenuItem>
-            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
-            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
-            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
-            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
-            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
-            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
-            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
-            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
-          </Select>
+          <TeamSelect
+            label="Team"
+            team={team}
+            handleTeam={setTeam}
+            hasZero={false}
+          />
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
           <InputLabel id="level-label">Level</InputLabel>

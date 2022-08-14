@@ -20,6 +20,7 @@ import PropertyCard from "../Properties/PropertyCard";
 import Loading from "../Loading";
 import RoleContext from "../useRole";
 import axios from "../axios";
+import TeamSelect from "../TeamSelect";
 
 const SetOwnership = () => {
   const [team, setTeam] = useState(-1);
@@ -42,7 +43,7 @@ const SetOwnership = () => {
     navigate("/properties?id=" + buildingData.id);
   };
 
-  const handleTeam = async (team) => {
+  const handleTeam = (team) => {
     if (team === 0) {
       setLevel(0);
     }
@@ -112,25 +113,12 @@ const SetOwnership = () => {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
-            <InputLabel id="team-ownership">Team</InputLabel>
-            <Select
-              value={team}
-              labelId="team-ownership"
-              onChange={(e) => {
-                handleTeam(e.target.value);
-              }}
-            >
-              <MenuItem value={-1}>Select Team</MenuItem>
-              <MenuItem value={0}>N/A</MenuItem>
-              <MenuItem value={1}>第1小隊</MenuItem>
-              <MenuItem value={2}>第2小隊</MenuItem>
-              <MenuItem value={3}>第3小隊</MenuItem>
-              <MenuItem value={4}>第4小隊</MenuItem>
-              <MenuItem value={5}>第5小隊</MenuItem>
-              <MenuItem value={6}>第6小隊</MenuItem>
-              <MenuItem value={7}>第7小隊</MenuItem>
-              <MenuItem value={8}>第8小隊</MenuItem>
-            </Select>
+            <TeamSelect
+              label="Team"
+              team={team}
+              handleTeam={handleTeam}
+              hasZero={true}
+            />
             {team !== buildingData.owner && team !== -1 && building !== -1 ? (
               <FormHelperText error={true}>Owner has Change!!!</FormHelperText>
             ) : null}

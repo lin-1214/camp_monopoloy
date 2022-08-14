@@ -100,7 +100,10 @@ const Notifications = () => {
           }}
         >
           <Card
-            sx={{ backgroundColor: "rgb(60,60,60)", color: "rgb(255,255,255)" }}
+            sx={{
+              backgroundColor: "rgb(60,60,60)",
+              color: "rgb(255,255,255)",
+            }}
           >
             <CardContent>
               <Typography variant="h6">

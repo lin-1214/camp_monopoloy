@@ -32,6 +32,7 @@ const PropertyCard = ({
   hawkEye,
   description,
   level,
+  expanded,
 }) => {
   const colorData = type === "Building" ? colors[type][area] : colors[type];
   // console.log(ref);

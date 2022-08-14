@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Stack, Paper, Box } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import { Stack, Paper, Box } from "@mui/material";
 import RoleContext from "../useRole";
 import PropertyCard from "./PropertyCard";
 import Loading from "../Loading";
