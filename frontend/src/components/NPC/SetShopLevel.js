@@ -14,19 +14,33 @@ import RoleContext from "../useRole";
 import axios from "../axios";
 
 const SetShopLevel = () => {
-  const [team, setTeam] = useState("Select Team");
+  const [team, setTeam] = useState(-1);
   const [level, setLevel] = useState(1);
-  const { role, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const { role } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
+  const handleTeam = async (team) => {
+    const getTeamLevel = async (team) => {
+      const { data } = await axios.get("/team/" + team);
+      return data.level;
+    };
+    const teamLevel = await getTeamLevel(team);
+    if (teamLevel === 3) {
+      setLevel(3);
+    } else {
+      setLevel(teamLevel + 1);
+    }
+    setTeam(team);
+  };
+
   const handleClick = async () => {
-    const payload = { teamname: team, level: level };
-    await axios.post("/..", payload); //api
+    const payload = { teamId: team, level };
+    await axios.post("/level", payload); //api
     navigate("/teams");
   };
 
   useEffect(() => {
-    if (role === "" || role === "NPC") {
+    if (role === "") {
       navigate("/permission");
     }
     // axios
@@ -59,18 +73,18 @@ const SetShopLevel = () => {
             value={team}
             id="team-label"
             onChange={(e) => {
-              setTeam(e.target.value);
+              handleTeam(e.target.value);
             }}
           >
-            <MenuItem value={"Select Team"}>Select Team</MenuItem>
-            <MenuItem value={"第1小隊"}>第1小隊</MenuItem>
-            <MenuItem value={"第2小隊"}>第2小隊</MenuItem>
-            <MenuItem value={"第3小隊"}>第3小隊</MenuItem>
-            <MenuItem value={"第4小隊"}>第4小隊</MenuItem>
-            <MenuItem value={"第5小隊"}>第5小隊</MenuItem>
-            <MenuItem value={"第6小隊"}>第6小隊</MenuItem>
-            <MenuItem value={"第7小隊"}>第7小隊</MenuItem>
-            <MenuItem value={"第8小隊"}>第8小隊</MenuItem>
+            <MenuItem value={-1}>Select Team</MenuItem>
+            <MenuItem value={1}>第1小隊</MenuItem>
+            <MenuItem value={2}>第2小隊</MenuItem>
+            <MenuItem value={3}>第3小隊</MenuItem>
+            <MenuItem value={4}>第4小隊</MenuItem>
+            <MenuItem value={5}>第5小隊</MenuItem>
+            <MenuItem value={6}>第6小隊</MenuItem>
+            <MenuItem value={7}>第7小隊</MenuItem>
+            <MenuItem value={8}>第8小隊</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>

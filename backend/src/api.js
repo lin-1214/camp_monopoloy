@@ -129,6 +129,14 @@ router.post("/occupation", async (req, res) => {
   res.json(team).status(200);
 });
 
+router.post("/level", async (req, res) => {
+  const { teamId, level } = req.body;
+  const team = await Team.findOne({ id: teamId });
+  team.level = level;
+  await team.save();
+  res.json(team).status(200);
+});
+
 router.post("/add", async (req, res) => {
   const { teamname, dollar } = req.body;
   const team = await Team.findAndCheckValid(teamname);
