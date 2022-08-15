@@ -54,7 +54,11 @@ const SetOwnership = () => {
     const { data } = await axios.get("/land/" + building);
     setBuilding(building);
     setBuildingData(data);
-    setLevel(data.level + 1);
+    if (data.type === "building") {
+      setLevel(data.level + 1);
+    } else {
+      setLevel(0);
+    }
   };
 
   const handleClose = (e, reason) => {
@@ -140,6 +144,7 @@ const SetOwnership = () => {
             </Select>
             {level - buildingData.level !== 1 &&
             team !== -1 &&
+            buildingData.type === "building" &&
             building !== -1 ? (
               <FormHelperText error={true}>
                 Not Upgrading 1 level!!!

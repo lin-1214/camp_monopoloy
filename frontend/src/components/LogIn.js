@@ -90,7 +90,7 @@ const LogIn = () => {
             disabled={!(user && password)}
             onClick={handleClick}
           >
-            Log In
+            Login
           </Button>
         </FormControl>
       </Box>

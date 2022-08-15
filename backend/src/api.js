@@ -77,7 +77,7 @@ router.get("/team", async (req, res) => {
 });
 
 router.get("/team/:teamId", async (req, res) => {
-  const team = await Team.findOne({ teamId: req.params.teamId });
+  const team = await Team.findOne({ id: req.params.teamId });
   res.json(team).status(200);
 });
 
@@ -180,6 +180,14 @@ router.post("/add", async (req, res) => {
     }
   }
   res.status(200).send("Update succeeded");
+});
+
+router.post("/series", async (req, res) => {
+  const { teamId, area } = req.body;
+  const count = await (
+    await Land.find({ area, owner: teamId })
+  ).filter((land) => land.owner > 0).length;
+  res.json({ count }).status(200);
 });
 
 router.post("/transfer", async (req, res) => {
@@ -380,7 +388,7 @@ router.post("/effect", async (req, res) => {
     type,
     teamname,
     title,
-    description,
+    description: `${teamname}: ${description}`,
     duration,
     createdAt: time,
   };

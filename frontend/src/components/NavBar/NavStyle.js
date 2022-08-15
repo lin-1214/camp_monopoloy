@@ -9,7 +9,8 @@ export const NavBarStyles = {
       color: "rgba(255, 255, 255, 0.7)",
     },
     "& .Mui-selected": {
-      color: "rgba(51,153,255,0.7)",
+      // color: "rgba(51,153,255,0.7)",
+      color: "#EFA53A",
     },
   },
   icons: {

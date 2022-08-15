@@ -16,6 +16,7 @@ import {
   TableRow,
   TableCell,
   Table,
+  // Divider,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -26,23 +27,41 @@ import TeamSelect from "../TeamSelect";
 
 const Transfer = () => {
   const [from, setFrom] = useState(-1);
+  const [fromData, setFromData] = useState({});
+
   const [to, setTo] = useState(-1);
+  const [toData, setToData] = useState({});
 
   const [building, setBuilding] = useState(-1);
   const [buildingData, setBuildingData] = useState({});
+  const [count, setCount] = useState(-1);
 
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [equal, setEqual] = useState(false);
   const [error, setError] = useState(false);
-  const [isEstate, setIsEstate] = useState(true);
-  const { teams, setTeams, role, filteredBuildings } = useContext(RoleContext);
+  const { role, filteredBuildings } = useContext(RoleContext);
   const navigate = useNavigate();
+
+  const handleFrom = async (from) => {
+    const { data } = await axios.get("/team/" + from);
+    // console.log(data);
+    setFromData(data);
+    setFrom(from);
+  };
+
+  const handleTo = async (to) => {
+    const { data } = await axios.get("/team/" + to);
+    // console.log(data);
+    setToData(data);
+    setTo(to);
+  };
+
   const handleClick = async () => {
     const payload = {
       from: from,
       to: to,
-      IsEstate: isEstate,
+      IsEstate: building !== -1,
       dollar: parseInt(amount),
       equal: equal,
     };
@@ -56,11 +75,23 @@ const Transfer = () => {
       setBuilding(building);
       setBuildingData(data);
       if (data.owner !== 0) {
-        setTo(data.owner);
+        handleTo(data.owner);
       }
-      if (data.level !== 0) {
-        setAmount(data.rent[data.level - 1]);
+      const res = await axios.post("/series", {
+        teamId: data.owner,
+        area: data.area,
+      });
+      const c = res.data.count;
+      setCount(res.data.count);
+
+      if (data.type === "building") {
+        if (data.level !== 0) {
+          setAmount(data.rent[data.level - 1]);
+        }
+      } else {
+        setAmount(c * 5000);
       }
+      // console.log(res.data.count);
     } else {
       setBuilding(-1);
       setBuildingData({});
@@ -68,19 +99,14 @@ const Transfer = () => {
   };
 
   const handlePercentMoney = (percent) => {
-    const item = teams.find((element) => element.teamname === `第${from}小隊`);
-    const money = item.money; //find the team's money
+    const money = fromData.money; //find the team's money
     setAmount(Math.round(money * percent));
     setEqual(false);
   };
 
   const handleEqualMoney = () => {
-    let money_from = teams.find(
-      (element) => element.teamname === `第${from}小隊`
-    ).money; //first team (using the card)
-    let money_to = teams.find(
-      (element) => element.teamname === `第${to}小隊`
-    ).money; //second team(passive)
+    let money_from = fromData.money; //first team (using the card)
+    let money_to = toData.money; //second team(passive)
     let temp = Math.round((money_from - money_to) / 2);
     setAmount(temp);
     setEqual(true);
@@ -116,35 +142,38 @@ const Transfer = () => {
           Preview Building
         </Typography>
         <PropertyCard {...buildingData} />
-        <Typography variant="body1" component="p">
-          Series Count: {123}
-        </Typography>
 
-        {/* <TableContainer component={Paper}>
-          <Table aria-label="rent-table" size="small">
-            <TableBody>
-              <TableRow>
-                <TableCell align="center">
-                  <HomeRoundedIcon />
-                </TableCell>
-                <TableCell align="center">
-                  <HomeRoundedIcon />
-                  <HomeRoundedIcon />
-                </TableCell>
-                <TableCell align="center">
-                  <HomeRoundedIcon />
-                  <HomeRoundedIcon />
-                  <HomeRoundedIcon />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">1</TableCell>
-                <TableCell align="center">2</TableCell>
-                <TableCell align="center">3</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer> */}
+        {buildingData.type === "building" ? (
+          <TableContainer component={Paper}>
+            <Table aria-label="rent-table" size="small">
+              <TableBody>
+                <TableRow>
+                  <TableCell align="center">
+                    <HomeRoundedIcon />
+                  </TableCell>
+                  <TableCell align="center">
+                    <HomeRoundedIcon />
+                    <HomeRoundedIcon />
+                  </TableCell>
+                  <TableCell align="center">
+                    <HomeRoundedIcon />
+                    <HomeRoundedIcon />
+                    <HomeRoundedIcon />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell align="center">{buildingData.rent[0]}</TableCell>
+                  <TableCell align="center">{buildingData.rent[1]}</TableCell>
+                  <TableCell align="center">{buildingData.rent[2]}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : null}
+
+        <Typography variant="body1" component="p">
+          Series Count: {count}
+        </Typography>
       </Box>
     );
   };
@@ -177,19 +206,18 @@ const Transfer = () => {
                 <TableCell align="center">{to}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell align="center">Buff</TableCell>
-                <TableCell align="center">No</TableCell>
-                <TableCell align="center">No</TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell align="center">Before</TableCell>
-                <TableCell align="center">{123}</TableCell>
-                <TableCell align="center">{123}</TableCell>
+                <TableCell align="center">{fromData.money}</TableCell>
+                <TableCell align="center">{toData.money}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell align="center">After</TableCell>
-                <TableCell align="center">{123}</TableCell>
-                <TableCell align="center">{123}</TableCell>
+                <TableCell align="center">
+                  {fromData.money - parseInt(amount)}
+                </TableCell>
+                <TableCell align="center">
+                  {toData.money + parseInt(amount)}
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -236,7 +264,7 @@ const Transfer = () => {
           <TeamSelect
             label="From.."
             team={from}
-            handleTeam={setFrom}
+            handleTeam={handleFrom}
             hasZero={false}
           />
         </FormControl>
@@ -247,7 +275,7 @@ const Transfer = () => {
           <TeamSelect
             label="To.."
             team={to}
-            handleTeam={setTo}
+            handleTeam={handleTo}
             hasZero={false}
             sx={{ marginBottom: 2 }}
           />

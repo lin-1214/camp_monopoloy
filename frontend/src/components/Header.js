@@ -55,7 +55,10 @@ const Header = () => {
         console.error(error);
       });
     setFilteredBuildings(
-      buildings.filter((building) => building.type === "Building")
+      buildings.filter(
+        (building) =>
+          building.type === "Building" || building.type === "SpecialBuilding"
+      )
     );
   };
 

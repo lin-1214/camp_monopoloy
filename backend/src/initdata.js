@@ -455,7 +455,7 @@ const effects = [
   {
     id: 1,
     title: "地產增值(I)",
-    description: "使你的房地產租金提升至150%, 效果持續10分鐘。不可疊加使用",
+    description: "房地產租金提升至150%, 效果持續10分鐘。不可疊加使用",
     trait: 1,
     duration: 600,
     bonus: 1.5,
@@ -464,7 +464,7 @@ const effects = [
     id: 2,
     title: "財產凍結",
     description:
-      "選擇一個小隊, 其他小隊踩到此小隊的房產無須付租金, 效果持續5分鐘",
+      "其他小隊踩到此小隊的房產無須付租金, 效果持續5分鐘",
     trait: 1,
     duration: 300,
     bonus: 0,
@@ -490,7 +490,7 @@ const effects = [
   {
     id: 5,
     title: "地產增值(II)",
-    description: "使你的房地產租金提升至200%, 效果持續10分鐘。不可疊加使用",
+    description: "房地產租金提升至200%, 效果持續10分鐘。不可疊加使用",
     trait: 1,
     duration: 600,
     bonus: 2,
