@@ -94,6 +94,7 @@ const SetMoney = () => {
 
   const handleSubmitAndSetOwnership = async () => {
     const payload = {
+      id: team,
       teamname: `第${team}小隊`,
       dollar: parseInt(amount) ? parseInt(amount) : 0,
     };
