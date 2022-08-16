@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Notifications from "./components/Notifications";
 import Teams from "./components/Teams/Teams";
 import Properties from "./components/Properties/Properties";
+import SellProperty from "./components/Properties/SellProperty";
 import LogIn from "./components/LogIn";
 import SetMoney from "./components/NPC/SetMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
@@ -24,7 +25,8 @@ import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("admin");
+  const [roleId, setRoleId] = useState(1);
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState("");
   const [buildings, setBuildings] = useState([]);
@@ -32,6 +34,8 @@ const App = () => {
   const value = {
     role,
     setRole,
+    roleId,
+    setRoleId,
     teams,
     setTeams,
     phase,
@@ -63,6 +67,7 @@ const App = () => {
               <Route path="notifications" element={<Notifications />} />
               <Route path="teams" element={<Teams />} />
               <Route path="properties" element={<Properties />} />
+              <Route path="sellproperty" element={<SellProperty />} />
               <Route path="login" element={<LogIn />} />
               <Route path="setmoney" element={<SetMoney />} />
               <Route path="setownership" element={<SetOwnership />} />

@@ -19,7 +19,20 @@ const LogIn = () => {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { setRole } = useContext(RoleContext);
+  const { setRole, setRoleId } = useContext(RoleContext);
+
+  const roleIdMap = {
+    第1小隊: 1,
+    第2小隊: 2,
+    第3小隊: 3,
+    第4小隊: 4,
+    第5小隊: 5,
+    第6小隊: 6,
+    第7小隊: 7,
+    第8小隊: 8,
+    NPC: 10,
+    admin: 20,
+  };
 
   const handleClick = async () => {
     // post /api/login
@@ -28,11 +41,13 @@ const LogIn = () => {
       data: { username },
     } = await axios.post("/login", payload);
     // console.log(username);
-    if (username === "NPC" || username === "admin") {
+    if (username !== "") {
       //successed!
       setMessage("Successfully login!");
       setOpen(true);
       setRole(username);
+      setRoleId(roleIdMap[username]);
+      console.log(roleIdMap[username]);
       navigate("/");
     } else {
       //failed

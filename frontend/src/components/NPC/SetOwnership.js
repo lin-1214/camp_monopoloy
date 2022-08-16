@@ -54,7 +54,7 @@ const SetOwnership = () => {
     const { data } = await axios.get("/land/" + building);
     setBuilding(building);
     setBuildingData(data);
-    if (data.type === "building") {
+    if (data.type === "Building") {
       setLevel(data.level + 1);
     } else {
       setLevel(0);
