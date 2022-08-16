@@ -27,6 +27,38 @@ const users = [
     username: "NPC",
     password: "npc",
   },
+  {
+    username: "第1小隊",
+    password: "第1小隊",
+  },
+  {
+    username: "第2小隊",
+    password: "第2小隊",
+  },
+  {
+    username: "第3小隊",
+    password: "第3小隊",
+  },
+  {
+    username: "第4小隊",
+    password: "第4小隊",
+  },
+  {
+    username: "第5小隊",
+    password: "第5小隊",
+  },
+  {
+    username: "第6小隊",
+    password: "第6小隊",
+  },
+  {
+    username: "第7小隊",
+    password: "第7小隊",
+  },
+  {
+    username: "第8小隊",
+    password: "第8小隊",
+  },
 ];
 
 const teams = [
@@ -463,8 +495,7 @@ const effects = [
   {
     id: 2,
     title: "財產凍結",
-    description:
-      "其他小隊踩到此小隊的房產無須付租金, 效果持續5分鐘",
+    description: "其他小隊踩到此小隊的房產無須付租金, 效果持續5分鐘",
     trait: 1,
     duration: 300,
     bonus: 0,
@@ -511,8 +542,8 @@ const notifications = [
     id: 0,
     title: "歡迎遊玩大富翁",
     description: "衝啊",
-    type: "permenant",
-    duration: -1,
+    type: "temporary",
+    duration: 1800,
     createdAt: 0,
   },
   // {

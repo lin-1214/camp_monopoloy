@@ -91,6 +91,40 @@ router.get("/land/:id", async (req, res) => {
   res.json(land).status(200);
 });
 
+router.get("/property/:teamId", async (req, res) => {
+  const properties = await Land.find({ owner: req.params.teamId });
+  res.json(properties).status(200);
+});
+
+router.post("/sell", async (req, res) => {
+  const { teamId, landId } = req.body;
+  const land = await Land.findOne({ id: landId });
+  const team = await Team.findOne({ id: teamId });
+  if (land.owner !== teamId) {
+    res.status(400).json({ error: "Not your land" });
+    return;
+  }
+
+  let price;
+  if (land.type === "building") {
+    if (land.level === 0) {
+      res
+        .status(400)
+        .json({ error: "Cannot sell a building that is not built" });
+      return;
+    }
+    price = land.price.buy + land.price.upgrade * (land.level - 1);
+  } else {
+    price = land.price.buy;
+  }
+
+  team.money.value += price;
+  await team.save();
+  await Land.findOneAndUpdate({ id: landId }, { owner: 0 });
+  await updateHawkEye();
+  res.status(200).json({ message: "Sell successful" });
+});
+
 router.get("/allEvents", async (req, res) => {
   const events = await Event.find().sort({ id: 1 });
   res.json(events).status(200);
@@ -313,7 +347,7 @@ router.post("/transfer", async (req, res) => {
   res.status(200).send("Update succeeded");
 });
 
-async function updateHawkEye(land) {
+async function updateHawkEye() {
   const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
   if (hawkEyeTeam === 0) return;
   const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
