@@ -16,10 +16,15 @@ const Teams = () => {
   const { teams, setTeams } = useContext(RoleContext);
 
   const columns = [
-    { id: "teamname", label: "Team", minWidth: 90, align: "center" }, //80
-    { id: "occupation", label: "Occupation", minWidth: 70, align: "center" }, //60
-    { id: "money", label: "Money", minWidth: 60, align: "center" },
-    //{id: "level", label: "Level", minWidth: 40, align: "center"},
+    { id: "teamname", label: "Team", minWidth: "15vw", align: "center" }, //80
+    {
+      id: "occupation",
+      label: "Occupation",
+      minWidth: "17vw",
+      align: "center",
+    }, //60
+    { id: "money", label: "Money", minWidth: "14vw", align: "center" },
+    { id: "level", label: "Level", minWidth: "8vw", align: "center" },
   ];
 
   const getTeams = async () => {
@@ -51,7 +56,8 @@ const Teams = () => {
         sx={{
           overflow: "hidden",
           paddingTop: "60px",
-          margin: "auto",
+          marginLeft: "2vw",
+          marginRight: "2vw",
         }}
       >
         <TableContainer
@@ -86,7 +92,7 @@ const Teams = () => {
                               : "破產"
                             : column.id === "occupation"
                             ? item[column.id] !== "N/A"
-                              ? item[column.id] + ` (${"I".repeat(item.level)})`
+                              ? item[column.id]
                               : "N/A"
                             : item[column.id]}
                         </TableCell>
