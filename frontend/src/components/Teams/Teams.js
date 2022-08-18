@@ -72,7 +72,7 @@ const Teams = () => {
                   <TableCell
                     key={item.id}
                     align={item.align}
-                    style={{ minWidth: item.minWidth }}
+                    style={{ minWidth: item.minWidth, fontSize: "15px" }}
                   >
                     {item.label}
                   </TableCell>
@@ -85,7 +85,11 @@ const Teams = () => {
                   <TableRow key={item.teamname}>
                     {columns.map((column) => {
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ fontSize: "15px" }}
+                        >
                           {column.id === "money"
                             ? Math.round(item[column.id]) > 0
                               ? Math.round(item[column.id])
