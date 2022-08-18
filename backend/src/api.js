@@ -99,7 +99,7 @@ router.get("/property/:teamId", async (req, res) => {
 router.post("/set", async (req, res) => {
   const { id, amount } = req.body;
   await Team.findOneAndUpdate({ id: parseInt(id) }, { money: amount });
-  res.send(200);
+  res.json({ success: true }).status(200);
 });
 
 const calcSellPrice = (land) => {
@@ -165,7 +165,7 @@ router
               }
               await buildings[i].save();
             }
-            res.json("Success").status(200);
+            console.log("Updated prices");
           }
           break;
         case 3:
@@ -182,7 +182,7 @@ router
               buildings[i].price.upgrade = buildings[i].price.upgrade * 2;
               await buildings[i].save();
             }
-            console.log("Doubled prices");
+            console.log("Updated prices");
           }
           break;
       }
@@ -352,6 +352,9 @@ router
       }
       pair.value = id;
       await pair.save();
+
+      const newEvent = await Event.findOne({ id });
+      req.io.emit("broadcast", newEvent);
     } else {
       res.json("Failed").status(403);
     }
@@ -643,6 +646,7 @@ router.post("/effect", async (req, res) => {
   // save
   await new Notification(notification).save();
   await team.save();
+  req.io.emit("broadcast", notification);
   res.status(200).send("Update succeeded");
 });
 

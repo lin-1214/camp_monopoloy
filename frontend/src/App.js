@@ -22,6 +22,7 @@ import PermissionDenied from "./components/PermissionDenied";
 import Footer from "./components/Footer";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
+import Broadcast from "./components/Broadcast";
 import { roleIdMap } from "./components/LogIn";
 import theme from "./theme";
 import { socket, SocketContext } from "./websocket";
@@ -60,6 +61,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <RoleContext.Provider value={value}>
         <Header />
+        <Broadcast />
         <TransitionGroup>
           <CSSTransition
             key={location.key}

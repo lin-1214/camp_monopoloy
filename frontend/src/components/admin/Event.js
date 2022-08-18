@@ -10,6 +10,7 @@ import {
   Box,
   Button,
   FormControl,
+  Alert,
 } from "@mui/material";
 import Loading from "../Loading";
 import RoleContext from "../useRole";
@@ -100,9 +101,7 @@ const Event = () => {
               Submit
             </Button>
           </FormControl>
-          <Typography component="h1" variant="h6">
-            {APIResponse}
-          </Typography>
+          {APIResponse && <Alert severity="info">{APIResponse}</Alert>}
         </Box>
         <Box
           sx={{

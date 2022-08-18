@@ -10,7 +10,3 @@ export const socket = io(WEBSOCKET_URL);
 socket.on("connect", () => {
   console.log(socket.id);
 });
-
-socket.on("broadcast", (...args) => {
-  console.log("broadcast", ...args);
-});
