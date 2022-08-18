@@ -52,7 +52,15 @@ const Transfer = () => {
 
   const handleTo = async (to) => {
     const { data } = await axios.get("/team/" + to);
-    // console.log(data);
+    /*if the "to" is not the owner and is affected by hawkeye, 
+    then set the price equal to the 40% rent of hawkeye's building */
+    console.log(to !== buildingData.owner);
+    console.log(buildingData.id !== buildingData.hawkEye);
+    if (to !== buildingData.owner && buildingData.id !== buildingData.hawkEye) {
+      const res = await axios.get("/land/" + buildingData.hawkEye);
+      console.log(res.data);
+      setAmount(Math.round(0.4 * res.data.rent[res.data.level - 1]));
+    }
     setToData(data);
     setTo(to);
   };

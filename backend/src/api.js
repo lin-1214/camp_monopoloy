@@ -571,15 +571,18 @@ async function updateHawkEye() {
   for (let i = 0; i < hawkEyeBuildings.length; i++) {
     await Land.findOneAndUpdate(
       { id: hawkEyeBuildings[i].id - 1 },
-      { hawkEye: 1 }
+      { hawkEye: hawkEyeBuildings[i].id }
     );
     await Land.findOneAndUpdate(
       { id: hawkEyeBuildings[i].id + 1 },
-      { hawkEye: 1 }
+      { hawkEye: hawkEyeBuildings[i].id }
     );
   }
   for (let i = 0; i < hawkEyeBuildings.length; i++) {
-    await Land.findOneAndUpdate({ id: hawkEyeBuildings[i].id }, { hawkEye: 2 });
+    await Land.findOneAndUpdate(
+      { id: hawkEyeBuildings[i].id },
+      { hawkEye: hawkEyeBuildings[i].id }
+    );
   }
   console.log("hawkEye updated");
 }

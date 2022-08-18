@@ -47,11 +47,13 @@ const PropertyCard = ({
     }
   }
 
-  if (hawkEye === 1) {
+  if (hawkEye !== 0 && hawkEye !== id) {
+    //affected
     levelIcon.push(
       <VisibilityIcon style={{ color: "rgb(225,100,100)" }} key={3} />
     );
-  } else if (hawkEye === 2) {
+  } else if (hawkEye !== 0 && hawkEye === id) {
+    //self
     levelIcon.push(<VisibilityIcon style={{ color: "#63f74f" }} key={3} />);
   } else if (hawkEye >= 0) {
     levelIcon.push(
