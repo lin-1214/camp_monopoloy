@@ -9,6 +9,15 @@ import {
   Button,
   Box,
   FormControl,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableContainer,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "../axios";
@@ -22,22 +31,22 @@ const SellProperty = () => {
   const { roleId, role, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
 
-  const handleBuilding = async (building) => {
+  const handleBuilding = (building) => {
     setBuilding(building);
-
     let temp;
-    const land = ownedBuildings.find((land) => land.id === building);
+    const land = ownedBuildings.find((land) => land.id === parseInt(building));
     if (land.type === "Building") {
       temp = land.price.buy + land.price.upgrade * (land.level - 1);
     } else {
       temp = price = land.price.buy;
     }
-    setPrice(Math.round(temp));
+    setPrice(Math.round(temp / 2));
   };
 
   const handleSubmit = async () => {
-    const payload = {};
-    await axios.post("/add", payload);
+    const payload = { teamId: roleId, landId: building };
+    console.log(payload);
+    await axios.post("/sell", payload);
     navigate("/teams");
     setNavBarId(2);
   };
@@ -89,21 +98,44 @@ const SellProperty = () => {
           Sell Property
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 0 }}>
-          <InputLabel id="building">Building</InputLabel>
-          <Select
-            value={building}
-            labelId="building"
+          <RadioGroup
             onChange={(e) => {
               handleBuilding(e.target.value);
             }}
           >
-            <MenuItem value={-1}>Select Building</MenuItem>
-            {ownedBuildings.map((item) => (
-              <MenuItem value={item.id} key={item.id}>
-                {item.id} {item.name}
-              </MenuItem>
-            ))}
-          </Select>
+            <TableContainer sx={{ maxHeight: "50vh" }}>
+              <Table stickyHeader sx={{ maxwidth: "90vw" }}>
+                <TableHead>
+                  <TableRow key={-1}>
+                    <TableCell>Building</TableCell>
+                    <TableCell>Auc. Price</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {ownedBuildings.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <FormControlLabel
+                          value={item.id}
+                          label={`${item.id} ${item.name}`}
+                          control={<Radio />}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {item.type === "Building"
+                          ? Math.round(
+                              (item.price.buy +
+                                item.price.upgrade * (item.level - 1)) /
+                                2
+                            )
+                          : Math.round(item.price.buy)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </RadioGroup>
           <Button
             variant="contained"
             disabled={building === -1}

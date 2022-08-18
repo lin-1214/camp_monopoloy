@@ -122,9 +122,9 @@ router.post("/sell", async (req, res) => {
   }
 
   const price = calcSellPrice(land);
-  team.money.value += price;
+  team.money += price;
   await team.save();
-  await Land.findOneAndUpdate({ id: landId }, { owner: 0 });
+  await Land.findOneAndUpdate({ id: landId }, { owner: 0, level: 0 });
   await updateHawkEye();
   res.status(200).json({ message: "Sell successful" });
 });
