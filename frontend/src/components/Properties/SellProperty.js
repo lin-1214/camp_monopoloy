@@ -2,9 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
-  InputLabel,
-  Select,
-  MenuItem,
+  // InputLabel,
+  // Select,
+  // MenuItem,
   Typography,
   Button,
   Box,
@@ -38,7 +38,7 @@ const SellProperty = () => {
     if (land.type === "Building") {
       temp = land.price.buy + land.price.upgrade * (land.level - 1);
     } else {
-      temp = price = land.price.buy;
+      temp = land.price.buy;
     }
     setPrice(Math.round(temp / 2));
   };

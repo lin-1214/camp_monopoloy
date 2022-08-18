@@ -9,6 +9,8 @@ import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+
 export const NavBarItems = [
   {
     id: 1,
@@ -99,6 +101,13 @@ export const adminItems = [
     label: "Set Money",
     shortLabel: "Set",
     route: "setmoney",
+  },
+  {
+    id: 13,
+    icon: <VolumeUpIcon />,
+    label: "Broadcast",
+    shortLabel: "Broadcast",
+    route: "broadcast",
   },
 ];
 

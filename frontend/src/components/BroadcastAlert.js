@@ -3,7 +3,7 @@ import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import { socket } from "../websocket";
 import RoleContext from "./useRole";
 
-const Broadcast = () => {
+const BroadcastAlert = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState({});
   const { setPhase } = useContext(RoleContext);
@@ -32,7 +32,7 @@ const Broadcast = () => {
     return () => {
       socket.off("broadcast");
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Snackbar
@@ -55,4 +55,4 @@ const Broadcast = () => {
   );
 };
 
-export default Broadcast;
+export default BroadcastAlert;

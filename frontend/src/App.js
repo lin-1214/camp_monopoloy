@@ -22,10 +22,11 @@ import PermissionDenied from "./components/PermissionDenied";
 import Footer from "./components/Footer";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
-import Broadcast from "./components/Broadcast";
+import BroadcastAlert from "./components/BroadcastAlert";
+import Broadcast from "./components/admin/Broadcast";
 import { roleIdMap } from "./components/LogIn";
 import theme from "./theme";
-import { socket, SocketContext } from "./websocket";
+// import { socket, SocketContext } from "./websocket";
 
 const App = () => {
   const localRole = localStorage.getItem("role");
@@ -61,7 +62,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <RoleContext.Provider value={value}>
         <Header />
-        <Broadcast />
+        <BroadcastAlert />
         <TransitionGroup>
           <CSSTransition
             key={location.key}
@@ -88,6 +89,7 @@ const App = () => {
               <Route path="permission" element={<PermissionDenied />} />
               <Route path="loading" element={<Loading />} />
               <Route path="setmoney" element={<SetMoney />} />
+              <Route path="broadcast" element={<Broadcast />} />
             </Routes>
           </CSSTransition>
         </TransitionGroup>
