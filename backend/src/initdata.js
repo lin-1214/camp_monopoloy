@@ -21,43 +21,43 @@ mongoose.connect(process.env.MONGO_URL, {
 const users = [
   {
     username: "admin",
-    password: "admin",
+    password: "4mqLR8u2do5b",
   },
   {
     username: "NPC",
-    password: "npc",
+    password: "A7AdFQ87QXhG",
   },
   {
     username: "第1小隊",
-    password: "第1小隊",
+    password: "656e1h",
   },
   {
     username: "第2小隊",
-    password: "第2小隊",
+    password: "s376rj",
   },
   {
     username: "第3小隊",
-    password: "第3小隊",
+    password: "e40um3",
   },
   {
     username: "第4小隊",
-    password: "第4小隊",
+    password: "40ju1i",
   },
   {
     username: "第5小隊",
-    password: "第5小隊",
+    password: "j9l71k",
   },
   {
     username: "第6小隊",
-    password: "第6小隊",
+    password: "q61s5w",
   },
   {
     username: "第7小隊",
-    password: "第7小隊",
+    password: "v2m4g8",
   },
   {
     username: "第8小隊",
-    password: "第8小隊",
+    password: "9w137u",
   },
 ];
 

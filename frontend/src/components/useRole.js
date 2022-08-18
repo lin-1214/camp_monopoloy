@@ -1,6 +1,8 @@
 import { createContext } from "react";
 
 const RoleContext = createContext({
+  navBarId: 0,
+  setNavBarId: () => {},
   role: "",
   setRole: () => {},
   roleId: 0,

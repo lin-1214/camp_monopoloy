@@ -40,7 +40,7 @@ const Transfer = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [equal, setEqual] = useState(false);
   const [error, setError] = useState(false);
-  const { role, filteredBuildings } = useContext(RoleContext);
+  const { roleId, filteredBuildings, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleFrom = async (from) => {
@@ -67,6 +67,7 @@ const Transfer = () => {
     };
     await axios.post("/transfer", payload);
     navigate("/teams");
+    setNavBarId(2);
   };
 
   const handleBuilding = async (building) => {
@@ -113,9 +114,9 @@ const Transfer = () => {
   };
 
   useEffect(() => {
-    // if (role === "") {
-    //   navigate("/permission");
-    // }
+    if (roleId < 10) {
+      navigate("/permission");
+    }
     // axios
     //   .get("/team")
     //   .then((res) => {
@@ -125,7 +126,7 @@ const Transfer = () => {
     //     console.error(error);
     //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role]);
+  }, [roleId]);
 
   const PreviewBuilding = () => {
     return (

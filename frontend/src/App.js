@@ -25,13 +25,16 @@ import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
-  const [role, setRole] = useState("admin");
-  const [roleId, setRoleId] = useState(1);
+  const [navBarId, setNavBarId] = useState(0);
+  const [role, setRole] = useState("第2小隊");
+  const [roleId, setRoleId] = useState(2);
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState("");
   const [buildings, setBuildings] = useState([]);
   const [filteredBuildings, setFilteredBuildings] = useState([]);
   const value = {
+    navBarId,
+    setNavBarId,
     role,
     setRole,
     roleId,

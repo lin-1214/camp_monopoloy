@@ -23,12 +23,12 @@ const Footer = () => {
     />
   );
   useEffect(() => {
-    if (role === "") {
-      setItems(NavBarItems);
-    } else if (role === "admin") {
+    if (role === "admin") {
       setItems(adminItems);
     } else if (role === "NPC") {
       setItems(NPCItems);
+    } else {
+      setItems(NavBarItems);
     }
   }, [role]);
 

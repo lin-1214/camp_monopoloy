@@ -31,6 +31,13 @@ export const NavBarItems = [
     shortLabel: "Properties",
     route: "properties",
   },
+  {
+    id: 3,
+    icon: <PaidIcon />,
+    label: "Sell Property",
+    shortLabel: "Sell",
+    route: "sellproperty",
+  },
 ];
 
 export const NPCItems = [
@@ -87,3 +94,17 @@ export const adminItems = [
     route: "setoccupation",
   },
 ];
+
+// export const Navigate = (path) => {
+//   const { setNavBarId } = useContext(RoleContext);
+//   const navigate = useNavigate();
+
+//   const itemMap = {
+//     ...NavBarItems,
+//     ...NPCItems,
+//     ...adminItems,
+//   };
+//   setNavBarId(itemMap.find((item) => item.route === path).id);
+
+//   return () => navigate(path);
+// };

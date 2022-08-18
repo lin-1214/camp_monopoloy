@@ -17,7 +17,7 @@ import TeamSelect from "../TeamSelect";
 const SetShopLevel = () => {
   const [team, setTeam] = useState(-1);
   const [level, setLevel] = useState(1);
-  const { role } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const { roleId, setNavBarId } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
@@ -38,13 +38,14 @@ const SetShopLevel = () => {
     const payload = { teamId: team, level };
     await axios.post("/level", payload); //api
     navigate("/teams");
+    setNavBarId(2);
   };
 
   useEffect(() => {
-    if (role === "") {
+    if (roleId < 10) {
       navigate("/permission");
     }
-  }, [setTeam, setLevel]);
+  }, [roleId, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">

@@ -16,7 +16,7 @@ import axios from "../axios";
 const SetOccupation = () => {
   const [team, setTeam] = useState("Select Team");
   const [occupation, setOccupation] = useState("Select Occupation");
-  const { role, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const { roleId, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -26,7 +26,7 @@ const SetOccupation = () => {
   };
 
   useEffect(() => {
-    if (role === "" || role === "NPC") {
+    if (roleId < 10) {
       navigate("/permission");
     }
     // axios

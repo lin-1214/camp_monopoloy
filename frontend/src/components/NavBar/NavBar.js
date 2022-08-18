@@ -15,12 +15,12 @@ import { NavBarStyles } from "./NavStyle";
 import RoleContext from "../useRole";
 
 const Navbar = ({ open }) => {
-  const [currIndex, setIndex] = useState(0);
-  const { role } = useContext(RoleContext);
+  // const [navBarId, setNavBarId] = useState(0);
+  const { roleId, navBarId, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = (index, name) => {
     navigate(name);
-    setIndex(index);
+    setNavBarId(index);
   };
 
   const mapping = (item) => (
@@ -28,7 +28,7 @@ const Navbar = ({ open }) => {
       button
       key={item.id}
       onClick={() => handleClick(item.id, item.route)}
-      selected={currIndex === item.id}
+      selected={navBarId === item.id}
     >
       <ListItemIcon sx={NavBarStyles.icons}>{item.icon}</ListItemIcon>
       <ListItemText sx={NavBarStyles.text} primary={item.label} />
@@ -48,7 +48,7 @@ const Navbar = ({ open }) => {
       <Divider />
       <List>
         {NavBarItems.map(mapping)}
-        {(role === "NPC" || role === "admin") && (
+        {(roleId > 20) && (
           <>
             <Divider />
             <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
@@ -57,7 +57,7 @@ const Navbar = ({ open }) => {
             {NPCItems.map(mapping)}
           </>
         )}
-        {role === "admin" && (
+        {roleId === 100 && (
           <>
             <Divider />
             <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>

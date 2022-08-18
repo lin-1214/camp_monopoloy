@@ -27,7 +27,7 @@ const Additional = () => {
     "使你的房地產租金提升至150%, 效果持續10分鐘。不可疊加使用"
   );
   const [open, setOpen] = useState(false);
-  const { role } = useContext(RoleContext);
+  const { roleId } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleClick = async () => {
@@ -37,7 +37,7 @@ const Additional = () => {
   };
 
   useEffect(() => {
-    if (role !== "admin") {
+    if (roleId !== 100) {
       navigate("/permission");
     }
     axios

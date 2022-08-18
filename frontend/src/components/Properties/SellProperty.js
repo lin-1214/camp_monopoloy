@@ -19,7 +19,7 @@ const SellProperty = () => {
   const [ownedBuildings, setOwnedBuildings] = useState([]);
   const [building, setBuilding] = useState(-1);
   const [price, setPrice] = useState(0);
-  const { roleId } = useContext(RoleContext);
+  const { roleId, role, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleBuilding = async (building) => {
@@ -39,12 +39,13 @@ const SellProperty = () => {
     const payload = {};
     await axios.post("/add", payload);
     navigate("/teams");
+    setNavBarId(2);
   };
 
   useEffect(() => {
-    // if (role === "") {
-    //   navigate("/permission");
-    // }
+    if (role === "" || role === "admin" || role === "NPC") {
+      navigate("/permission");
+    }
 
     const getOwnedBuildings = async () => {
       await axios

@@ -29,7 +29,7 @@ const SetOwnership = () => {
   const [level, setLevel] = useState(1);
   const [prefill, setPrefill] = useState(false);
   const [open, setOpen] = useState(false);
-  const { role, filteredBuildings } = useContext(RoleContext);
+  const { roleId, filteredBuildings, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams(); // eslint-disable-line no-unused-vars
   const prefillTeams = searchParams.get("team");
@@ -41,6 +41,7 @@ const SetOwnership = () => {
     const payload = { teamId: team, land: buildingData.name, level };
     await axios.post("/ownership", payload);
     navigate("/properties?id=" + buildingData.id);
+    setNavBarId(3);
   };
 
   const handleTeam = (team) => {
@@ -69,7 +70,7 @@ const SetOwnership = () => {
   };
 
   useEffect(() => {
-    if (role === "") {
+    if (roleId < 10) {
       navigate("/permission");
     }
     if (!prefill && prefillBuilding !== null && prefillTeams !== null) {

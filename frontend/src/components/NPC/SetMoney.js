@@ -22,6 +22,7 @@ import SendIcon from "@mui/icons-material/Send";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "../axios";
+// import navigate from "../navigate";
 import RoleContext from "../useRole";
 import TeamSelect from "../TeamSelect";
 
@@ -36,7 +37,7 @@ const SetMoney = () => {
   const [price, setPrice] = useState({});
 
   const [showPreview, setShowPreview] = useState(false);
-  const { role, filteredBuildings } = useContext(RoleContext);
+  const { roleId, filteredBuildings, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
@@ -90,6 +91,7 @@ const SetMoney = () => {
     };
     await axios.post("/add", payload);
     navigate("/teams");
+    setNavBarId(2);
   };
 
   const handleSubmitAndSetOwnership = async () => {
@@ -100,6 +102,7 @@ const SetMoney = () => {
     };
     await axios.post("/add", payload);
     navigate("/setownership?id=" + building + "&team=" + team);
+    setNavBarId(5);
   };
 
   const SimpleMoneyButton = ({ val }) => {
@@ -123,8 +126,9 @@ const SetMoney = () => {
   };
 
   useEffect(() => {
-    if (role === "") {
+    if (roleId < 10) {
       navigate("/permission");
+      setNavBarId(0);
     }
     // axios
     //   .get("/team")

@@ -30,8 +30,8 @@ const LogIn = () => {
     第6小隊: 6,
     第7小隊: 7,
     第8小隊: 8,
-    NPC: 10,
-    admin: 20,
+    NPC: 50,
+    admin: 100,
   };
 
   const handleClick = async () => {
