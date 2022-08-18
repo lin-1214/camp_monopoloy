@@ -16,17 +16,19 @@ import RoleContext from "../useRole";
 import axios from "../axios";
 
 const Event = () => {
-  const [message, setMessage] = useState(
-    "持有蜘蛛人系列建築的隊伍須進監獄上跳舞課"
-  );
   const [event, setEvent] = useState(0);
+  const [message, setMessage] = useState("無");
+  const [APIResponse, setAPIResponse] = useState("");
   const [temp, setTemp] = useState(1);
   const [events, setEvents] = useState([]);
   const { role, setPhase } = useContext(RoleContext);
   const navigate = useNavigate();
+
   const handleClick = async () => {
-    await axios.post("/event", { id: event + 1 });
-    navigate("/notifications");
+    await axios.post("/event", { id: event }).then((res) => {
+      setAPIResponse(res.data);
+    });
+    // navigate("/notifications");
   };
 
   const handleClick2 = () => {
@@ -77,10 +79,7 @@ const Event = () => {
             >
               {events.map((item) => {
                 return (
-                  <MenuItem
-                    value={events.indexOf(item)}
-                    key={events.indexOf(item)}
-                  >
+                  <MenuItem value={item.id} key={events.indexOf(item)}>
                     {item.title}
                   </MenuItem>
                 );
@@ -101,6 +100,9 @@ const Event = () => {
               Submit
             </Button>
           </FormControl>
+          <Typography component="h1" variant="h6">
+            {APIResponse}
+          </Typography>
         </Box>
         <Box
           sx={{

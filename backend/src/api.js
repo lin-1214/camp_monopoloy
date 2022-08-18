@@ -142,9 +142,144 @@ router
       { value: id }
     );
     if (pair) {
-      res.json({ success: true }).status(200);
+      switch (id) {
+        default: // 4, 8, 14
+          res.json("Success").status(200);
+          break;
+        case 1: // 持有蜘蛛人系列建築的隊伍須進監獄上跳舞課
+          {
+            const spiderSeries = await (
+              await Land.find({ area: 1 })
+            ).filter((land) => land.owner !== 0);
+            const owners = await spiderSeries.map((land) => land.owner);
+            const uniqueOwners = owners
+              .filter(function (item, pos) {
+                return owners.indexOf(item) == pos;
+              })
+              .sort();
+            console.log(uniqueOwners);
+            res.json(`Team: ${uniqueOwners}`).status(200);
+          }
+          break;
+        case 2: // 面臨國喪，持有黑豹系列建築的隊伍可以選擇(1)在原地休息5分鐘默哀致意 或 (2)繳20000結束
+          {
+            const blackSeries = await (
+              await Land.find({ area: 4 })
+            ).filter((land) => land.owner !== 0);
+            const owners = await blackSeries.map((land) => land.owner);
+            const uniqueOwners = owners
+              .filter(function (item, pos) {
+                return owners.indexOf(item) == pos;
+              })
+              .sort();
+            console.log(uniqueOwners);
+            res.json(`Team: ${uniqueOwners}`).status(200);
+          }
+          break;
+        case 3: // 購買房地產與升級的金額減半
+        case 9:
+          // TODO
+          res.json("TODO").status(200);
+          break;
+        case 5: // 所有小隊手中現金減少10000。支付不出來視同破產
+        case 12:
+          {
+            const teams = await Team.find();
+            for (let i = 0; i < teams.length; i++) {
+              teams[i].money -= 10000;
+              await teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 6: // 所有人的房產下降一星級
+          {
+            const lands = await (
+              await (
+                await Land.find()
+              ).filter(
+                (land) =>
+                  land.type === "Building" || land.type === "SpecialBuilding"
+              )
+            ).filter((land) => land.level > 0);
+            for (let i = 0; i < lands.length; i++) {
+              if (lands[i].level === 1) {
+                const owner = await Team.findOne({ id: lands[i].owner });
+                owner.money += Math.round(lands[i].price.buy / 2);
+                lands[i].owner = 0;
+                await owner.save();
+              }
+              lands[i].level -= 1;
+              await lands[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 7: // 復聯系列的房產(與過路費)將提升1.5倍
+          // TODO
+          res.json("TODO").status(200);
+          break;
+        case 10: // 財產前4的小隊全部入獄
+          {
+            const teams = await Team.find().sort({ money: -1 });
+            let count = 0;
+            let top4 = [];
+            for (let i = 0; i < teams.length; i++) {
+              if (count < 4) {
+                top4.push(teams[i]);
+              } else if (teams[i].money === top4[count - 1].money) {
+                top4.push(teams[i]);
+              } else {
+                break;
+              }
+              count++;
+            }
+            console.log(top4);
+            const names = await top4.map((team) => team.id).sort();
+            res.json(`Teams: ${names}`).status(200);
+          }
+          break;
+        case 11: // 地球以外的房產格強制拋售, 並獲得50%價值的金額(地球以外:太空總部、泰坦星、佛米爾星、虛無之地、天劍局、阿斯嘉、彩虹橋、英靈殿、多摩)
+          {
+            const outsideEarthId = [2, 8, 9, 12, 19, 28, 29, 32, 39];
+            const outsideEarthLands = await Land.find({
+              id: { $in: outsideEarthId },
+            });
+            for (let i = 0; i < outsideEarthLands.length; i++) {
+              // console.log(outsideEarthLands[i].name);
+              if (outsideEarthLands[i].owner === 0) continue;
+              const owner = await Team.findOne({
+                id: outsideEarthLands[i].owner,
+              });
+              owner.money += Math.round(outsideEarthLands[i].price.buy / 2);
+              if (outsideEarthLands[i].level > 1) {
+                owner.money += Math.round(
+                  ((outsideEarthLands[i].level - 1) *
+                    outsideEarthLands[i].price.upgrade) /
+                    2
+                );
+              }
+              outsideEarthLands[i].owner = 0;
+              outsideEarthLands[i].level = 0;
+              await owner.save();
+              await outsideEarthLands[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 13: // 手上持有現金翻倍
+          {
+            const teams = await Team.find();
+            for (let i = 0; i < teams.length; i++) {
+              teams[i].money *= 2;
+              await teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+      }
     } else {
-      res.json({ success: false }).status(403);
+      res.json("Failed").status(403);
     }
   })
   .get("/event", async (req, res) => {
