@@ -64,25 +64,26 @@ const Notifications = () => {
       return () => clearInterval(task);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    return (
-      <Card key={id} sx={{ display: "flex", flexDirection: "column" }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={9}>
-              <Typography variant="h6">{title}</Typography>
+    if (elapsed < 0) return null;
+    else
+      return (
+        <Card key={id} sx={{ display: "flex", flexDirection: "column" }}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={9}>
+                <Typography variant="h6">{title}</Typography>
+              </Grid>
+              <Grid item xs={3} sx={{ alignItems: "flex-end" }}>
+                <Typography variant="body1">
+                  {Math.floor(elapsed / 60)} :{" "}
+                  {elapsed % 60 > 9 ? elapsed % 60 : "0" + (elapsed % 60)}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={3} sx={{ alignItems: "flex-end" }}>
-              <Typography variant="body1">
-                {Math.floor(elapsed / 60)} :{" "}
-                {elapsed % 60 > 9 ? elapsed % 60 : "0" + (elapsed % 60)}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Typography variant="body2">{content}</Typography>
-        </CardContent>
-      </Card>
-    );
+            <Typography variant="body2">{content}</Typography>
+          </CardContent>
+        </Card>
+      );
   };
 
   if (eventMessage.title === undefined) {
