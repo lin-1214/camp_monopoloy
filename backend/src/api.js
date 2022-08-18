@@ -66,10 +66,21 @@ async function deleteTimeoutNotification() {
   }
 }
 
-router.get("/phase", async (req, res) => {
-  const phase = await Pair.findOne({ key: "phase" });
-  res.json({ phase: phase.value }).status(200);
-});
+router
+  .get("/phase", async (req, res) => {
+    const phase = await Pair.findOne({ key: "phase" });
+    res.json({ phase: phase.value }).status(200);
+  })
+  .post("/phase", async (req, res) => {
+    const phase = await Pair.findOne({ key: "phase" });
+    phase.value = req.body.phase;
+    await phase.save();
+    res.json({ phase: phase.value }).status(200);
+    req.io.emit("broadcast", {
+      title: `Phase Changed to ${phase.value}`,
+      description: "",
+    });
+  });
 
 router.get("/team", async (req, res) => {
   const teams = await Team.find().sort({ teamname: 1 });
@@ -355,6 +366,7 @@ router
 
       const newEvent = await Event.findOne({ id });
       req.io.emit("broadcast", newEvent);
+      console.log("broadcast");
     } else {
       res.json("Failed").status(403);
     }

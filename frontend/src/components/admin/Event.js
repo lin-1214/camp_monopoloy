@@ -20,7 +20,7 @@ const Event = () => {
   const [event, setEvent] = useState(0);
   const [message, setMessage] = useState("無");
   const [APIResponse, setAPIResponse] = useState("");
-  const [temp, setTemp] = useState(1);
+  const [tempPhase, setTempPhase] = useState(1);
   const [events, setEvents] = useState([]);
   const { role, setPhase } = useContext(RoleContext);
   const navigate = useNavigate();
@@ -32,8 +32,9 @@ const Event = () => {
     // navigate("/notifications");
   };
 
-  const handleClick2 = () => {
-    setPhase(temp);
+  const handleClick2 = async () => {
+    setPhase(tempPhase);
+    await axios.post("/phase", { phase: tempPhase });
     navigate("/notifications");
   };
 
@@ -116,7 +117,10 @@ const Event = () => {
           </Typography>
           <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
             <InputLabel id="title">Select Phase</InputLabel>
-            <Select value={temp} onChange={(e) => setTemp(e.target.value)}>
+            <Select
+              value={tempPhase}
+              onChange={(e) => setTempPhase(e.target.value)}
+            >
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>

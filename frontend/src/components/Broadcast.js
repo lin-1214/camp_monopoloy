@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import { socket } from "../websocket";
+import RoleContext from "./useRole";
 
 const Broadcast = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState({});
+  const { setPhase } = useContext(RoleContext);
 
   const handleClose = (event, reason) => {
     setOpen(false);
@@ -15,6 +17,16 @@ const Broadcast = () => {
       setOpen(true);
       setMessage(...args);
       console.log("broadcast", ...args);
+    });
+
+    socket.on("phase", (phase) => {
+      setOpen(true);
+      setMessage({
+        title: `Phase Changed to ${phase}`,
+        description: "",
+      });
+      setPhase(phase);
+      console.log("phase", phase);
     });
 
     return () => {
