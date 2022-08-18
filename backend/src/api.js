@@ -87,10 +87,17 @@ router.get("/team", async (req, res) => {
   res.json(teams).status(200);
 });
 
+router.get("/team/hawkeye", async (req, res) => {
+  const team = await Team.findOne({ occupation: "鷹眼" });
+  console.log(team);
+  res.json(team).status(200);
+});
+
 router.get("/team/:teamId", async (req, res) => {
   const team = await Team.findOne({ id: req.params.teamId });
   res.json(team).status(200);
 });
+
 
 router.get("/land", async (req, res) => {
   const lands = await Land.find().sort({ id: 1 });

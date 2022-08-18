@@ -50,19 +50,25 @@ const Transfer = () => {
     setFrom(from);
   };
 
-  const handleTo = async (to) => {
-    const { data } = await axios.get("/team/" + to);
+  const handleTo = async (to, newBuildingData) => {
+    const { data: toData } = await axios.get("/team/" + to);
+    setToData(toData);
+    setTo(to);
+
     /*if the "to" is not the owner and is affected by hawkeye, 
     then set the price equal to the 40% rent of hawkeye's building */
-    console.log(to !== buildingData.owner);
-    console.log(buildingData.id !== buildingData.hawkEye);
-    if (to !== buildingData.owner && buildingData.id !== buildingData.hawkEye) {
-      const res = await axios.get("/land/" + buildingData.hawkEye);
+
+    // console.log(to !== buildingData.owner);
+    // console.log(buildingData.id !== buildingData.hawkEye);
+    // console.log(buildingData);
+    // if (buildingData === null) return;
+    const data = newBuildingData !== undefined ? newBuildingData : buildingData;
+    if (to !== data.owner && data.id !== data.hawkEye) {
+      const res = await axios.get("/land/" + data.hawkEye);
       console.log(res.data);
       setAmount(Math.round(0.4 * res.data.rent[res.data.level - 1]));
+      setErrorMessage("Auto Fill Hawk Eye");
     }
-    setToData(data);
-    setTo(to);
   };
 
   const handleClick = async () => {
@@ -84,7 +90,24 @@ const Transfer = () => {
       setBuilding(building);
       setBuildingData(data);
       if (data.owner !== 0) {
-        handleTo(data.owner);
+        if (data.type === "Building") {
+          if (data.level !== 0) {
+            setAmount(data.rent[data.level - 1]);
+          }
+        } else {
+          setAmount(c * 5000);
+        }
+        handleTo(data.owner, data);
+      } else if (data.hawkEye !== 0 && data.id !== data.hawkEye) {
+        const { data: hawkEyeTeam } = await axios.get("/team/hawkeye");
+        handleTo(hawkEyeTeam.id, data);
+        const { data: hawkEyeBuilding } = await axios.get(
+          "/land/" + data.hawkEye
+        );
+        setAmount(
+          Math.round(0.4 * hawkEyeBuilding.rent[hawkEyeBuilding.level - 1])
+        );
+        setErrorMessage("Auto Fill Hawk Eye");
       }
       const res = await axios.post("/series", {
         teamId: data.owner,
@@ -92,15 +115,6 @@ const Transfer = () => {
       });
       const c = res.data.count;
       setCount(res.data.count);
-
-      if (data.type === "Building") {
-        if (data.level !== 0) {
-          setAmount(data.rent[data.level - 1]);
-        }
-      } else {
-        setAmount(c * 5000);
-      }
-      // console.log(res.data.count);
     } else {
       setBuilding(-1);
       setBuildingData({});
@@ -347,6 +361,7 @@ const Transfer = () => {
               }
             }}
             helperText={errorMessage}
+            FormHelperTextProps={{ error: true }}
           />
           <Box
             sx={{
