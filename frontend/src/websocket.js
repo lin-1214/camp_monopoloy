@@ -5,4 +5,12 @@ import io from "socket.io-client";
 const WEBSOCKET_URL = "localhost:4000";
 
 export const socket = io(WEBSOCKET_URL);
-export const SocketContext = React.createContext(socket);
+// export const SocketContext = React.createContext(socket);
+
+socket.on("connect", () => {
+  console.log(socket.id);
+});
+
+socket.on("broadcast", (...args) => {
+  console.log("broadcast", ...args);
+});

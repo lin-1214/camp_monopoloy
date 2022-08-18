@@ -24,7 +24,7 @@ import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
 import { roleIdMap } from "./components/LogIn";
 import theme from "./theme";
-// import { socket, SocketContext } from "./websocket";
+import { socket, SocketContext } from "./websocket";
 
 const App = () => {
   const localRole = localStorage.getItem("role");
