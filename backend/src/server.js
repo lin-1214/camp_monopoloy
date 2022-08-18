@@ -1,4 +1,4 @@
-// import { Server } from "socket.io";
+import { Server } from "socket.io";
 import http from "http";
 import https from "https";
 import mongoose from "mongoose";
@@ -14,7 +14,7 @@ import morgan from "morgan";
 import cors from "cors";
 
 import apiRouter from "./api.js";
-// import socket from "./socket.js";
+import socket from "./socket.js";
 
 dotenv.config();
 
@@ -53,12 +53,12 @@ db.once("open", () => {
     server = http.createServer(app);
   }
 
-  // const io = new Server(server, {
-  //   cors: {
-  //     origin: "http://localhost:3000",
-  //     methods: ["GET", "POST"],
-  //   },
-  // });
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+    },
+  });
   // app.locals.io = io;
 
   // const redisClient = redis.createClient(6379, REDIS_URL);
@@ -85,15 +85,15 @@ db.once("open", () => {
 
   // sessionOptions.store.clear();
 
-  if (NODE_ENV === "development" && !HTTPS) {
-    // sessionOptions.cookie.secure = false;
-    // console.log("Secure cookie is off");
-  }
-  if (NODE_ENV === "production") {
-    console.log("NODE_ENV = production");
-    app.set("trust proxy", 1);
-    console.log("Trust proxy is on");
-  }
+  // if (NODE_ENV === "development" && !HTTPS) {
+  // sessionOptions.cookie.secure = false;
+  // console.log("Secure cookie is off");
+  // }
+  // if (NODE_ENV === "production") {
+  //   console.log("NODE_ENV = production");
+  //   app.set("trust proxy", 1);
+  //   console.log("Trust proxy is on");
+  // }
 
   // const sessionMiddleware = session(sessionOptions);
 
@@ -103,7 +103,7 @@ db.once("open", () => {
 
   // app.use(function (req, res, next) {
   //   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  //   // res.header("Access-Control-Allow-Origin", "http://trader.asuscomm.com");
+  // res.header("Access-Control-Allow-Origin", "http://trader.asuscomm.com");
   //   res.header(
   //     "Access-Control-Allow-Headers",
   //     "Origin, X-Requested-With, Content-Type, Accept"
@@ -121,6 +121,10 @@ db.once("open", () => {
   // app.use(sessionMiddleware);
   app.use(morgan("dev"));
   // app.use(express.static(path.join(process.cwd(), "build")));
+  app.use(function (request, response, next) {
+    request.io = io;
+    next();
+  });
 
   app.use("/api", apiRouter);
 
@@ -128,7 +132,7 @@ db.once("open", () => {
   //   res.sendFile(path.join(process.cwd(), "build", "index.html"));
   // });
 
-  // socket(io);
+  socket(io);
 
   server.listen(port, () =>
     console.log(`App listening at ${protocal}://localhost:${port}`)

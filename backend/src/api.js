@@ -646,6 +646,12 @@ router.post("/effect", async (req, res) => {
   res.status(200).send("Update succeeded");
 });
 
+router.post("/broadcast", async (req, res) => {
+  req.io.emit("broadcast", req.body);
+  res.status(200).send("Broadcast succeeded");
+  console.log("broadcast sent");
+});
+
 router.get("/notifications", async (req, res) => {
   await deleteTimeoutNotification();
   // save
