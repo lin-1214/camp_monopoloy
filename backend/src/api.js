@@ -666,7 +666,8 @@ router.post("/effect", async (req, res) => {
 });
 
 router.post("/broadcast", async (req, res) => {
-  req.io.emit("broadcast", req.body);
+  const { title, description } = req.body;
+  req.io.emit("broadcast", { title, description });
   res.status(200).send("Broadcast succeeded");
   console.log("broadcast sent");
 });
@@ -723,7 +724,7 @@ router.post("/login", async (req, res) => {
   // console.log(password);
   const user = await User.findAndValidate(username, password);
   if (!user) {
-    res.status(200).send(null);
+    res.status(200).send({ username: "" });
     console.log("login failed");
     return;
   }

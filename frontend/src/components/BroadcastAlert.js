@@ -48,8 +48,8 @@ const BroadcastAlert = () => {
         elevation={6}
         variant="filled"
       >
-        <AlertTitle>{message.title}</AlertTitle>
-        {message.description}
+        <AlertTitle>{String(message.title)}</AlertTitle>
+        {String(message.description)}
       </Alert>
     </Snackbar>
   );

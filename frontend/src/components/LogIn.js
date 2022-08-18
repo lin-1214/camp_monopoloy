@@ -42,9 +42,9 @@ const LogIn = () => {
     } = await axios.post("/login", payload);
     // console.log(username);
     if (username !== "") {
-      //successed!
-      setMessage("Successfully login!");
+      // success!
       setOpen(true);
+      setMessage("Successfully login!");
       setRole(username);
       setRoleId(roleIdMap[username]);
       // console.log(roleIdMap[username]);
@@ -52,7 +52,9 @@ const LogIn = () => {
       navigate("/");
     } else {
       //failed
-      setMessage("Wrong username or password.");
+      setRole("");
+      setRoleId(0);
+      setMessage("Wrong Username or Password.");
       setOpen(true);
     }
   };
@@ -110,7 +112,7 @@ const LogIn = () => {
           </Button>
         </FormControl>
       </Box>
-      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
           sx={{ width: "100%" }}
