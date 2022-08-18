@@ -24,7 +24,7 @@ const Teams = () => {
       align: "center",
     }, //60
     { id: "money", label: "Money", minWidth: "14vw", align: "center" },
-    { id: "level", label: "Level", minWidth: "8vw", align: "center" },
+    // { id: "level", label: "Level", minWidth: "8vw", align: "center" },
   ];
 
   const getTeams = async () => {
@@ -72,7 +72,7 @@ const Teams = () => {
                   <TableCell
                     key={item.id}
                     align={item.align}
-                    style={{ minWidth: item.minWidth, fontSize: "15px" }}
+                    style={{ minWidth: item.minWidth }}
                   >
                     {item.label}
                   </TableCell>
@@ -85,18 +85,14 @@ const Teams = () => {
                   <TableRow key={item.teamname}>
                     {columns.map((column) => {
                       return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ fontSize: "15px" }}
-                        >
+                        <TableCell key={column.id} align={column.align}>
                           {column.id === "money"
                             ? Math.round(item[column.id]) > 0
                               ? Math.round(item[column.id])
                               : "破產"
                             : column.id === "occupation"
                             ? item[column.id] !== "N/A"
-                              ? item[column.id]
+                              ? item[column.id] + ` (${"I".repeat(item.level)})`
                               : "N/A"
                             : item[column.id]}
                         </TableCell>
