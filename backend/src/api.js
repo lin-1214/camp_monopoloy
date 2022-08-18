@@ -96,6 +96,12 @@ router.get("/property/:teamId", async (req, res) => {
   res.json(properties).status(200);
 });
 
+router.post("/set", async (req, res) => {
+  const { id, amount } = req.body;
+  await Team.findOneAndUpdate({ id: parseInt(id) }, { money: amount });
+  res.send(200);
+});
+
 const calcSellPrice = (land) => {
   let price;
   if (land.type === "Building") {

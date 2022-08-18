@@ -17,6 +17,7 @@ import SetShopLevel from "./components/NPC/SetShopLevel";
 import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
 import SetOccupation from "./components/admin/SetOccupation";
+import SetMoney from "./components/admin/SetMoney";
 import PermissionDenied from "./components/PermissionDenied";
 import Footer from "./components/Footer";
 import RoleContext from "./components/useRole";
@@ -84,6 +85,7 @@ const App = () => {
               <Route path="setoccupation" element={<SetOccupation />} />
               <Route path="permission" element={<PermissionDenied />} />
               <Route path="loading" element={<Loading />} />
+              <Route path="setmoney" element={<SetMoney />} />
             </Routes>
           </CSSTransition>
         </TransitionGroup>

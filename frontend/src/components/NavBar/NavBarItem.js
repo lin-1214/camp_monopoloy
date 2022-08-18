@@ -8,7 +8,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
-
+import BuildCircleIcon from "@mui/icons-material/BuildCircle";
 export const NavBarItems = [
   {
     id: 1,
@@ -92,6 +92,13 @@ export const adminItems = [
     label: "Set Occupation",
     shortLabel: "Occupation",
     route: "setoccupation",
+  },
+  {
+    id: 12,
+    icon: <BuildCircleIcon />,
+    label: "Set Money",
+    shortLabel: "Set",
+    route: "setmoney",
   },
 ];
 
