@@ -137,11 +137,50 @@ router.get("/allEvents", async (req, res) => {
 router
   .post("/event", async (req, res) => {
     const { id } = req.body;
-    const pair = await Pair.findOneAndUpdate(
-      { key: "currentEvent" },
-      { value: id }
-    );
+    const pair = await Pair.findOne({ key: "currentEvent" });
     if (pair) {
+      const currentEvent = parseInt(pair.value);
+      // console.log(currentEvent);
+      switch (currentEvent) {
+        default:
+          break;
+        case 7:
+          {
+            const buildings = await (
+              await Land.find()
+            ).filter((land) => land.type === "Building" && land.area === 3);
+            for (let i = 0; i < buildings.length; i++) {
+              buildings[i].price.buy = Math.round(buildings[i].price.buy / 1.5);
+              buildings[i].price.upgrade = Math.round(
+                buildings[i].price.upgrade / 1.5
+              );
+              for (let j = 0; j < 3; j++) {
+                buildings[i].rent[j] = Math.round(buildings[i].rent[j] / 1.5);
+              }
+              await buildings[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 3:
+        case 9:
+          {
+            const buildings = await (
+              await Land.find()
+            ).filter(
+              (land) =>
+                land.type === "Building" || land.type === "SpecialBuilding"
+            );
+            for (let i = 0; i < buildings.length; i++) {
+              buildings[i].price.buy = buildings[i].price.buy * 2;
+              buildings[i].price.upgrade = buildings[i].price.upgrade * 2;
+              await buildings[i].save();
+            }
+            console.log("Doubled prices");
+          }
+          break;
+      }
+
       switch (id) {
         default: // 4, 8, 14
           res.json("Success").status(200);
@@ -178,8 +217,22 @@ router
           break;
         case 3: // 購買房地產與升級的金額減半
         case 9:
-          // TODO
-          res.json("TODO").status(200);
+          {
+            const buildings = await (
+              await Land.find()
+            ).filter(
+              (land) =>
+                land.type === "Building" || land.type === "SpecialBuilding"
+            );
+            for (let i = 0; i < buildings.length; i++) {
+              buildings[i].price.buy = Math.round(buildings[i].price.buy / 2);
+              buildings[i].price.upgrade = Math.round(
+                buildings[i].price.upgrade / 2
+              );
+              await buildings[i].save();
+            }
+            res.json("Success").status(200);
+          }
           break;
         case 5: // 所有小隊手中現金減少10000。支付不出來視同破產
         case 12:
@@ -217,7 +270,20 @@ router
           break;
         case 7: // 復聯系列的房產(與過路費)將提升1.5倍
           // TODO
-          res.json("TODO").status(200);
+          {
+            const buildings = await (
+              await Land.find()
+            ).filter((land) => land.type === "Building" && land.area === 3);
+            for (let i = 0; i < buildings.length; i++) {
+              buildings[i].price.buy *= 1.5;
+              buildings[i].price.upgrade *= 1.5;
+              for (let j = 0; j < 3; j++) {
+                buildings[i].rent[j] *= 1.5;
+              }
+              await buildings[i].save();
+            }
+            res.json("Success").status(200);
+          }
           break;
         case 10: // 財產前4的小隊全部入獄
           {
@@ -278,6 +344,8 @@ router
           }
           break;
       }
+      pair.value = id;
+      await pair.save();
     } else {
       res.json("Failed").status(403);
     }

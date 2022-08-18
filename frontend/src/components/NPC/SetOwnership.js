@@ -145,7 +145,7 @@ const SetOwnership = () => {
             </Select>
             {level - buildingData.level !== 1 &&
             team !== -1 &&
-            buildingData.type === "building" &&
+            buildingData.type === "Building" &&
             building !== -1 ? (
               <FormHelperText error={true}>
                 Not Upgrading 1 level!!!

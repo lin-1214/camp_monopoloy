@@ -85,7 +85,7 @@ const Transfer = () => {
       const c = res.data.count;
       setCount(res.data.count);
 
-      if (data.type === "building") {
+      if (data.type === "Building") {
         if (data.level !== 0) {
           setAmount(data.rent[data.level - 1]);
         }
@@ -144,7 +144,7 @@ const Transfer = () => {
         </Typography>
         <PropertyCard {...buildingData} />
 
-        {buildingData.type === "building" ? (
+        {buildingData.type === "Building" ? (
           <TableContainer component={Paper}>
             <Table aria-label="rent-table" size="small">
               <TableBody>
