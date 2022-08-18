@@ -16,7 +16,7 @@ import RoleContext from "../useRole";
 
 const Navbar = ({ open }) => {
   // const [navBarId, setNavBarId] = useState(0);
-  const { roleId, navBarId, setNavBarId } = useContext(RoleContext);
+  const { role, roleId, navBarId, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
   const handleClick = (index, name) => {
     navigate(name);
@@ -45,10 +45,11 @@ const Navbar = ({ open }) => {
       onClose={() => {}}
     >
       <Toolbar />
+      <Typography variant="h6" align="center"> {role} </Typography>
       <Divider />
       <List>
         {NavBarItems.map(mapping)}
-        {(roleId > 20) && (
+        {roleId > 20 && (
           <>
             <Divider />
             <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>

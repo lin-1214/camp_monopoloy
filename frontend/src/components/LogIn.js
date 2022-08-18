@@ -13,6 +13,19 @@ import {
 import RoleContext from "./useRole";
 import axios from "./axios";
 
+export const roleIdMap = {
+  第1小隊: 1,
+  第2小隊: 2,
+  第3小隊: 3,
+  第4小隊: 4,
+  第5小隊: 5,
+  第6小隊: 6,
+  第7小隊: 7,
+  第8小隊: 8,
+  NPC: 50,
+  admin: 100,
+};
+
 const LogIn = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -20,19 +33,6 @@ const LogIn = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { setRole, setRoleId } = useContext(RoleContext);
-
-  const roleIdMap = {
-    第1小隊: 1,
-    第2小隊: 2,
-    第3小隊: 3,
-    第4小隊: 4,
-    第5小隊: 5,
-    第6小隊: 6,
-    第7小隊: 7,
-    第8小隊: 8,
-    NPC: 50,
-    admin: 100,
-  };
 
   const handleClick = async () => {
     // post /api/login
@@ -47,7 +47,8 @@ const LogIn = () => {
       setOpen(true);
       setRole(username);
       setRoleId(roleIdMap[username]);
-      console.log(roleIdMap[username]);
+      // console.log(roleIdMap[username]);
+      localStorage.setItem("role", username);
       navigate("/");
     } else {
       //failed

@@ -42,6 +42,7 @@ const Header = () => {
   const handleLogout = () => {
     // console.log(role);
     setRole("");
+    localStorage.removeItem("role");
     navigate("/"); //set to home later
   };
 

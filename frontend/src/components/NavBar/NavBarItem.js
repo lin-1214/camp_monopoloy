@@ -32,7 +32,7 @@ export const NavBarItems = [
     route: "properties",
   },
   {
-    id: 3,
+    id: 4,
     icon: <PaidIcon />,
     label: "Sell Property",
     shortLabel: "Sell",
@@ -42,28 +42,28 @@ export const NavBarItems = [
 
 export const NPCItems = [
   {
-    id: 4,
+    id: 5,
     icon: <PaidIcon />,
     label: "Set Money",
     shortLabel: "Money",
     route: "setmoney",
   },
   {
-    id: 5,
+    id: 6,
     icon: <RequestQuoteIcon />,
     label: "Set Ownership",
     shortLabel: "Ownership",
     route: "setownership",
   },
   {
-    id: 6,
+    id: 7,
     icon: <CurrencyExchangeIcon />,
     label: "Transfer",
     shortLabel: "Transfer",
     route: "transfer",
   },
   {
-    id: 7,
+    id: 8,
     icon: <ShoppingCartIcon />,
     label: "Set Shop",
     shortLabel: "Shop",
@@ -73,21 +73,21 @@ export const NPCItems = [
 
 export const adminItems = [
   {
-    id: 8,
+    id: 9,
     icon: <EventIcon />,
     label: "Event / Phase",
     shortLabel: "Event",
     route: "event",
   },
   {
-    id: 9,
+    id: 10,
     icon: <AddToQueueIcon />,
     label: "Additional",
     shortLabel: "Additional",
     route: "additional",
   },
   {
-    id: 10,
+    id: 11,
     icon: <BuildIcon />,
     label: "Set Occupation",
     shortLabel: "Occupation",

@@ -21,13 +21,16 @@ import PermissionDenied from "./components/PermissionDenied";
 import Footer from "./components/Footer";
 import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
+import { roleIdMap } from "./components/LogIn";
 import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
+  const localRole = localStorage.getItem("role");
+  // console.log(localRole);
   const [navBarId, setNavBarId] = useState(0);
-  const [role, setRole] = useState("第2小隊");
-  const [roleId, setRoleId] = useState(2);
+  const [role, setRole] = useState(localRole ? localRole : "");
+  const [roleId, setRoleId] = useState(localRole ? roleIdMap[role] : 0);
   const [teams, setTeams] = useState([]);
   const [phase, setPhase] = useState("");
   const [buildings, setBuildings] = useState([]);

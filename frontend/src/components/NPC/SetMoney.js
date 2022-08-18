@@ -102,7 +102,7 @@ const SetMoney = () => {
     };
     await axios.post("/add", payload);
     navigate("/setownership?id=" + building + "&team=" + team);
-    setNavBarId(5);
+    setNavBarId(6);
   };
 
   const SimpleMoneyButton = ({ val }) => {
