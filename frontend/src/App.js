@@ -10,7 +10,7 @@ import Teams from "./components/Teams/Teams";
 import Properties from "./components/Properties/Properties";
 import SellProperty from "./components/Properties/SellProperty";
 import LogIn from "./components/LogIn";
-import SetMoney from "./components/NPC/SetMoney";
+import AddMoney from "./components/NPC/AddMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
 import SetShopLevel from "./components/NPC/SetShopLevel";
@@ -75,7 +75,7 @@ const App = () => {
               <Route path="properties" element={<Properties />} />
               <Route path="sellproperty" element={<SellProperty />} />
               <Route path="login" element={<LogIn />} />
-              <Route path="setmoney" element={<SetMoney />} />
+              <Route path="addmoney" element={<AddMoney />} />
               <Route path="setownership" element={<SetOwnership />} />
               <Route path="transfer" element={<Transfer />} />
               <Route path="setshop" element={<SetShopLevel />} />

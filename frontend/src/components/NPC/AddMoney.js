@@ -26,7 +26,7 @@ import axios from "../axios";
 import RoleContext from "../useRole";
 import TeamSelect from "../TeamSelect";
 
-const SetMoney = () => {
+const AddMoney = () => {
   const [team, setTeam] = useState(-1);
   const [teamData, setTeamData] = useState({});
 
@@ -341,4 +341,4 @@ const SetMoney = () => {
     </Container>
   );
 };
-export default SetMoney;
+export default AddMoney;

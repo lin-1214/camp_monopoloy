@@ -44,9 +44,9 @@ export const NPCItems = [
   {
     id: 5,
     icon: <PaidIcon />,
-    label: "Set Money",
+    label: "Add Money",
     shortLabel: "Money",
-    route: "setmoney",
+    route: "addmoney",
   },
   {
     id: 6,
