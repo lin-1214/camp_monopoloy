@@ -90,13 +90,6 @@ const Transfer = () => {
       setBuilding(building);
       setBuildingData(data);
       if (data.owner !== 0) {
-        if (data.type === "Building") {
-          if (data.level !== 0) {
-            setAmount(data.rent[data.level - 1]);
-          }
-        } else {
-          setAmount(c * 5000);
-        }
         handleTo(data.owner, data);
       } else if (data.hawkEye !== 0 && data.id !== data.hawkEye) {
         const { data: hawkEyeTeam } = await axios.get("/team/hawkeye");
@@ -109,12 +102,21 @@ const Transfer = () => {
         );
         setErrorMessage("Auto Fill Hawk Eye");
       }
+
       const res = await axios.post("/series", {
         teamId: data.owner,
         area: data.area,
       });
       const c = res.data.count;
       setCount(res.data.count);
+
+      if (data.type === "Building") {
+        if (data.level !== 0) {
+          setAmount(data.rent[data.level - 1]);
+        }
+      } else {
+        setAmount(c * 5000);
+      }
     } else {
       setBuilding(-1);
       setBuildingData({});

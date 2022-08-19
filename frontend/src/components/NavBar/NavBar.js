@@ -62,7 +62,7 @@ const Navbar = ({ open }) => {
           <>
             <Divider />
             <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
-              admin
+              Admin
             </Typography>
             {adminItems.map(mapping)}
           </>

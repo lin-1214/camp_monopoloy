@@ -4,12 +4,14 @@ import VillaIcon from "@mui/icons-material/Villa";
 import PaidIcon from "@mui/icons-material/Paid";
 import BuildIcon from "@mui/icons-material/Build";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+// import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
-import BuildCircleIcon from "@mui/icons-material/BuildCircle";
+// import BuildCircleIcon from "@mui/icons-material/BuildCircle";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import GavelIcon from '@mui/icons-material/Gavel';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 
 export const NavBarItems = [
   {
@@ -35,7 +37,7 @@ export const NavBarItems = [
   },
   {
     id: 4,
-    icon: <PaidIcon />,
+    icon: <GavelIcon />,
     label: "Sell Property",
     shortLabel: "Sell",
     route: "sellproperty",
@@ -66,7 +68,7 @@ export const NPCItems = [
   },
   {
     id: 8,
-    icon: <ShoppingCartIcon />,
+    icon: <AddBusinessIcon />,
     label: "Set Shop",
     shortLabel: "Shop",
     route: "setshop",
@@ -97,7 +99,7 @@ export const adminItems = [
   },
   {
     id: 12,
-    icon: <BuildCircleIcon />,
+    icon: <PaidIcon />,
     label: "Set Money",
     shortLabel: "Set",
     route: "setmoney",

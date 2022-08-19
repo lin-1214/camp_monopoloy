@@ -98,7 +98,6 @@ router.get("/team/:teamId", async (req, res) => {
   res.json(team).status(200);
 });
 
-
 router.get("/land", async (req, res) => {
   const lands = await Land.find().sort({ id: 1 });
   res.json(lands).status(200);
@@ -272,13 +271,8 @@ router
         case 6: // 所有人的房產下降一星級
           {
             const lands = await (
-              await (
-                await Land.find()
-              ).filter(
-                (land) =>
-                  land.type === "Building" || land.type === "SpecialBuilding"
-              )
-            ).filter((land) => land.level > 0);
+              await Land.find()
+            ).filter((land) => land.type === "Building" && land.level > 0);
             for (let i = 0; i < lands.length; i++) {
               if (lands[i].level === 1) {
                 const owner = await Team.findOne({ id: lands[i].owner });
@@ -289,11 +283,21 @@ router
               lands[i].level -= 1;
               await lands[i].save();
             }
+
+            const special = await Land.find({ type: "SpecialBuilding" });
+            for (let i = 0; i < special.length; i++) {
+              if (special[i].owner !== 0) {
+                const owner = await Team.findOne({ id: special[i].owner });
+                owner.money += Math.round(special[i].price.buy / 2);
+                special[i].owner = 0;
+                await owner.save();
+                await special[i].save();
+              }
+            }
             res.json("Success").status(200);
           }
           break;
         case 7: // 復聯系列的房產(與過路費)將提升1.5倍
-          // TODO
           {
             const buildings = await (
               await Land.find()
@@ -364,6 +368,50 @@ router
               teams[i].money *= 2;
               await teams[i].save();
             }
+            res.json("Success").status(200);
+          }
+          break;
+        case 15: // 所有小隊增加10000塊
+          {
+            const teams = await Team.find();
+            for (let i = 0; i < teams.length; i++) {
+              teams[i].money += 10000;
+              await teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 16: // 所有小隊增加30000塊
+          {
+            const teams = await Team.find();
+            for (let i = 0; i < teams.length; i++) {
+              teams[i].money += 30000;
+              await teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 17: // 所有小隊增加50000塊
+          {
+            const teams = await Team.find();
+            for (let i = 0; i < teams.length; i++) {
+              teams[i].money += 50000;
+              await teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 18: // 薩諾斯吸取所有小隊持有金錢的一半
+          {
+            const teams = await Team.find();
+            const thanos = await Team.findOne({ occupation: "薩諾斯" });
+            for (let i = 0; i < teams.length; i++) {
+              if (teams[i].id === thanos.id) continue;
+              thanos.money += Math.round(teams[i].money / 2);
+              teams[i].money = Math.round(teams[i].money / 2);
+              await teams[i].save();
+            }
+            await thanos.save();
             res.json("Success").status(200);
           }
           break;
