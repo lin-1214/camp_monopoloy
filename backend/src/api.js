@@ -119,7 +119,7 @@ router.post("/set", async (req, res) => {
   res.json({ success: true }).status(200);
 });
 
-const calcSellPrice = (land) => {
+const calcSellPrice = (land, forced) => {
   let price;
   if (land.type === "Building") {
     if (land.level === 0) {
@@ -132,19 +132,23 @@ const calcSellPrice = (land) => {
   } else {
     price = land.price.buy;
   }
-  return Math.round(price / 2);
+  if (!forced) {
+    return Math.round(price / 2);
+  } else {
+    return price * 2;
+  }
 };
 
 router.post("/sell", async (req, res) => {
-  const { teamId, landId } = req.body;
+  const { teamId, landId, forced } = req.body;
   const land = await Land.findOne({ id: landId });
-  const team = await Team.findOne({ id: teamId });
-  if (land.owner !== teamId) {
+  if (land.owner !== teamId && teamId < 10) {
     res.status(400).json({ error: "Not your land" });
     return;
   }
+  const team = await Team.findOne({ id: land.owner });
 
-  const price = calcSellPrice(land);
+  const price = calcSellPrice(land, forced);
   team.money += price;
   await team.save();
   await Land.findOneAndUpdate({ id: landId }, { owner: 0, level: 0 });
