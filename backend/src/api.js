@@ -638,20 +638,30 @@ router.post("/effect", async (req, res) => {
   res.status(200).send("Update succeeded");
 });
 
-router.post("/broadcast", async (req, res) => {
-  const { title, description } = req.body;
-  let time = Date.now();
-  const broadcast = { createdAt: time, title: title, description: description };
-  await new Broadcast(broadcast).save();
-  req.io.emit("broadcast", { title, description });
-  res.status(200).send("Broadcast succeeded");
-  console.log("broadcast sent");
-});
-
-router.get("/broadcast", async (req, res) => {
-  const data = await Broadcast.find({}).sort({ createdAt: 1 });
-  res.json(data).status(200);
-});
+router
+  .post("/broadcast", async (req, res) => {
+    const { title, description, level } = req.body;
+    let time = Date.now();
+    const broadcast = {
+      createdAt: time,
+      title: title,
+      description: description,
+      level: level,
+    };
+    await new Broadcast(broadcast).save();
+    req.io.emit("broadcast", { title, description, level });
+    res.status(200).send("Broadcast succeeded");
+    console.log("broadcast sent");
+  })
+  .get("/broadcast", async (req, res) => {
+    const data = await Broadcast.find({}).sort({ createdAt: -1 });
+    res.json(data).status(200);
+  })
+  .delete("/broadcast/:createdAt", async (req, res) => {
+    const { createdAt } = req.params;
+    const data = await Broadcast.findOneAndDelete({ createdAt });
+    res.json(data).status(200);
+  });
 
 router.get("/notifications", async (req, res) => {
   await deleteTimeoutNotification();
@@ -709,9 +719,12 @@ router.post("/login", async (req, res) => {
     console.log("login failed");
     return;
   }
-  // req.session.user = user;
   res.status(200).send({ username: user.username });
   // null, npc, admin: String
+});
+
+router.get("/room", async (req, res) => {
+  res.status(200).send(req.io.room);
 });
 
 // router.post("/logout", async (req, res) => {

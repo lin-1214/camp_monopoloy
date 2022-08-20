@@ -6,17 +6,20 @@ import RoleContext from "./useRole";
 const BroadcastAlert = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState({});
-  const { setPhase } = useContext(RoleContext);
+  const { roleId, setPhase } = useContext(RoleContext);
 
   const handleClose = (event, reason) => {
     setOpen(false);
   };
 
   useEffect(() => {
-    socket.on("broadcast", (...args) => {
-      setOpen(true);
-      setMessage(...args);
-      console.log("broadcast", ...args);
+    socket.on("broadcast", (args) => {
+      // console.log(args.level, roleId);
+      if (roleId >= args.level) {
+        setOpen(true);
+        setMessage(args);
+        console.log("broadcast", ...args);
+      }
     });
 
     socket.on("phase", (phase) => {
@@ -44,7 +47,13 @@ const BroadcastAlert = () => {
       <Alert
         onClose={handleClose}
         sx={{ width: "100%" }}
-        severity="info"
+        severity={
+          message.level >= 100
+            ? "error"
+            : message.level >= 10
+            ? "warning"
+            : "info"
+        }
         elevation={6}
         variant="filled"
       >

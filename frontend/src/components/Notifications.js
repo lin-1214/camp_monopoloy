@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Stack,
   Container,
@@ -9,16 +9,21 @@ import {
   Box,
   Tab,
   Tabs,
-  Table,
-  TableContainer,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableBody,
-  Paper,
+  Alert,
+  AlertTitle,
+  IconButton,
+  // Table,
+  // TableContainer,
+  // TableRow,
+  // TableCell,
+  // TableHead,
+  // TableBody,
+  // Paper,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Loading from "./Loading";
 import axios from "./axios";
+import RoleContext from "./useRole";
 
 const Notifications = () => {
   const [val, setVal] = useState(0); //tab value
@@ -26,6 +31,7 @@ const Notifications = () => {
   const [permMessages, setPermMessages] = useState([]); //permanent message
   const [eventMessage, setEventMessage] = useState({}); //event
   const [broadcast, setBroadcast] = useState([]); //historical broadcasts
+  const { roleId } = useContext(RoleContext);
 
   //tab components
   const handleChange = (e, val) => {
@@ -61,6 +67,17 @@ const Notifications = () => {
   const FetchBroadcast = async () => {
     const { data } = await axios.get("/broadcast");
     setBroadcast(data);
+  };
+
+  const handleDelete = async (createdAt) => {
+    await axios
+      .delete(`/broadcast/${createdAt}`)
+      .then((res) => {
+        setBroadcast(broadcast.filter((item) => item.createdAt !== createdAt));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -197,29 +214,50 @@ const Notifications = () => {
             spacing={1}
             sx={{
               marginTop: "10px",
-              marginLeft: "20px",
-              marginRight: "20px",
+              marginBottom: 10,
+              mx: "auto",
+              alignItems: "center",
             }}
           >
             {broadcast &&
-              broadcast.map((item) => (
-                <Card
-                  key={item.id}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: "#0288d1",
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="h6">{item.title}</Typography>
-                    <Typography variant="body2">{item.description}</Typography>
-                    <Typography variant="caption">
-                      {new Date(item.createdAt).toLocaleString()}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
+              broadcast.map(
+                (item) =>
+                  roleId >= item.level && (
+                    <Alert
+                      key={broadcast.indexOf(item)}
+                      sx={{ width: "90%" }}
+                      severity={
+                        item.level >= 100
+                          ? "error"
+                          : item.level >= 10
+                          ? "warning"
+                          : "info"
+                      }
+                      elevation={6}
+                      variant="filled"
+                      action={
+                        roleId !== 100 ? (
+                          <Typography variant="caption">
+                            {new Date(item.createdAt).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })}
+                          </Typography>
+                        ) : (
+                          <IconButton
+                            onClick={() => handleDelete(item.createdAt)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        )
+                      }
+                    >
+                      <AlertTitle>{String(item.title)}</AlertTitle>
+                      {String(item.description)}
+                    </Alert>
+                  )
+              )}
           </Stack>
         </TabPanel>
       </Container>

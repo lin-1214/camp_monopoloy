@@ -44,26 +44,21 @@ const Navbar = ({ open }) => {
       onOpen={() => {}}
       onClose={() => {}}
     >
-      <Toolbar />
-      <Typography variant="h6" align="center"> {role} </Typography>
+      <Toolbar align="center">{role}</Toolbar>
       <Divider />
       <List>
         {NavBarItems.map(mapping)}
         {roleId > 20 && (
           <>
             <Divider />
-            <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
-              NPC
-            </Typography>
+            <Typography sx={{ marginLeft: 3, marginTop: 2 }}>NPC</Typography>
             {NPCItems.map(mapping)}
           </>
         )}
         {roleId === 100 && (
           <>
             <Divider />
-            <Typography sx={{ marginLeft: 3, marginTop: 2, marginBottom: 2 }}>
-              Admin
-            </Typography>
+            <Typography sx={{ marginLeft: 3, marginTop: 2 }}>Admin</Typography>
             {adminItems.map(mapping)}
           </>
         )}

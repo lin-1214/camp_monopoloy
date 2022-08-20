@@ -9,7 +9,7 @@ import Notifications from "./components/Notifications";
 import Teams from "./components/Teams/Teams";
 import Properties from "./components/Properties/Properties";
 import SellProperty from "./components/Properties/SellProperty";
-import LogIn from "./components/LogIn";
+import LogIn from "./components/Login";
 import AddMoney from "./components/NPC/AddMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
@@ -24,7 +24,7 @@ import RoleContext from "./components/useRole";
 import Loading from "./components/Loading";
 import BroadcastAlert from "./components/BroadcastAlert";
 import Broadcast from "./components/admin/Broadcast";
-import { roleIdMap } from "./components/LogIn";
+import { roleIdMap } from "./components/Login";
 import theme from "./theme";
 // import { socket, SocketContext } from "./websocket";
 

@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
-  // Select,
-  // MenuItem,
+  Select,
+  MenuItem,
   TextField,
   // InputLabel,
   Typography,
@@ -19,11 +19,12 @@ import axios from "../axios";
 const Broadcast = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [level, setLevel] = useState(0);
   const { role } = useContext(RoleContext);
   const navigate = useNavigate();
 
   const handleClick = async () => {
-    await axios.post("/broadcast", { title, description });
+    await axios.post("/broadcast", { title, description, level });
   };
 
   useEffect(() => {
@@ -50,9 +51,9 @@ const Broadcast = () => {
           {/* <InputLabel id="title">Title</InputLabel> */}
           <TextField
             id="title"
-            label="Enter Title"
+            label="Title"
             multiline
-            sx={{ marginTop: 2, marginBottom: 2 }}
+            // sx={{ marginTop: 2, marginBottom: 2 }}
             variant="standard"
             value={title}
             onChange={(e) => {
@@ -64,15 +65,30 @@ const Broadcast = () => {
           {/* <InputLabel id="description">Description</InputLabel> */}
           <TextField
             id="description"
-            label="Enter Description"
+            label="Description"
             multiline
-            sx={{ marginTop: 2, marginBottom: 2 }}
+            // sx={{ marginTop: 2, marginBottom: 2 }}
             variant="standard"
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
             }}
           />
+        </FormControl>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
+          <Select
+            labelId="level"
+            id="level"
+            value={level}
+            sx={{ marginTop: 2, marginBottom: 2 }}
+            onChange={(e) => {
+              setLevel(e.target.value);
+            }}
+          >
+            <MenuItem value={0}>Public</MenuItem>
+            <MenuItem value={10}>NPC</MenuItem>
+            <MenuItem value={100}>Admin</MenuItem>
+          </Select>
           <Button disabled={!title || !description} onClick={handleClick}>
             Submit
           </Button>

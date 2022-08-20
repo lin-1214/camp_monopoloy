@@ -11,6 +11,7 @@ import {
   Alert,
 } from "@mui/material";
 import RoleContext from "./useRole";
+// import { socket } from "../websocket";
 import axios from "./axios";
 
 export const roleIdMap = {
@@ -46,7 +47,8 @@ const LogIn = () => {
       setOpen(true);
       setMessage("Successfully login!");
       setRole(username);
-      setRoleId(roleIdMap[username]);
+      const id = roleIdMap[username];
+      setRoleId(id);
       // console.log(roleIdMap[username]);
       localStorage.setItem("role", username);
       navigate("/");

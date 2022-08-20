@@ -4,6 +4,7 @@ const BroadcastSchema = new Schema({
   createdAt: Number,
   title: String,
   description: String,
+  level: Number,
 });
 
 const Broadcast = mongoose.model("broadcast", BroadcastSchema);
