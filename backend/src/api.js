@@ -32,21 +32,29 @@ router.get("/", (req, res) => {
 //   next();
 // };
 
-async function calcmoney(teamname, money, estate) {
-  const team = await Team.findOne({ teamname });
-  if (money > 0) {
-    if (team.soulgem.value) {
-      money *= 2;
-    }
-    if (estate) {
-      money *= team.bonus.value;
-    }
-  } else {
-    if (team.soulgem.value) {
-      money *= 1.5;
-    }
+// async function calcmoney(teamname, money, estate) {
+//   const team = await Team.findOne({ teamname });
+//   if (money > 0) {
+//     if (team.soulgem.value) {
+//       money *= 2;
+//     }
+//     if (estate) {
+//       money *= team.bonus.value;
+//     }
+//   } else {
+//     if (team.soulgem.value) {
+//       money *= 1.5;
+//     }
+//   }
+//   return money;
+// }
+
+async function updateTeam(team, io) {
+  if (team.money < 0) {
+    const message = { title: "破產!!!", description: team.teamname };
+    io.emit("broadcast", message);
   }
-  return money;
+  await team.save();
 }
 
 async function deleteTimeoutNotification() {
@@ -472,40 +480,18 @@ router.post("/add", async (req, res) => {
     console.log("Team not found");
     return;
   }
+  let newMoney = 0;
   if (team.soulgem.value === true) {
     if (dollar < 0) {
-      const newTeam = await Team.findOneAndUpdate(
-        { id: id },
-        { money: Math.round(team.money + dollar * 1.5) }
-      );
-      if (!newTeam) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
+      newMoney = Math.round(team.money + dollar * 1.5);
     } else {
-      const newTeam = await Team.findOneAndUpdate(
-        { id: id },
-        { money: team.money + dollar * 2 }
-      );
-      if (!newTeam) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
+      newMoney = Math.round(team.money + dollar * 2);
     }
   } else {
-    const newTeam = await Team.findOneAndUpdate(
-      { id: id },
-      { money: team.money + dollar }
-    );
-    console.log(team, newTeam);
-    if (!newTeam) {
-      res.status(403).send();
-      console.log("Update failed");
-      return;
-    }
+    newMoney = Math.round(team.money + dollar);
   }
+  team.money = newMoney;
+  await updateTeam(team, req.io);
   res.status(200).send("Update succeeded");
 });
 

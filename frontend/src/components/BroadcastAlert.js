@@ -50,7 +50,7 @@ const BroadcastAlert = () => {
       >
         <AlertTitle>{String(message.title)}</AlertTitle>
         {String(message.description)} <br />
-        {String(message.note)}
+        {String(message.note || "")}
       </Alert>
     </Snackbar>
   );
