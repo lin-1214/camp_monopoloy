@@ -127,17 +127,9 @@ const Notifications = () => {
         <Box>
           <Tabs
             value={val}
-            fullwidth
             onChange={handleChange}
-            sx={{
-              width: "200px",
-              marginTop: "70px",
-              marginLeft: "auto",
-              marginRight: "auto",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            variant="fullWidth"
+            sx={{ marginTop: "70px" }}
           >
             <Tab label="current" {...tabprops(0)} />
             <Tab label="history" {...tabprops(1)} />
