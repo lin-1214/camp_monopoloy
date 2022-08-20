@@ -147,6 +147,13 @@ const Notifications = () => {
       );
   };
 
+  const broadcastType = (level) => {
+    if (level === null || level === undefined) return "info";
+    else if (level >= 50) return "warning";
+    else if (level >= 100) return "error";
+    else return "info";
+  };
+
   if (eventMessage.title === undefined) {
     return <Loading />;
   } else {
@@ -237,13 +244,7 @@ const Notifications = () => {
                     <Alert
                       key={broadcast.indexOf(item)}
                       sx={{ width: "90%" }}
-                      severity={
-                        item.level >= 100
-                          ? "error"
-                          : item.level >= 10
-                          ? "warning"
-                          : "info"
-                      }
+                      severity={broadcastType(item.level)}
                       elevation={6}
                       variant="filled"
                       action={
@@ -270,7 +271,12 @@ const Notifications = () => {
                   )
               )}
           </Stack>
-          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} sx={{marginBottom: 10}}>
+          <Snackbar
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            sx={{ marginBottom: 10 }}
+          >
             <Alert severity="success" variant="filled">
               Successfully deleted
             </Alert>

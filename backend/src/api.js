@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
 
 async function updateTeam(team, io) {
   if (team.money < 0) {
-    const message = { title: "破產!!!", description: team.teamname };
+    const message = { title: "破產!!!", description: team.teamname, level: 0 };
     io.emit("broadcast", message);
   }
   await team.save();
@@ -88,6 +88,7 @@ router
     req.io.emit("broadcast", {
       title: `Phase Changed to ${phase.value}`,
       description: "",
+      level: 0
     });
   });
 
@@ -440,6 +441,7 @@ router
 
       const newEvent = await Event.findOne({ id });
       newEvent.note = note;
+      newEvent.level = 0;
       await newEvent.save();
       req.io.emit("broadcast", newEvent);
       console.log("broadcast");

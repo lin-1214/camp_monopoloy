@@ -15,10 +15,11 @@ const BroadcastAlert = () => {
   useEffect(() => {
     socket.on("broadcast", (args) => {
       // console.log(args.level, roleId);
-      if (roleId >= args.level) {
+      // console.log(args);
+      if (roleId >= (args.level || 0)) {
         setOpen(true);
         setMessage(args);
-        // console.log("broadcast", args);
+        console.log("broadcast", args);
       }
     });
 
@@ -37,6 +38,14 @@ const BroadcastAlert = () => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const broadcastType = (level) => {
+    console.log(level);
+    if (level === null || level === undefined) return "info";
+    else if (level >= 100) return "error";
+    else if (level >= 10) return "warning";
+    else return "info";
+  };
+
   return (
     <Snackbar
       open={open}
@@ -47,13 +56,7 @@ const BroadcastAlert = () => {
       <Alert
         onClose={handleClose}
         sx={{ width: "100%" }}
-        severity={
-          message.level >= 100
-            ? "error"
-            : message.level >= 10
-            ? "warning"
-            : "info"
-        }
+        severity={broadcastType(message.level)}
         elevation={6}
         variant="filled"
       >
