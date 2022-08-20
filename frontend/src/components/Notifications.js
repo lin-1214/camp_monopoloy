@@ -6,43 +6,76 @@ import {
   Card,
   CardContent,
   Typography,
-  // Box,
+  Box,
+  Tab,
+  Tabs,
+  Table,
+  TableContainer,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableBody,
+  Paper,
 } from "@mui/material";
 import Loading from "./Loading";
 import axios from "./axios";
 
 const Notifications = () => {
-  const [messages, setMessages] = useState([]);
-  const [eventMessage, setEventMessage] = useState({});
-  const [permMessages, setPermMessages] = useState([]);
+  const [val, setVal] = useState(0); //tab value
+  const [messages, setMessages] = useState([]); //temporary message
+  const [permMessages, setPermMessages] = useState([]); //permanent message
+  const [eventMessage, setEventMessage] = useState({}); //event
+  const [broadcast, setBroadcast] = useState([]); //historical broadcasts
 
+  //tab components
+  const handleChange = (e, val) => {
+    setVal(val);
+  };
+
+  const TabPanel = ({ children, value, index }) => {
+    return (
+      <div hidden={value !== index} id={index}>
+        {value === index && <Box>{children}</Box>}
+      </div>
+    );
+  };
+
+  const tabprops = (idx) => {
+    return { id: idx };
+  };
+
+  //fetch data
   const FetchEvent = async () => {
     const { data } = await axios.get("/event");
-    // console.log(data);
     if (data !== null) setEventMessage(data); //avoid 0 state
   };
 
   const FetchMessages = async () => {
     const { data } = await axios.get("/notifications");
-    // console.log(data);
     const temporary = data.filter((item) => item.type === "temporary");
     const permanent = data.filter((item) => item.type === "permenant");
     setMessages(temporary);
     setPermMessages(permanent);
   };
+
+  const FetchBroadcast = async () => {
+    const { data } = await axios.get("/broadcast");
+    setBroadcast(data);
+  };
+
   useEffect(() => {
-    //fetch event from backend
+    //fetch event, messages, and historical broadcast from backend
     FetchEvent();
-    //fetch messages from backend
     FetchMessages();
-    //assign data to the messages
-    // refresh every 10 seconds
+    FetchBroadcast();
+
+    // refresh every 15 seconds
     const interval = setInterval(async () => {
       await FetchEvent();
       await FetchMessages();
-    }, 10000);
+      await FetchBroadcast();
+    }, 15000);
     return () => clearInterval(interval);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -91,60 +124,111 @@ const Notifications = () => {
   } else {
     return (
       <Container component="main" maxWidth="xs">
-        <Stack
-          spacing={1}
-          sx={{
-            maxWidth: 700,
-            marginTop: "80px",
-            marginLeft: "20px",
-            marginRight: "20px",
-          }}
-        >
-          <Card
+        <Box>
+          <Tabs
+            value={val}
+            fullwidth
+            onChange={handleChange}
             sx={{
-              backgroundColor: "rgb(60,60,60)",
-              color: "rgb(255,255,255)",
+              width: "200px",
+              marginTop: "70px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <CardContent>
-              <Typography variant="h6">
-                事件：{eventMessage ? eventMessage.title : "無"}
-              </Typography>
-              <Typography variant="body2">
-                {eventMessage.description}
-              </Typography>
-              <Typography variant="body2">{eventMessage.note}</Typography>
-            </CardContent>
-          </Card>
-          {permMessages &&
-            permMessages.map((item) => (
-              // <Card key={item.id}>
-              //   <CardContent>
-              //     <Typography variant="subtitle1">{item.title}</Typography>
-              //     <Typography variant="body2">{item.description}</Typography>
-              //   </CardContent>
-              // </Card>
-              <Card
-                key={item.id}
-                sx={{ display: "flex", flexDirection: "column" }}
-              >
-                <CardContent>
-                  <Typography variant="h6">{item.title}</Typography>
-                  <Typography variant="body2">{item.description}</Typography>
-                </CardContent>
-              </Card>
-            ))}
-          {messages &&
-            messages.map((item) => (
-              <TimedComponent
-                id={item.id}
-                duration={item.duration}
-                title={item.title}
-                content={item.description}
-                createdAt={item.createdAt}
-              />
-            ))}
-        </Stack>
+            <Tab label="current" {...tabprops(0)} />
+            <Tab label="history" {...tabprops(1)} />
+          </Tabs>
+        </Box>
+
+        <TabPanel value={val} index={0}>
+          <Stack
+            spacing={1}
+            sx={{
+              maxWidth: 700,
+              marginTop: "10px",
+              marginLeft: "20px",
+              marginRight: "20px",
+            }}
+          >
+            <Card
+              sx={{
+                backgroundColor: "rgb(60,60,60)",
+                color: "rgb(255,255,255)",
+              }}
+            >
+              <CardContent>
+                <Typography variant="h6">
+                  事件：{eventMessage ? eventMessage.title : "無"}
+                </Typography>
+                <Typography variant="body2">
+                  {eventMessage.description}
+                </Typography>
+                <Typography variant="body2">{eventMessage.note}</Typography>
+              </CardContent>
+            </Card>
+            {permMessages &&
+              permMessages.map((item) => (
+                // <Card key={item.id}>
+                //   <CardContent>
+                //     <Typography variant="subtitle1">{item.title}</Typography>
+                //     <Typography variant="body2">{item.description}</Typography>
+                //   </CardContent>
+                // </Card>
+                <Card
+                  key={item.id}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <CardContent>
+                    <Typography variant="h6">{item.title}</Typography>
+                    <Typography variant="body2">{item.description}</Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            {messages &&
+              messages.map((item) => (
+                <TimedComponent
+                  id={item.id}
+                  duration={item.duration}
+                  title={item.title}
+                  content={item.description}
+                  createdAt={item.createdAt}
+                />
+              ))}
+          </Stack>
+        </TabPanel>
+        <TabPanel value={val} index={1}>
+          <TableContainer>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="middle">Title</TableCell>
+                  <TableCell align="middle">Content</TableCell>
+                  <TableCell align="middle">Time</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {broadcast &&
+                  broadcast.map((item) => (
+                    <TableRow>
+                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
+                        {item.title}
+                      </TableCell>
+                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
+                        {item.description}
+                      </TableCell>
+                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
+                        {new Date(item.createdAt).toLocaleString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TabPanel>
       </Container>
     );
   }

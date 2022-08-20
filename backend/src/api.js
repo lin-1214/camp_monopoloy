@@ -6,6 +6,7 @@ import Notification from "../models/notification.js";
 import Event from "../models/event.js";
 import Pair from "../models/pair.js";
 import Effect from "../models/effect.js";
+import Broadcast from "../models/broadcast.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -309,6 +310,7 @@ router
                 await special[i].save();
               }
             }
+            await updateHawkEye();
             res.json("Success").status(200);
           }
           break;
@@ -373,6 +375,7 @@ router
               outsideEarthLands[i].level = 0;
               await owner.save();
               await outsideEarthLands[i].save();
+              await updateHawkEye();
             }
             res.json("Success").status(200);
           }
@@ -718,9 +721,17 @@ router.post("/effect", async (req, res) => {
 
 router.post("/broadcast", async (req, res) => {
   const { title, description } = req.body;
+  let time = Date.now();
+  const broadcast = { createdAt: time, title: title, description: description };
+  await new Broadcast(broadcast).save();
   req.io.emit("broadcast", { title, description });
   res.status(200).send("Broadcast succeeded");
   console.log("broadcast sent");
+});
+
+router.get("/broadcast", async (req, res) => {
+  const data = await Broadcast.find({}).sort({ createdAt: 1 });
+  res.json(data).status(200);
 });
 
 router.get("/notifications", async (req, res) => {

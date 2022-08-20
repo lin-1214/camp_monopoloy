@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 import dotenv from "dotenv-defaults";
 import Team from "../models/team.js";
 import Land from "../models/land.js";
 import User from "../models/user.js";
 import Notification from "../models/notification.js";
+import Broadcast from "../models/broadcast.js";
 import Event from "../models/event.js";
 import Pair from "../models/pair.js";
 import Effect from "../models/effect.js";
@@ -617,6 +617,7 @@ db.once("open", async () => {
   await Pair.deleteMany({});
   await Notification.deleteMany({});
   await Effect.deleteMany({});
+  await Broadcast.deleteMany({});
   console.log("delete done");
 
   users.forEach(async (user) => {

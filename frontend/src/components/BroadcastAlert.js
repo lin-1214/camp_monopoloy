@@ -38,6 +38,7 @@ const BroadcastAlert = () => {
     <Snackbar
       open={open}
       onClose={handleClose}
+      autoHideDuration={4000}
       sx={{ marginTop: 15 }}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
