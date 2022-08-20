@@ -201,33 +201,34 @@ const Notifications = () => {
           </Stack>
         </TabPanel>
         <TabPanel value={val} index={1}>
-          <TableContainer>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="middle">Title</TableCell>
-                  <TableCell align="middle">Content</TableCell>
-                  <TableCell align="middle">Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {broadcast &&
-                  broadcast.map((item) => (
-                    <TableRow>
-                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
-                        {item.title}
-                      </TableCell>
-                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
-                        {item.description}
-                      </TableCell>
-                      <TableCell align="middle" sx={{ fontSize: "14px" }}>
-                        {new Date(item.createdAt).toLocaleString()}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Stack
+            spacing={1}
+            sx={{
+              marginTop: "10px",
+              marginLeft: "20px",
+              marginRight: "20px",
+            }}
+          >
+            {broadcast &&
+              broadcast.map((item) => (
+                <Card
+                  key={item.id}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    backgroundColor: "#0288d1",
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="h6">{item.title}</Typography>
+                    <Typography variant="body2">{item.description}</Typography>
+                    <Typography variant="caption">
+                      {new Date(item.createdAt).toLocaleString()}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+          </Stack>
         </TabPanel>
       </Container>
     );
