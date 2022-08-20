@@ -167,6 +167,7 @@ router
     const pair = await Pair.findOne({ key: "currentEvent" });
     if (pair) {
       const currentEvent = parseInt(pair.value);
+      let note = "";
       // console.log(currentEvent);
       switch (currentEvent) {
         default:
@@ -224,7 +225,8 @@ router
               })
               .sort();
             console.log(uniqueOwners);
-            res.json(`Team: ${uniqueOwners}`).status(200);
+            note = `Team: ${uniqueOwners.length ? uniqueOwners : "None"}`;
+            res.json(note).status(200);
           }
           break;
         case 2: // 面臨國喪，持有黑豹系列建築的隊伍可以選擇(1)在原地休息5分鐘默哀致意 或 (2)繳20000結束
@@ -239,7 +241,8 @@ router
               })
               .sort();
             console.log(uniqueOwners);
-            res.json(`Team: ${uniqueOwners}`).status(200);
+            note = `Team: ${uniqueOwners.length ? uniqueOwners : "None"}`;
+            res.json(note).status(200);
           }
           break;
         case 3: // 購買房地產與升級的金額減半
@@ -334,7 +337,8 @@ router
             }
             console.log(top4);
             const names = await top4.map((team) => team.id).sort();
-            res.json(`Teams: ${names}`).status(200);
+            note = `Team: ${names}`;
+            res.json(note).status(200);
           }
           break;
         case 11: // 地球以外的房產格強制拋售, 並獲得50%價值的金額(地球以外:太空總部、泰坦星、佛米爾星、虛無之地、天劍局、阿斯嘉、彩虹橋、英靈殿、多摩)
@@ -424,6 +428,8 @@ router
       await pair.save();
 
       const newEvent = await Event.findOne({ id });
+      newEvent.note = note;
+      await newEvent.save();
       req.io.emit("broadcast", newEvent);
       console.log("broadcast");
     } else {

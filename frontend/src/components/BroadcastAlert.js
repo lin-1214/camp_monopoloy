@@ -49,7 +49,8 @@ const BroadcastAlert = () => {
         variant="filled"
       >
         <AlertTitle>{String(message.title)}</AlertTitle>
-        {String(message.description)}
+        {String(message.description)} <br />
+        {String(message.note)}
       </Alert>
     </Snackbar>
   );

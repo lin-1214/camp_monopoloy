@@ -113,6 +113,7 @@ const Notifications = () => {
               <Typography variant="body2">
                 {eventMessage.description}
               </Typography>
+              <Typography variant="body2">{eventMessage.note}</Typography>
             </CardContent>
           </Card>
           {permMessages &&

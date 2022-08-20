@@ -82,10 +82,10 @@ const Header = () => {
     if (phase === "") {
       getPhase();
     }
-    // const timer = setInterval(() => {
-    //   getPhase();
-    // }, 30000);
-    // return () => clearInterval(timer);
+    const timer = setInterval(() => {
+      getPhase();
+    }, 30000);
+    return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredBuildings, buildings]);
 
