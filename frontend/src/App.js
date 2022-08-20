@@ -9,7 +9,7 @@ import Notifications from "./components/Notifications";
 import Teams from "./components/Teams/Teams";
 import Properties from "./components/Properties/Properties";
 import SellProperty from "./components/Properties/SellProperty";
-import LogIn from "./components/Login";
+import Login from "./components/Login";
 import AddMoney from "./components/NPC/AddMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
@@ -78,7 +78,7 @@ const App = () => {
               <Route path="teams" element={<Teams />} />
               <Route path="properties" element={<Properties />} />
               <Route path="sellproperty" element={<SellProperty />} />
-              <Route path="login" element={<LogIn />} />
+              <Route path="login" element={<Login />} />
               <Route path="addmoney" element={<AddMoney />} />
               <Route path="setownership" element={<SetOwnership />} />
               <Route path="transfer" element={<Transfer />} />

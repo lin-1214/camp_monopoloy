@@ -27,7 +27,7 @@ export const roleIdMap = {
   admin: 100,
 };
 
-const LogIn = () => {
+const Login = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -127,4 +127,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default Login;

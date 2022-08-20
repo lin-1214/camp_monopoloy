@@ -9,6 +9,7 @@ import {
   Box,
   Tab,
   Tabs,
+  Snackbar,
   Alert,
   AlertTitle,
   IconButton,
@@ -31,6 +32,7 @@ const Notifications = () => {
   const [permMessages, setPermMessages] = useState([]); //permanent message
   const [eventMessage, setEventMessage] = useState({}); //event
   const [broadcast, setBroadcast] = useState([]); //historical broadcasts
+  const [open, setOpen] = useState(false); //snackbar open
   const { roleId } = useContext(RoleContext);
 
   //tab components
@@ -74,10 +76,19 @@ const Notifications = () => {
       .delete(`/broadcast/${createdAt}`)
       .then((res) => {
         setBroadcast(broadcast.filter((item) => item.createdAt !== createdAt));
+        console.log("Successfully deleted");
+        setOpen(true);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -259,6 +270,11 @@ const Notifications = () => {
                   )
               )}
           </Stack>
+          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} sx={{marginBottom: 10}}>
+            <Alert severity="success" variant="filled">
+              Successfully deleted
+            </Alert>
+          </Snackbar>
         </TabPanel>
       </Container>
     );
