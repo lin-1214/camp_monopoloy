@@ -506,127 +506,46 @@ router.post("/series", async (req, res) => {
   res.json({ count }).status(200);
 });
 
-router.post("/transfer", async (req, res) => {
-  const { from, to, IsEstate, dollar, equal } = req.body;
-  const team1 = await Team.findAndCheckValid(from);
-  if (!team1) {
-    res.status(403).send();
-    console.log("Team not found");
-    return;
-  }
-  const team2 = await Team.findOne({ id: to });
-  if (!team2) {
-    res.status(403).send();
-    console.log("Team not found");
-    return;
-  }
-  if (equal) {
-    const equalmoney = Math.round((team1.money + team2.money) / 2);
-    const newTeam1 = await Team.findOneAndUpdate(
-      { id: from },
-      { money: equalmoney }
-    );
-    const newTeam2 = await Team.findOneAndUpdate(
-      { id: to },
-      { money: equalmoney }
-    );
-    if (!newTeam1 || !newTeam2) {
-      res.status(403).send();
-      console.log("Update failed");
-      return;
-    }
-    res.status(200).send("Update succeeded");
-    return;
+const calcTransfer = async (from, to, amount, isEstate) => {
+  if (from === to) return null;
+
+  const FromTeam = await Team.findOne({ id: from }); //minus
+  const ToTeam = await Team.findOne({ id: to }); //add
+  if (!FromTeam || !ToTeam) {
+    console.log("error finding teams in func: calcTransfer");
+    return null;
   }
 
-  if (!IsEstate) {
-    if (team1.soulgem.value === true) {
-      const newTeam1 = await Team.findOneAndUpdate(
-        { id: from },
-        { money: Math.round(team1.money - dollar * 1.5) }
-      );
-      if (!newTeam1) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    } else {
-      const newTeam1 = await Team.findOneAndUpdate(
-        { id: from },
-        { money: team1.money - dollar }
-      );
-      if (!newTeam1) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    }
-    if (team2.soulgem.value === true) {
-      const newTeam2 = await Team.findOneAndUpdate(
-        { id: to },
-        { money: team2.money + dollar * 2 }
-      );
-      if (!newTeam2) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    } else {
-      const newTeam2 = await Team.findOneAndUpdate(
-        { id: to },
-        { money: team2.money + dollar }
-      );
-      if (!newTeam2) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    }
+  let FromAmount = FromTeam.money;
+  let ToAmount = ToTeam.money;
+  let TransferAmount = amount;
+
+  if (isEstate && ToTeam.bonus.value !== 1)
+    TransferAmount *= ToTeam.bonus.value;
+  if (FromTeam.soulgem.value) FromAmount -= TransferAmount * 1.5;
+  else FromAmount -= TransferAmount;
+
+  if (ToTeam.soulgem.value) ToAmount += TransferAmount *= 2;
+  else ToAmount += TransferAmount;
+
+  return { from: FromAmount, to: ToAmount };
+};
+
+router.post("/transfer", async (req, res) => {
+  const { from, to, IsEstate, dollar } = req.body;
+  //update team status
+  await Team.findAndCheckValid(from);
+  await Team.findAndCheckValid(to);
+
+  const data = await calcTransfer(from, to, dollar, IsEstate);
+  if (!data) {
+    console.log("Transfer failed");
+    res.status(403).send("Transfer failed");
   } else {
-    if (team1.soulgem.value === true) {
-      const newTeam1 = await Team.findOneAndUpdate(
-        { id: from },
-        { money: Math.round(team1.money - dollar * 1.5 * team2.bonus.value) }
-      );
-      if (!newTeam1) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    } else {
-      const newTeam1 = await Team.findOneAndUpdate(
-        { id: from },
-        { money: team1.money - dollar * team2.bonus.value }
-      );
-      if (!newTeam1) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    }
-    if (team2.soulgem.value === true) {
-      const newTeam2 = await Team.findOneAndUpdate(
-        { id: to },
-        { money: team2.money + dollar * 2 * team2.bonus.value }
-      );
-      if (!newTeam2) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    } else {
-      const newTeam2 = await Team.findOneAndUpdate(
-        { id: to },
-        { money: team2.money + dollar * team2.bonus.value }
-      );
-      if (!newTeam2) {
-        res.status(403).send();
-        console.log("Update failed");
-        return;
-      }
-    }
+    await Team.findOneAndUpdate({ id: from }, { money: data.from });
+    await Team.findOneAndUpdate({ id: to }, { money: data.to });
+    res.status(200).send("Update succeeded");
   }
-  res.status(200).send("Update succeeded");
 });
 
 async function updateHawkEye() {

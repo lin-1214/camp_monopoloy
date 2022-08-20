@@ -38,7 +38,6 @@ const Transfer = () => {
 
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const [equal, setEqual] = useState(false);
   const [error, setError] = useState(false);
   const { roleId, filteredBuildings, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
@@ -77,7 +76,6 @@ const Transfer = () => {
       to: to,
       IsEstate: building !== -1,
       dollar: parseInt(amount),
-      equal: equal,
     };
     await axios.post("/transfer", payload);
     navigate("/teams");
@@ -126,7 +124,6 @@ const Transfer = () => {
   const handlePercentMoney = (percent) => {
     const money = fromData.money; //find the team's money
     setAmount(Math.round(money * percent));
-    setEqual(false);
   };
 
   const handleEqualMoney = () => {
@@ -134,7 +131,6 @@ const Transfer = () => {
     let money_to = toData.money; //second team(passive)
     let temp = Math.round((money_from - money_to) / 2);
     setAmount(temp);
-    setEqual(true);
   };
 
   useEffect(() => {
