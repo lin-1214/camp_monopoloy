@@ -18,7 +18,7 @@ const BroadcastAlert = () => {
       if (roleId >= args.level) {
         setOpen(true);
         setMessage(args);
-        console.log("broadcast", ...args);
+        // console.log("broadcast", args);
       }
     });
 
