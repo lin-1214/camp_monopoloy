@@ -50,12 +50,32 @@ router.get("/", (req, res) => {
 //   return money;
 // }
 
-async function updateTeam(team, io) {
-  if (team.money < 0) {
+async function updateTeam(team, moneyChanged, io, saved) {
+  const teamObj = await Team.findOne({ id: team });
+  var ratio = 1;
+  if (teamObj.soulgem.value === true) {
+    if (moneyChanged > 0) ratio = 2;
+    else ratio = 1.5;
+  }
+  console.log(ratio);
+  console.log(teamObj.money);
+  console.log(teamObj.money + moneyChanged * ratio);
+  let final = Math.round(teamObj.money + moneyChanged * ratio);
+  console.log("final: ", final);
+  if (saved && final < 0) {
     const message = { title: "破產!!!", description: team.teamname, level: 0 };
     io.emit("broadcast", message);
   }
-  await team.save();
+  if (saved) {
+    const temp = await Team.findOneAndUpdate(
+      { id: team },
+      { money: final },
+      { new: true } //return the item after update
+    );
+    return temp;
+  } else {
+    return { money: final };
+  }
 }
 
 async function deleteTimeoutNotification() {
@@ -88,7 +108,7 @@ router
     req.io.emit("broadcast", {
       title: `Phase Changed to ${phase.value}`,
       description: "",
-      level: 0
+      level: 0,
     });
   });
 
@@ -478,26 +498,24 @@ router.post("/level", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-  const { id, teamname, dollar } = req.body;
+  const { id, dollar } = req.body;
   const team = await Team.findAndCheckValid(id);
   if (!team) {
     res.status(403).send();
     console.log("Team not found");
     return;
   }
-  let newMoney = 0;
-  if (team.soulgem.value === true) {
-    if (dollar < 0) {
-      newMoney = Math.round(team.money + dollar * 1.5);
-    } else {
-      newMoney = Math.round(team.money + dollar * 2);
-    }
-  } else {
-    newMoney = Math.round(team.money + dollar);
-  }
-  team.money = newMoney;
-  await updateTeam(team, req.io);
+  await updateTeam(id, dollar, req.io, true);
   res.status(200).send("Update succeeded");
+});
+
+router.get("/add", async (req, res) => {
+  console.log(req.query);
+  const { id, dollar } = req.query;
+  console.log(id, dollar);
+  const data = await updateTeam(id, dollar, req.io, false);
+  console.log(data);
+  res.json(data).status(200);
 });
 
 router.post("/series", async (req, res) => {
@@ -518,18 +536,22 @@ const calcTransfer = async (from, to, amount, isEstate) => {
     return null;
   }
 
-  let FromAmount = FromTeam.money;
-  let ToAmount = ToTeam.money;
-  let TransferAmount = amount;
-
-  if (isEstate && ToTeam.bonus.value !== 1)
+  var FromAmount = parseInt(FromTeam.money);
+  var ToAmount = parseInt(ToTeam.money);
+  var TransferAmount = parseInt(amount);
+  console.log(TransferAmount, ToTeam.bonus.value);
+  if (isEstate && ToTeam.bonus.value !== 0)
     TransferAmount *= ToTeam.bonus.value;
-  if (FromTeam.soulgem.value) FromAmount -= TransferAmount * 1.5;
+
+  console.log(TransferAmount);
+  if (FromTeam.soulgem.value)
+    FromAmount -= parseInt(Math.round(TransferAmount * 1.5));
   else FromAmount -= TransferAmount;
 
-  if (ToTeam.soulgem.value) ToAmount += TransferAmount *= 2;
+  if (ToTeam.soulgem.value)
+    ToAmount += parseInt(Math.round(TransferAmount * 2));
   else ToAmount += TransferAmount;
-
+  console.log({ from: FromAmount, to: ToAmount });
   return { from: FromAmount, to: ToAmount };
 };
 
@@ -548,6 +570,17 @@ router.post("/transfer", async (req, res) => {
     await Team.findOneAndUpdate({ id: to }, { money: data.to });
     res.status(200).send("Update succeeded");
   }
+});
+
+router.get("/transfer", async (req, res) => {
+  let from = req.query.from;
+  let to = req.query.to;
+  let IsEstate = req.query.IsEstate;
+  let dollar = req.query.dollar;
+  const data = await calcTransfer(from, to, dollar, IsEstate);
+  console.log(data);
+  if (data !== null) res.json(data).status(200);
+  else res.status(403).send();
 });
 
 async function updateHawkEye() {

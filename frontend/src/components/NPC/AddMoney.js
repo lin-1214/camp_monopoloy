@@ -29,6 +29,7 @@ import TeamSelect from "../TeamSelect";
 const AddMoney = () => {
   const [team, setTeam] = useState(-1);
   const [teamData, setTeamData] = useState({});
+  const [newData, setNewData] = useState(0);
 
   const [amount, setAmount] = useState("0");
   const [errorMessage, setErrorMessage] = useState("");
@@ -81,6 +82,13 @@ const AddMoney = () => {
     }
     const money = teamData.money;
     handleAmount(Math.round(money * -0.1));
+  };
+
+  const handlePreview = async () => {
+    const { data } = await axios.get("/add", {
+      params: { id: team, dollar: amount },
+    });
+    setNewData(data.money);
   };
 
   const handleSubmit = async () => {
@@ -141,6 +149,12 @@ const AddMoney = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (team !== -1 && amount !== 0) {
+      handlePreview();
+    }
+  }, [team, amount]);
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -171,7 +185,6 @@ const AddMoney = () => {
             sx={{ marginTop: 2, marginBottom: 1 }}
             onChange={(e) => {
               const re = /^-?[0-9\b]+$/;
-              console.log(e.target.value);
               if (
                 e.target.value === "-" ||
                 e.target.value === "" ||
@@ -333,7 +346,7 @@ const AddMoney = () => {
               Preview
             </Typography>
             <Typography component="h2" variant="body2" sx={{ marginBottom: 1 }}>
-              {teamData.money} &gt;&gt; {teamData.money + parseInt(amount)}
+              {teamData.money} &gt;&gt; {newData}
             </Typography>
           </Box>
         ) : null}

@@ -34,9 +34,13 @@ const Transfer = () => {
 
   const [building, setBuilding] = useState(-1);
   const [buildingData, setBuildingData] = useState({});
+
   const [count, setCount] = useState(-1);
 
+  const [finalData, setFinalData] = useState({});
+
   const [amount, setAmount] = useState(0);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [error, setError] = useState(false);
   const { roleId, filteredBuildings, setNavBarId } = useContext(RoleContext);
@@ -68,6 +72,19 @@ const Transfer = () => {
       setAmount(Math.round(0.4 * res.data.rent[res.data.level - 1]));
       setErrorMessage("Auto Fill Hawk Eye");
     }
+  };
+
+  const FetchFinal = async () => {
+    const { data } = await axios.get("/transfer", {
+      params: {
+        from: from,
+        to: to,
+        IsEstate: building !== -1,
+        dollar: parseInt(amount),
+      },
+    });
+    console.log(data);
+    setFinalData(data);
   };
 
   const handleClick = async () => {
@@ -147,6 +164,12 @@ const Transfer = () => {
     //   });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roleId]);
+
+  useEffect(() => {
+    if (from !== -1 && to !== -1 && amount !== 0) {
+      FetchFinal();
+    }
+  }, [from, to, amount]);
 
   const PreviewBuilding = () => {
     return (
@@ -233,12 +256,8 @@ const Transfer = () => {
               </TableRow>
               <TableRow>
                 <TableCell align="center">After</TableCell>
-                <TableCell align="center">
-                  {fromData.money - parseInt(amount)}
-                </TableCell>
-                <TableCell align="center">
-                  {toData.money + parseInt(amount)}
-                </TableCell>
+                <TableCell align="center">{finalData.from}</TableCell>
+                <TableCell align="center">{finalData.to}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
