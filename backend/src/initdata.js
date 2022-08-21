@@ -502,7 +502,7 @@ const events = [
   },
   {
     id: 18,
-    title: "薩若斯彈指",
+    title: "薩諾斯彈指",
     description: "薩諾斯吸取所有小隊持有金錢的一半",
   },
 ];

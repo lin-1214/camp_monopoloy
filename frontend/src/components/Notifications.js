@@ -149,8 +149,8 @@ const Notifications = () => {
 
   const broadcastType = (level) => {
     if (level === null || level === undefined) return "info";
-    else if (level >= 50) return "warning";
     else if (level >= 100) return "error";
+    else if (level >= 50) return "warning";
     else return "info";
   };
 
