@@ -57,13 +57,19 @@ async function updateTeam(team, moneyChanged, io, saved) {
     if (moneyChanged > 0) ratio = 2;
     else ratio = 1.5;
   }
-  console.log(ratio);
-  console.log(teamObj.money);
-  console.log(teamObj.money + moneyChanged * ratio);
+  // console.log(ratio);
+  // console.log(teamObj.money);
+  // console.log(teamObj.money + moneyChanged * ratio);
   let final = Math.round(teamObj.money + moneyChanged * ratio);
-  console.log("final: ", final);
+  // console.log("final: ", final);
   if (saved && final < 0) {
-    const message = { title: "破產!!!", description: team.teamname, level: 0 };
+    const message = {
+      title: "破產!!!",
+      description: teamObj.teamname,
+      level: 0,
+      createdAt: Date.now(),
+    };
+    await new Broadcast(message).save();
     io.emit("broadcast", message);
   }
   if (saved) {
@@ -179,8 +185,9 @@ router.post("/sell", async (req, res) => {
   const team = await Team.findOne({ id: land.owner });
 
   const price = calcSellPrice(land, forced);
-  team.money += price;
-  await team.save();
+  // team.money += price;
+  // await team.save();
+  await updateTeam(land.owner, price, req.io, true);
   await Land.findOneAndUpdate({ id: landId }, { owner: 0, level: 0 });
   await updateHawkEye();
   res.status(200).json({ message: "Sell successful" });
@@ -299,8 +306,9 @@ router
           {
             const teams = await Team.find();
             for (let i = 0; i < teams.length; i++) {
-              teams[i].money -= 10000;
-              await teams[i].save();
+              // teams[i].money -= 10000;
+              // await teams[i].save();
+              await updateTeam(teams[i].id, -10000, req.io, true);
             }
             res.json("Success").status(200);
           }
@@ -312,10 +320,16 @@ router
             ).filter((land) => land.type === "Building" && land.level > 0);
             for (let i = 0; i < lands.length; i++) {
               if (lands[i].level === 1) {
-                const owner = await Team.findOne({ id: lands[i].owner });
-                owner.money += Math.round(lands[i].price.buy / 2);
+                // const owner = await Team.findOne({ id: lands[i].owner });
+                // owner.money += Math.round(lands[i].price.buy / 2);
+                await updateTeam(
+                  lands[i].owner,
+                  Math.round(lands[i].price.buy / 2),
+                  req.io,
+                  true
+                );
                 lands[i].owner = 0;
-                await owner.save();
+                // await owner.save();
               }
               lands[i].level -= 1;
               await lands[i].save();
@@ -324,10 +338,16 @@ router
             const special = await Land.find({ type: "SpecialBuilding" });
             for (let i = 0; i < special.length; i++) {
               if (special[i].owner !== 0) {
-                const owner = await Team.findOne({ id: special[i].owner });
-                owner.money += Math.round(special[i].price.buy / 2);
+                // const owner = await Team.findOne({ id: special[i].owner });
+                // owner.money += Math.round(special[i].price.buy / 2);
+                await updateTeam(
+                  special[i].owner,
+                  Math.round(special[i].price.buy / 2),
+                  req.io,
+                  true
+                );
                 special[i].owner = 0;
-                await owner.save();
+                // await owner.save();
                 await special[i].save();
               }
             }
@@ -381,12 +401,18 @@ router
             for (let i = 0; i < outsideEarthLands.length; i++) {
               // console.log(outsideEarthLands[i].name);
               if (outsideEarthLands[i].owner === 0) continue;
-              const owner = await Team.findOne({
-                id: outsideEarthLands[i].owner,
-              });
-              owner.money += Math.round(outsideEarthLands[i].price.buy / 2);
+              // const owner = await Team.findOne({
+              //   id: outsideEarthLands[i].owner,
+              // });
+              let money = Math.round(outsideEarthLands[i].price.buy / 2);
+              // owner.money += Math.round(outsideEarthLands[i].price.buy / 2);
               if (outsideEarthLands[i].level > 1) {
-                owner.money += Math.round(
+                // owner.money += Math.round(
+                //   ((outsideEarthLands[i].level - 1) *
+                //     outsideEarthLands[i].price.upgrade) /
+                //     2
+                // );
+                money += Math.round(
                   ((outsideEarthLands[i].level - 1) *
                     outsideEarthLands[i].price.upgrade) /
                     2
@@ -394,7 +420,8 @@ router
               }
               outsideEarthLands[i].owner = 0;
               outsideEarthLands[i].level = 0;
-              await owner.save();
+              await updateTeam(outsideEarthLands[i].owner, money, req.io, true);
+              // await owner.save();
               await outsideEarthLands[i].save();
               await updateHawkEye();
             }
@@ -415,8 +442,9 @@ router
           {
             const teams = await Team.find();
             for (let i = 0; i < teams.length; i++) {
-              teams[i].money += 10000;
-              await teams[i].save();
+              // teams[i].money += 10000;
+              // await teams[i].save();
+              await updateTeam(teams[i].id, 10000, req.io, true);
             }
             res.json("Success").status(200);
           }
@@ -425,8 +453,9 @@ router
           {
             const teams = await Team.find();
             for (let i = 0; i < teams.length; i++) {
-              teams[i].money += 30000;
-              await teams[i].save();
+              // teams[i].money += 30000;
+              // await teams[i].save();
+              await updateTeam(teams[i].id, 30000, req.io, true);
             }
             res.json("Success").status(200);
           }
@@ -435,8 +464,9 @@ router
           {
             const teams = await Team.find();
             for (let i = 0; i < teams.length; i++) {
-              teams[i].money += 50000;
-              await teams[i].save();
+              // teams[i].money += 50000;
+              // await teams[i].save();
+              await updateTeam(teams[i].id, 50000, req.io, true);
             }
             res.json("Success").status(200);
           }
@@ -497,26 +527,26 @@ router.post("/level", async (req, res) => {
   res.json(team).status(200);
 });
 
-router.post("/add", async (req, res) => {
-  const { id, dollar } = req.body;
-  const team = await Team.findAndCheckValid(id);
-  if (!team) {
-    res.status(403).send();
-    console.log("Team not found");
-    return;
-  }
-  await updateTeam(id, dollar, req.io, true);
-  res.status(200).send("Update succeeded");
-});
-
-router.get("/add", async (req, res) => {
-  console.log(req.query);
-  const { id, dollar } = req.query;
-  console.log(id, dollar);
-  const data = await updateTeam(id, dollar, req.io, false);
-  console.log(data);
-  res.json(data).status(200);
-});
+router
+  .post("/add", async (req, res) => {
+    const { id, dollar } = req.body;
+    const team = await Team.findAndCheckValid(id);
+    if (!team) {
+      res.status(403).send();
+      console.log("Team not found");
+      return;
+    }
+    await updateTeam(id, dollar, req.io, true);
+    res.status(200).send("Update succeeded");
+  })
+  .get("/add", async (req, res) => {
+    console.log(req.query);
+    const { id, dollar } = req.query;
+    console.log(id, dollar);
+    const data = await updateTeam(id, dollar, req.io, false);
+    console.log(data);
+    res.json(data).status(200);
+  });
 
 router.post("/series", async (req, res) => {
   const { teamId, area } = req.body;

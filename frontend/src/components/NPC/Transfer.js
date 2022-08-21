@@ -169,7 +169,7 @@ const Transfer = () => {
     if (from !== -1 && to !== -1 && amount !== 0) {
       FetchFinal();
     }
-  }, [from, to, amount]);
+  }, [from, to, amount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const PreviewBuilding = () => {
     return (

@@ -153,7 +153,7 @@ const AddMoney = () => {
     if (team !== -1 && amount !== 0) {
       handlePreview();
     }
-  }, [team, amount]);
+  }, [team, amount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container component="main" maxWidth="xs">
