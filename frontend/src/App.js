@@ -14,6 +14,7 @@ import AddMoney from "./components/NPC/AddMoney";
 import SetOwnership from "./components/NPC/SetOwnership";
 import Transfer from "./components/NPC/Transfer";
 import SetShopLevel from "./components/NPC/SetShopLevel";
+import Support from "./components/NPC/Support";
 import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
 import SetOccupation from "./components/admin/SetOccupation";
@@ -83,6 +84,7 @@ const App = () => {
               <Route path="setownership" element={<SetOwnership />} />
               <Route path="transfer" element={<Transfer />} />
               <Route path="setshop" element={<SetShopLevel />} />
+              <Route path="support" element={<Support />} />
               <Route path="event" element={<Event />} />
               <Route path="additional" element={<Additional />} />
               <Route path="setoccupation" element={<SetOccupation />} />

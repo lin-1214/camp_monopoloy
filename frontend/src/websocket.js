@@ -10,5 +10,5 @@ socket.on("connect", () => {
 });
 
 socket.on("disconnect", () => {
-  console.log("disconnect")
+  console.log("disconnect");
 });

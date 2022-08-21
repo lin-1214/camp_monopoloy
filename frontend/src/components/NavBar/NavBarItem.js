@@ -12,6 +12,7 @@ import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import GavelIcon from '@mui/icons-material/Gavel';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import HelpIcon from '@mui/icons-material/Help';
 
 export const NavBarItems = [
   {
@@ -72,6 +73,13 @@ export const NPCItems = [
     label: "Set Shop",
     shortLabel: "Shop",
     route: "setshop",
+  },
+  {
+    id: 8,
+    icon: <HelpIcon />,
+    label: "Support",
+    shortLabel: "Support",
+    route: "support",
   },
 ];
 
