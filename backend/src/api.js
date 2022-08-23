@@ -616,6 +616,10 @@ router.get("/transfer", async (req, res) => {
 async function updateHawkEye() {
   const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
   if (hawkEyeTeam === 0) return;
+  // may delete some building need to clear and fill(?)
+  for (let i = 1; i <= 40; i++) {
+    await Land.findOneAndUpdate({ id: i }, { hawkEye: 0 });
+  }
   const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
   console.log(hawkEyeBuildings);
   for (let i = 0; i < hawkEyeBuildings.length; i++) {

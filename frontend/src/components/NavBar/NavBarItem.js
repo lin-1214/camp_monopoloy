@@ -9,10 +9,10 @@ import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
 // import BuildCircleIcon from "@mui/icons-material/BuildCircle";
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import GavelIcon from '@mui/icons-material/Gavel';
-import AddBusinessIcon from '@mui/icons-material/AddBusiness';
-import HelpIcon from '@mui/icons-material/Help';
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import GavelIcon from "@mui/icons-material/Gavel";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import HelpIcon from "@mui/icons-material/Help";
 
 export const NavBarItems = [
   {
@@ -75,7 +75,7 @@ export const NPCItems = [
     route: "setshop",
   },
   {
-    id: 8,
+    id: 9,
     icon: <HelpIcon />,
     label: "Support",
     shortLabel: "Support",
@@ -85,35 +85,35 @@ export const NPCItems = [
 
 export const adminItems = [
   {
-    id: 9,
+    id: 10,
     icon: <EventIcon />,
     label: "Event / Phase",
     shortLabel: "Event",
     route: "event",
   },
   {
-    id: 10,
+    id: 11,
     icon: <AddToQueueIcon />,
     label: "Additional",
     shortLabel: "Additional",
     route: "additional",
   },
   {
-    id: 11,
+    id: 12,
     icon: <BuildIcon />,
     label: "Set Occupation",
     shortLabel: "Occupation",
     route: "setoccupation",
   },
   {
-    id: 12,
+    id: 13,
     icon: <PaidIcon />,
     label: "Set Money",
     shortLabel: "Set",
     route: "setmoney",
   },
   {
-    id: 13,
+    id: 14,
     icon: <VolumeUpIcon />,
     label: "Broadcast",
     shortLabel: "Broadcast",

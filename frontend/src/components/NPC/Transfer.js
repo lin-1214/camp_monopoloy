@@ -166,7 +166,7 @@ const Transfer = () => {
   }, [roleId]);
 
   useEffect(() => {
-    if (from !== -1 && to !== -1 && amount !== 0) {
+    if (from !== -1 && to !== -1 && amount !== 0 && from !== to) {
       FetchFinal();
     }
   }, [from, to, amount]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -400,9 +400,9 @@ const Transfer = () => {
               variant="contained"
               sx={{ marginBottom: 1 }}
               disabled={to === -1 || from === -1}
-              onClick={() => handlePercentMoney(0.05)}
+              onClick={() => handlePercentMoney(0.02)}
             >
-              5%
+              2%
             </Button>
             <Button
               variant="contained"
