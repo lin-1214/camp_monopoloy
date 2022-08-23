@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -8,14 +8,20 @@ import {
   MenuItem,
   Select,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import RoleContext from "../useRole";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "../axios";
+import { useNavigate } from "react-router-dom";
 
 const Support = () => {
   const { buildings } = useContext(RoleContext);
   const [building, setBuilding] = useState(-1);
+  const [open, setOpen] = useState(false);
+  const { roleId } = useContext(RoleContext);
+  const navigate = useNavigate();
 
   const handleBuilding = (building) => {
     setBuilding(building);
@@ -24,7 +30,14 @@ const Support = () => {
   const handleClick = async () => {
     const payload = { title: "Need Help!!", description: building, level: 100 };
     await axios.post("/broadcast", payload);
+    setOpen(true);
   };
+
+  useEffect(() => {
+    if (roleId < 10) {
+      navigate("/permission");
+    }
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,6 +80,18 @@ const Support = () => {
           </Button>
         </FormControl>
       </Box>
+      <Snackbar
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+        autoHideDuration={2000}
+        sx={{ marginBottom: 10 }}
+      >
+        <Alert severity="success" variant="filled">
+          Successfully Sent
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

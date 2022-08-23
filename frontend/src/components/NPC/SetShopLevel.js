@@ -24,6 +24,7 @@ const SetShopLevel = () => {
   const navigate = useNavigate();
 
   const handleTeam = async (team) => {
+    if (team === -1) return;
     const getTeamData = async (team) => {
       const { data } = await axios.get("/team/" + team);
       setTeamData(data);

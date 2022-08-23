@@ -75,7 +75,7 @@ export const NPCItems = [
     route: "setshop",
   },
   {
-    id: 9,
+    id: 14,
     icon: <HelpIcon />,
     label: "Support",
     shortLabel: "Support",
