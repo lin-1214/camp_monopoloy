@@ -4,7 +4,7 @@ import VillaIcon from "@mui/icons-material/Villa";
 import PaidIcon from "@mui/icons-material/Paid";
 import BuildIcon from "@mui/icons-material/Build";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-// import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined"; // import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
@@ -68,11 +68,11 @@ export const NPCItems = [
     route: "transfer",
   },
   {
-    id: 8,
-    icon: <AddBusinessIcon />,
-    label: "Set Shop",
-    shortLabel: "Shop",
-    route: "setshop",
+    id: 11,
+    icon: <ForestOutlinedIcon />,
+    label: "Resource",
+    shortLabel: "Resource",
+    route: "resource",
   },
   {
     id: 14,
@@ -93,17 +93,17 @@ export const adminItems = [
   },
   {
     id: 11,
-    icon: <AddToQueueIcon />,
-    label: "Additional",
-    shortLabel: "Additional",
-    route: "additional",
+    icon: <ForestOutlinedIcon />,
+    label: "Resource",
+    shortLabel: "Resource",
+    route: "resource",
   },
   {
     id: 12,
     icon: <BuildIcon />,
-    label: "Set Occupation",
-    shortLabel: "Occupation",
-    route: "setoccupation",
+    label: "Team Info",
+    shortLabel: "Team",
+    route: "teams",
   },
   {
     id: 13,

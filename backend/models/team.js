@@ -3,9 +3,16 @@ const Schema = mongoose.Schema;
 const TeamSchema = new Schema({
   id: Number,
   teamname: String,
-  occupation: String,
+  // occupation: String,
   money: Number,
-  level: Number,
+  dice: Number,
+  resources: {
+    gold: Number,
+    meat: Number,
+    cola: Number,
+    wood: Number,
+    metal: Number,
+  },
   bonus: { value: Number, time: Number, duration: Number },
   soulgem: { value: Boolean, time: Number },
 });

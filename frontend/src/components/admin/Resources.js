@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Paper,
   Table,
@@ -8,42 +9,53 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
-import RoleContext from "../useRole";
 import Loading from "../Loading";
+import RoleContext from "../useRole";
 import axios from "../axios";
-//import User from "../../../../backend/models/user";
 
-const Teams = () => {
-  const { teams, setTeams } = useContext(RoleContext);
+const Resources = () => {
+  let flag = false;
+  const [resources, setResources] = useState([]);
+  const { roleId, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const navigate = useNavigate();
 
   const columns = [
-    { id: "teamname", label: "Team", minWidth: "10vw", align: "center" },
-    { id: "dice", label: "Dice", minWidth: "5vw", align: "center" },
-    { id: "money", label: "Money", minWidth: "17vw", align: "center" },
-    // { id: "resources", label: "Resources", minWidth: "17vw", align: "center" },
+    { id: "name", label: "Type", minWidth: "15vw", align: "center" },
+    { id: "price", label: "Price", minWidth: "17vw", align: "center" },
   ];
 
-  const getTeams = async () => {
+  const getResources = async () => {
     axios
-      .get("/team")
+      .get("/resourceInfo")
       .then((res) => {
-        setTeams(res.data);
+        setResources(res.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const updatePrices = async () => {
+    // console.log(resources);
+    // console.log(1);
+    // const payload = { resources: resources };
+    await axios.post("/resource");
+  };
+
   useEffect(() => {
-    getTeams();
-    const id = setInterval(() => {
-      getTeams();
+    getResources();
+    const update = setInterval(() => {
+      getResources();
+      flag = !flag;
+      if (flag) updatePrices();
     }, 5000);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    return () => clearInterval(update);
   }, []);
 
-  if (teams.length === 0) {
+  useEffect(() => {}, [flag]);
+
+  if (resources.length === 0) {
     return <Loading />;
   } else {
     return (
@@ -52,6 +64,7 @@ const Teams = () => {
         sx={{
           overflow: "hidden",
           paddingTop: "60px",
+          paddingBottom: "60px",
           marginLeft: "2vw",
           marginRight: "2vw",
         }}
@@ -80,9 +93,9 @@ const Teams = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {teams.map((item) => {
+              {resources.map((resource) => {
                 return (
-                  <TableRow key={item.teamname}>
+                  <TableRow key={resource.teamname}>
                     {columns.map((column) => {
                       return (
                         <TableCell
@@ -90,17 +103,9 @@ const Teams = () => {
                           align={column.align}
                           style={{ userSelect: "none" }}
                         >
-                          {column.id === "money"
-                            ? Math.round(item[column.id]) > 0
-                              ? Math.round(item[column.id])
-                              : "破產"
-                            : column.id === "resources"
-                            ? `Gold: ${item[column.id].gold}, Meat: ${
-                                item[column.id].meat
-                              }, Cola: ${item[column.id].cola}, Wood: ${
-                                item[column.id].wood
-                              }, Metal: ${item[column.id].wood}`
-                            : item[column.id]}
+                          {column.id === "name"
+                            ? resource.name
+                            : resource.price}
                         </TableCell>
                       );
                     })}
@@ -114,4 +119,5 @@ const Teams = () => {
     );
   }
 };
-export default Teams;
+
+export default Resources;

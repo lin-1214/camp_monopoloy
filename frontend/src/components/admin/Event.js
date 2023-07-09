@@ -104,7 +104,7 @@ const Event = () => {
           </FormControl>
           {APIResponse && <Alert severity="info">{APIResponse}</Alert>}
         </Box>
-        <Box
+        {/* <Box
           sx={{
             marginTop: 5,
             display: "flex",
@@ -129,7 +129,7 @@ const Event = () => {
               Submit
             </Button>
           </FormControl>
-        </Box>
+        </Box> */}
       </Container>
     );
   }

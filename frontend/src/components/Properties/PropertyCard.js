@@ -87,7 +87,11 @@ const PropertyCard = ({
         </Grid>
         <Grid item xs>
           <Grid item>
-            <Typography variant="h6" marginTop="1px">
+            <Typography
+              variant="h6"
+              marginTop="1px"
+              style={{ fontWeight: "600" }}
+            >
               {name}
             </Typography>
           </Grid>

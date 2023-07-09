@@ -79,11 +79,11 @@ const Header = () => {
       // console.log("get properties");
       getProperties();
     }
-    if (phase === "") {
-      getPhase();
-    }
+    // if (phase === "") {
+    //   getPhase();
+    // }
     const timer = setInterval(() => {
-      getPhase();
+      // getPhase();
     }, 30000);
     return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,7 +97,7 @@ const Header = () => {
             <MenuIcon />
             <NavBar open={open} />
           </IconButton>
-          <Typography variant="body2">Phase {phase}</Typography>
+          <Typography variant="h1">NTUEE MONOPOLY</Typography>
           <Button
             sx={{ display: pathname === "/login" && "none" }}
             color="inherit"

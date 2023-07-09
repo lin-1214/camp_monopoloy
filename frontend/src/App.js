@@ -18,6 +18,7 @@ import Support from "./components/NPC/Support";
 import Event from "./components/admin/Event";
 import Additional from "./components/admin/Additional";
 import SetOccupation from "./components/admin/SetOccupation";
+import Resources from "./components/admin/Resources";
 import SetMoney from "./components/admin/SetMoney";
 import PermissionDenied from "./components/PermissionDenied";
 import Footer from "./components/Footer";
@@ -27,7 +28,9 @@ import BroadcastAlert from "./components/BroadcastAlert";
 import Broadcast from "./components/admin/Broadcast";
 import { roleIdMap } from "./components/Login";
 import theme from "./theme";
-// import { socket, SocketContext } from "./websocket";
+// import SetPrices from "./components/admin/Resources";
+// import Resource from "../../backend/models/resource";
+// // import { socket, SocketContext } from "./websocket";
 
 const App = () => {
   const localRole = localStorage.getItem("role");
@@ -90,6 +93,7 @@ const App = () => {
               <Route path="setoccupation" element={<SetOccupation />} />
               <Route path="permission" element={<PermissionDenied />} />
               <Route path="loading" element={<Loading />} />
+              <Route path="resource" element={<Resources />} />
               <Route path="setmoney" element={<SetMoney />} />
               <Route path="broadcast" element={<Broadcast />} />
             </Routes>

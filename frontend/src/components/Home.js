@@ -5,8 +5,19 @@ import { Container, Box } from "@mui/material";
 const Home = () => {
   return (
     <Container>
-      <Box sx={{ height: "80px" }} />
-      <img src="/banner.jpg" alt="Avengers" style={{ maxWidth: "100%" }} />
+      <Box
+        sx={{
+          height: "80px",
+        }}
+      />
+      <img
+        src="/banner.jpg"
+        alt="Avengers"
+        style={{
+          maxWidth: "100%",
+          userSelect: "none",
+        }}
+      />
     </Container>
   );
 };
