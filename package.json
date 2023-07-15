@@ -1,6 +1,7 @@
 {
   "scripts": {
     "install-all": "yarn install && cd frontend && yarn install && cd ../backend && yarn install && cd ..",
+    "install:prod": "cd frontend && yarn install --freeze-lockfile && cd ../backend && yarn install --freeze-lockfile",
     "install-backend": "yarn install && cd backend && yarn install && cd ..",
     "install-frontend": "yarn install && cd frontend && yarn install && cd ..",
     "build-frontend": "cd frontend && yarn build && cd ..",
