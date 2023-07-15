@@ -10,6 +10,30 @@ import Broadcast from "../models/broadcast.js";
 import Resource from "../models/resource.js";
 const router = express.Router();
 
+const buffBuildings = async (building_1, building_2) => {
+  building_1.buffed = 1;
+  building_2.buffed = 1;
+  for (let i = 0; i < 3; i++) {
+    building_1.rent[i] *= 1.5;
+    building_2.rent[i] *= 1.5;
+  }
+
+  await building_1.save();
+  await building_2.save();
+};
+
+const debuffBuildings = async (building_1, building_2) => {
+  building_1.buffed = 0;
+  building_2.buffed = 0;
+  for (let i = 0; i < 3; i++) {
+    building_1.rent[i] /= 1.5;
+    building_2.rent[i] /= 1.5;
+  }
+
+  await building_1.save();
+  await building_2.save();
+};
+
 router.get("/", (req, res) => {
   res.json({ a: 1, b: 2 });
 });
@@ -124,6 +148,14 @@ router.get("/team", async (req, res) => {
   res.json(teams).status(200);
 });
 
+router.post("/teamRich", async (req, res) => {
+  const teams = await Team.find().sort({ money: 1 });
+  const team = teams[0];
+  console.log(team);
+  await Team.findOneAndUpdate({ id: team.id }, { money: team.money * 0.75 });
+  res.json(team).status(200);
+});
+
 // router.get("/team/hawkeye", async (req, res) => {
 //   const team = await Team.findOne({ occupation: "鷹眼" });
 //   console.log(team);
@@ -159,6 +191,30 @@ router.post("/set", async (req, res) => {
 router.get("/resourceInfo", async (req, res) => {
   const resources = await Resource.find().sort({ id: 1 });
   res.json(resources).status(200);
+});
+
+router.post("/sellResource", async (req, res) => {
+  const { teamId, resourceId, number, mode } = req.body;
+
+  const team = await Team.find({ id: teamId });
+  const resource = await Resource.find({ id: resourceId });
+
+  if (mode === 0) {
+    await Team.findOneAndUpdate(
+      { id: teamId },
+      {
+        money: team[0].money + resource[0].price * number,
+      }
+    );
+  } else if (mode === 1) {
+    await Team.findOneAndUpdate(
+      { id: teamId },
+      {
+        money: team[0].money - resource[0].price * number,
+      }
+    );
+  }
+  res.json("Success").status(200);
 });
 
 // update resource
@@ -224,7 +280,6 @@ router.post("/sell", async (req, res) => {
   // await team.save();
   await updateTeam(land.owner, price, req.io, true);
   await Land.findOneAndUpdate({ id: landId }, { owner: 0, level: 0 });
-  await updateHawkEye();
   res.status(200).json({ message: "Sell successful" });
 });
 
@@ -617,33 +672,33 @@ router.get("/transfer", async (req, res) => {
   else res.status(403).send();
 });
 
-async function updateHawkEye() {
-  const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
-  if (hawkEyeTeam === 0) return;
-  // may delete some building need to clear and fill(?)
-  for (let i = 1; i <= 40; i++) {
-    await Land.findOneAndUpdate({ id: i }, { hawkEye: 0 });
-  }
-  const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
-  console.log(hawkEyeBuildings);
-  for (let i = 0; i < hawkEyeBuildings.length; i++) {
-    await Land.findOneAndUpdate(
-      { id: hawkEyeBuildings[i].id - 1 },
-      { hawkEye: hawkEyeBuildings[i].id }
-    );
-    await Land.findOneAndUpdate(
-      { id: hawkEyeBuildings[i].id + 1 },
-      { hawkEye: hawkEyeBuildings[i].id }
-    );
-  }
-  for (let i = 0; i < hawkEyeBuildings.length; i++) {
-    await Land.findOneAndUpdate(
-      { id: hawkEyeBuildings[i].id },
-      { hawkEye: hawkEyeBuildings[i].id }
-    );
-  }
-  console.log("hawkEye updated");
-}
+// async function updateHawkEye() {
+//   const { value: hawkEyeTeam } = await Pair.findOne({ key: "hawkEyeTeam" });
+//   if (hawkEyeTeam === 0) return;
+//   // may delete some building need to clear and fill(?)
+//   for (let i = 1; i <= 40; i++) {
+//     await Land.findOneAndUpdate({ id: i }, { hawkEye: 0 });
+//   }
+//   const hawkEyeBuildings = await Land.find({ owner: hawkEyeTeam });
+//   console.log(hawkEyeBuildings);
+//   for (let i = 0; i < hawkEyeBuildings.length; i++) {
+//     await Land.findOneAndUpdate(
+//       { id: hawkEyeBuildings[i].id - 1 },
+//       { hawkEye: hawkEyeBuildings[i].id }
+//     );
+//     await Land.findOneAndUpdate(
+//       { id: hawkEyeBuildings[i].id + 1 },
+//       { hawkEye: hawkEyeBuildings[i].id }
+//     );
+//   }
+//   for (let i = 0; i < hawkEyeBuildings.length; i++) {
+//     await Land.findOneAndUpdate(
+//       { id: hawkEyeBuildings[i].id },
+//       { hawkEye: hawkEyeBuildings[i].id }
+//     );
+//   }
+//   console.log("hawkEye updated");
+// }
 
 router.post("/ownership", async (req, res) => {
   const { teamId, land, level } = req.body;
@@ -659,8 +714,160 @@ router.post("/ownership", async (req, res) => {
     console.log("Update failed");
     return;
   }
-  await updateHawkEye(land);
+
+  // await updateHawkEye(land);
   res.status(200).send("update succeeded");
+});
+
+router.post("/calcbonus", async (req, res) => {
+  const { teamId, land, level } = req.body;
+  const buildings = await Land.find({}).sort({ id: 1 });
+  console.log(req.body);
+  const targetBuilding = await Land.find({ name: land });
+
+  if (targetBuilding[0].id === 2 || targetBuilding[0].id === 3) {
+    if (buildings[1].owner === buildings[2].owner) {
+      buffBuildings(buildings[1], buildings[2]);
+    } else if (
+      buildings[1].buffed === 1 &&
+      buildings[1].owner !== buildings[2].owner
+    ) {
+      debuffBuildings(buildings[1], buildings[2]);
+    }
+  } else if (targetBuilding[0].id === 6 || targetBuilding[0].id === 7) {
+    if (buildings[5].owner === buildings[6].owner) {
+      buffBuildings(buildings[5], buildings[6]);
+    } else if (
+      buildings[5].buffed === 1 &&
+      buildings[5].owner !== buildings[6].owner
+    ) {
+      debuffBuildings(buildings[5], buildings[6]);
+    }
+  } else if (targetBuilding[0].id === 10 || targetBuilding[0].id === 11) {
+    if (buildings[9].owner === buildings[10].owner) {
+      buffBuildings(buildings[9], buildings[10]);
+    } else if (
+      buildings[9].buffed === 1 &&
+      buildings[9].owner !== buildings[10].owner
+    ) {
+      debuffBuildings(buildings[9], buildings[10]);
+    }
+  } else if (targetBuilding[0].id === 15 || targetBuilding[0].id === 16) {
+    if (buildings[14].owner === buildings[15].owner) {
+      buffBuildings(buildings[14], buildings[15]);
+    } else if (
+      buildings[14].buffed === 1 &&
+      buildings[14].owner !== buildings[15].owner
+    ) {
+      debuffBuildings(buildings[9], buildings[10]);
+    }
+  } else if (targetBuilding[0].id === 20 || targetBuilding[0].id === 21) {
+    if (buildings[19].owner === buildings[20].owner) {
+      buffBuildings(buildings[19], buildings[20]);
+    } else if (
+      buildings[19].buffed === 1 &&
+      buildings[19].owner !== buildings[20].owner
+    ) {
+      debuffBuildings(buildings[19], buildings[20]);
+    }
+  } else if (targetBuilding[0].id === 25 || targetBuilding[0].id === 26) {
+    if (buildings[24].owner === buildings[25].owner) {
+      buffBuildings(buildings[24], buildings[25]);
+    } else if (
+      buildings[24].buffed === 1 &&
+      buildings[24].owner !== buildings[25].owner
+    ) {
+      debuffBuildings(buildings[24], buildings[25]);
+    }
+  } else if (targetBuilding[0].id === 29 || targetBuilding[0].id === 30) {
+    if (buildings[28].owner === buildings[29].owner) {
+      buffBuildings(buildings[28], buildings[29]);
+    } else if (
+      buildings[28].buffed === 1 &&
+      buildings[28].owner !== buildings[29].owner
+    ) {
+      debuffBuildings(buildings[28], buildings[29]);
+    }
+  } else if (targetBuilding[0].id === 33 || targetBuilding[0].id === 34) {
+    if (buildings[32].owner === buildings[33].owner) {
+      buffBuildings(buildings[32], buildings[33]);
+    } else if (
+      buildings[32].buffed === 1 &&
+      buildings[32].owner !== buildings[33].owner
+    ) {
+      debuffBuildings(buildings[32], buildings[33]);
+    }
+  } else if (targetBuilding[0].id === 37 || targetBuilding[0].id === 38) {
+    if (buildings[36].owner === buildings[37].owner) {
+      buffBuildings(buildings[36], buildings[37]);
+    } else if (
+      buildings[36].buffed === 1 &&
+      buildings[36].owner !== buildings[37].owner
+    ) {
+      debuffBuildings(buildings[36], buildings[37]);
+    }
+  } else if (targetBuilding[0].id === 41 || targetBuilding[0].id === 42) {
+    if (buildings[40].owner === buildings[41].owner) {
+      buffBuildings(buildings[40], buildings[41]);
+    } else if (
+      buildings[40].buffed === 1 &&
+      buildings[40].owner !== buildings[41].owner
+    ) {
+      debuffBuildings(buildings[40], buildings[41]);
+    }
+  } else if (targetBuilding[0].id === 46 || targetBuilding[0].id === 47) {
+    if (buildings[45].owner === buildings[46].owner) {
+      buffBuildings(buildings[45], buildings[46]);
+    } else if (
+      buildings[45].buffed === 1 &&
+      buildings[45].owner !== buildings[46].owner
+    ) {
+      debuffBuildings(buildings[45], buildings[46]);
+    }
+  }
+});
+
+router.post("/aquire", async (req, res) => {
+  const { land, teamId } = req.body;
+  const target = await Land.find({ name: land });
+  const originOwner = target[0].owner;
+  const originTeam = await Team.find({ id: originOwner });
+  const newTeam = await Team.find({ id: teamId });
+  originTeam[0].money +=
+    target[0].price.buy + (target[0].level - 1) * target[0].price.upgrade;
+  newTeam[0].money -=
+    target[0].price.buy + (target[0].level - 1) * target[0].price.upgrade;
+  target[0].owner = teamId;
+
+  await originTeam[0].save();
+  await newTeam[0].save();
+  await target[0].save();
+  res.json("Success").status(200);
+});
+
+router.get("/aquireBuilding", async (req, res) => {
+  const targetBuilding = Land.find({ type: "Building" }).sort({ id: 1 });
+  res.json(targetBuilding).status(200);
+});
+
+router.post("/exchange", async (req, res) => {
+  const { land, otherLand, teamId, otherTeamId } = req.body;
+  const land_1 = await Land.find({ name: land });
+  const land_2 = await Land.find({ name: otherLand });
+  land_1[0].owner = otherTeamId;
+  land_2[0].owner = teamId;
+  await land_1[0].save();
+  await land_2[0].save();
+  res.json("Success").status(200);
+});
+
+router.post("/shipRepair", async (req, res) => {
+  const { teamId } = req.body;
+  console.log(teamId);
+  const team = await Team.find({ id: teamId });
+  team[0].dice = 2;
+  await team[0].save();
+  res.json("Success").status(200);
 });
 
 router.get("/allEffects", async (req, res) => {

@@ -13,13 +13,14 @@ const colors = {
     5: "rgb(153,255,255)",
     6: "rgb(194,163,195)",
   },
-  SpecialBuilding: "rgb(255,93,255)",
+  Transport: "rgb(255,93,255)",
   Chance: "rgb(128,0,0)",
   Jail: "rgb(128,128,128)",
-  ToJail: "rgb(128,128,128)",
+  Arena: "rgb(128,128,128)",
   Event: "rgb(0,0,0)",
   Store: "rgb(51,153,255)",
   Game: "rgb(25,73,128)",
+  Random: "rgb(153,0,153)",
 };
 
 const PropertyCard = ({
@@ -33,6 +34,7 @@ const PropertyCard = ({
   description,
   level,
   expanded,
+  buffed,
 }) => {
   const colorData = type === "Building" ? colors[type][area] : colors[type];
   // console.log(ref);
@@ -87,13 +89,23 @@ const PropertyCard = ({
         </Grid>
         <Grid item xs>
           <Grid item>
-            <Typography
-              variant="h6"
-              marginTop="1px"
-              style={{ fontWeight: "600" }}
-            >
-              {name}
-            </Typography>
+            {(buffed === 0 && type === "Building") || type !== "Building" ? (
+              <Typography
+                variant="h6"
+                marginTop="1px"
+                style={{ fontWeight: "600" }}
+              >
+                {name}
+              </Typography>
+            ) : (
+              <Typography
+                variant="h6"
+                marginTop="1px"
+                style={{ fontWeight: "800", color: "rgb(255,178,14)" }}
+              >
+                {name}
+              </Typography>
+            )}
           </Grid>
           {type === "Building" || type === "SpecialBuilding" ? (
             <Grid item>

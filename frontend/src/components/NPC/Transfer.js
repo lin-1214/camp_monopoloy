@@ -384,34 +384,34 @@ const Transfer = () => {
             sx={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "center",
               marginTop: 1,
             }}
           >
-            <Button
+            {/* <Button
               variant="contained"
               sx={{ marginBottom: 1 }}
               disabled={to === -1 || from === -1}
               onClick={handleEqualMoney}
             >
               Equal
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               sx={{ marginBottom: 1 }}
               disabled={to === -1 || from === -1}
-              onClick={() => handlePercentMoney(0.02)}
+              onClick={() => handlePercentMoney(0.5)}
             >
-              2%
+              raise
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               sx={{ marginBottom: 1 }}
               disabled={to === -1 || from === -1}
               onClick={() => handlePercentMoney(0.1)}
             >
               10%
-            </Button>
+            </Button> */}
           </Box>
           {/* <Button
             disabled={!(from && to && amount) || from === to}

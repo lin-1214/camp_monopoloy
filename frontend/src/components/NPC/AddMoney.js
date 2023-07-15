@@ -74,14 +74,10 @@ const AddMoney = () => {
     // console.log(data);
   };
 
-  const handlePercentMoney = async () => {
-    if (teamData.teamname !== team) {
-      const { data } = await axios.get("/team/" + team);
-      console.log(data);
-      setTeamData(data);
-    }
-    const money = teamData.money;
-    handleAmount(Math.round(money * -0.1));
+  const handleJeff = async () => {
+    const { data } = await axios.post("/teamRich");
+    console.log(data);
+    handleAmount(Math.round(data.money * 0.25));
   };
 
   const handlePreview = async () => {
@@ -236,9 +232,9 @@ const AddMoney = () => {
               variant="contained"
               disabled={team === -1}
               sx={{ marginBottom: 1, width: 80 }}
-              onClick={handlePercentMoney}
+              onClick={handleJeff}
             >
-              -10%
+              Jeff
             </Button>
             <Button
               variant="contained"

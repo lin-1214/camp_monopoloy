@@ -8,9 +8,12 @@ import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined"; // import S
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
 import AddToQueueIcon from "@mui/icons-material/AddToQueue";
+import ConstructionIcon from "@mui/icons-material/Construction";
 // import BuildCircleIcon from "@mui/icons-material/BuildCircle";
+import QuizIcon from "@mui/icons-material/Quiz";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import GavelIcon from "@mui/icons-material/Gavel";
+import MapIcon from "@mui/icons-material/Map";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import HelpIcon from "@mui/icons-material/Help";
 
@@ -38,10 +41,10 @@ export const NavBarItems = [
   },
   {
     id: 4,
-    icon: <GavelIcon />,
-    label: "Sell Property",
-    shortLabel: "Sell",
-    route: "sellproperty",
+    icon: <MapIcon />,
+    label: "Game Map",
+    shortLabel: "Map",
+    route: "map",
   },
 ];
 
@@ -67,6 +70,13 @@ export const NPCItems = [
     shortLabel: "Transfer",
     route: "transfer",
   },
+  // {
+  //   id: 8,
+  //   icon: <ConstructionIcon />,
+  //   label: "Repair",
+  //   shortLabel: "Repair",
+  //   route: "setdice",
+  // },
   {
     id: 11,
     icon: <ForestOutlinedIcon />,
@@ -76,10 +86,10 @@ export const NPCItems = [
   },
   {
     id: 14,
-    icon: <HelpIcon />,
-    label: "Support",
-    shortLabel: "Support",
-    route: "support",
+    icon: <QuizIcon />,
+    label: "Random",
+    shortLabel: "Random",
+    route: "random",
   },
 ];
 

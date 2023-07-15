@@ -18,7 +18,7 @@ const Teams = () => {
 
   const columns = [
     { id: "teamname", label: "Team", minWidth: "10vw", align: "center" },
-    { id: "dice", label: "Dice", minWidth: "5vw", align: "center" },
+    // { id: "dice", label: "Dice", minWidth: "5vw", align: "center" },
     { id: "money", label: "Money", minWidth: "17vw", align: "center" },
     // { id: "resources", label: "Resources", minWidth: "17vw", align: "center" },
   ];
@@ -52,6 +52,7 @@ const Teams = () => {
         sx={{
           overflow: "hidden",
           paddingTop: "60px",
+          paddingBottom: "60px",
           marginLeft: "2vw",
           marginRight: "2vw",
         }}

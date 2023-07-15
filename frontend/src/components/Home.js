@@ -4,10 +4,14 @@ import { Container, Box } from "@mui/material";
 //put an great made after effect intro video!!
 const Home = () => {
   return (
-    <Container>
+    <Container component="main">
       <Box
         sx={{
-          height: "80px",
+          height: "100px",
+          marginTop: "10vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       />
       <img

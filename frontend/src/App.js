@@ -28,6 +28,9 @@ import BroadcastAlert from "./components/BroadcastAlert";
 import Broadcast from "./components/admin/Broadcast";
 import { roleIdMap } from "./components/Login";
 import theme from "./theme";
+import SetDice from "./components/NPC/SetDice";
+import Map from "./components/Properties/Map";
+import Random from "./components/NPC/Random";
 // import SetPrices from "./components/admin/Resources";
 // import Resource from "../../backend/models/resource";
 // // import { socket, SocketContext } from "./websocket";
@@ -87,7 +90,7 @@ const App = () => {
               <Route path="setownership" element={<SetOwnership />} />
               <Route path="transfer" element={<Transfer />} />
               <Route path="setshop" element={<SetShopLevel />} />
-              <Route path="support" element={<Support />} />
+              <Route path="random" element={<Random />} />
               <Route path="event" element={<Event />} />
               <Route path="additional" element={<Additional />} />
               <Route path="setoccupation" element={<SetOccupation />} />
@@ -96,6 +99,8 @@ const App = () => {
               <Route path="resource" element={<Resources />} />
               <Route path="setmoney" element={<SetMoney />} />
               <Route path="broadcast" element={<Broadcast />} />
+              <Route path="setdice" element={<SetDice />} />
+              <Route path="map" element={<Map />} />
             </Routes>
           </CSSTransition>
         </TransitionGroup>

@@ -9,6 +9,7 @@ const LandSchema = new Schema({
   //hawkEye: Number,
   description: String,
   level: Number,
+  buffed: Number,
   price: { buy: Number, upgrade: Number },
   rent: [Number],
 });
