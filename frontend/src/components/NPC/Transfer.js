@@ -139,8 +139,8 @@ const Transfer = () => {
   };
 
   const handlePercentMoney = (percent) => {
-    const money = fromData.money; //find the team's money
-    setAmount(Math.round(money * percent));
+    // const money = fromData.money; //find the team's money
+    setAmount(Math.round(amount * (1 + percent)));
   };
 
   const handleEqualMoney = () => {

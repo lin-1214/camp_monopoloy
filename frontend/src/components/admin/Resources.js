@@ -30,7 +30,9 @@ const Resources = () => {
   const [resources, setResources] = useState([]);
   const [resourceId, setResourceId] = useState(-1);
   const [number, setNumber] = useState(0);
-  const { roleId, teams, setTeams } = useContext(RoleContext); // eslint-disable-line no-unused-vars
+  const { roleId, teams, setTeams, filteredBuildings, setNavBarId } =
+    useContext(RoleContext); // eslint-disable-line no-unused-vars
+
   const navigate = useNavigate();
 
   const columns = [
@@ -57,6 +59,8 @@ const Resources = () => {
       mode: mode,
     };
     await axios.post("/sellResource", payload);
+    navigate("/teams");
+    setNavBarId(2);
   };
 
   const handleTeam = (team) => {
@@ -79,7 +83,7 @@ const Resources = () => {
       getResources();
       flag = !flag;
       if (flag) updatePrices();
-    }, 5000);
+    }, 50000);
 
     return () => clearInterval(update);
   }, []);

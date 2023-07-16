@@ -483,32 +483,32 @@ router
             res.json("Success").status(200);
           }
           break;
-        case 16: // 海域不平靜，各組暫停行動5分鐘，擁有龍宮城、漁人島房產格隊伍不受影響
-          {
-            let teams = [];
-            const lands = await (
-              await Land.find()
-            ).filter(
-              (land) =>
-                land.type === "Building" &&
-                (land.id === 29 ||
-                  land.id === 30 ||
-                  land.id === 33 ||
-                  land.id === 34)
-            );
-            for (let i = 0; i < lands.length; i++) {
-              if (!teams.includes(lands[i].owner)) {
-                teams.push(lands[i].owner);
-              }
-            }
-            teams.sort(function (a, b) {
-              return a - b;
-            });
-            const names = await teams.map((team) => team.id);
-            res.json(`Teams ${names} aren't affected.`).status(200);
-          }
+        // case 16: // 海域不平靜，各組暫停行動5分鐘，擁有龍宮城、漁人島房產格隊伍不受影響
+        //   {
+        //     let teams = [];
+        //     const lands = await (
+        //       await Land.find()
+        //     ).filter(
+        //       (land) =>
+        //         land.type === "Building" &&
+        //         (land.id === 29 ||
+        //           land.id === 30 ||
+        //           land.id === 33 ||
+        //           land.id === 34)
+        //     );
+        //     for (let i = 0; i < lands.length; i++) {
+        //       if (!teams.includes(lands[i].owner)) {
+        //         teams.push(lands[i].owner);
+        //       }
+        //     }
+        //     teams.sort(function (a, b) {
+        //       return a - b;
+        //     });
+        //     const names = await teams.map((team) => team.id);
+        //     res.json(`Teams ${names} aren't affected.`).status(200);
+        //   }
 
-          break;
+        //   break;
         case 17: // 仇富心態爆發，財產前4的小隊入獄
           {
             const teams = await Team.find().sort({ money: -1 });

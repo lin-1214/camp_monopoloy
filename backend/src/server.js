@@ -116,10 +116,10 @@ db.once("open", () => {
   //   next();
   // });
   // init middleware
-  if (process.env.NODE_ENV === "production") {
-    const __dirname = path.resolve();
-    app.use(express.static(path.join(__dirname, "../frontend", "build")));
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   const __dirname = path.resolve();
+  //   app.use(express.static(path.join(__dirname, "../frontend", "build")));
+  // }
   app.use(express.json());
   app.use(cors());
   // app.use(sessionMiddleware);
