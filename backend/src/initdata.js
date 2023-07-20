@@ -425,8 +425,8 @@ const lands = [
   { id: 35, type: "Game", name: "遊戲格", description: "認真聽規則！" },
   {
     id: 36,
-    type: "Random",
-    name: "恐怖三桅帆船",
+    type: "Building",
+    name: "隨機格 - 恐怖三桅帆船",
     owner: 0,
     level: 0,
     price: { buy: 22000, upgrade: 12000 },
@@ -530,17 +530,17 @@ const resources = [
   {
     id: 1,
     name: "gold",
-    price: 1600,
+    price: 4000,
   },
   {
     id: 2,
     name: "meat",
-    price: 1400,
+    price: 3000,
   },
   {
     id: 3,
     name: "cola",
-    price: 1200,
+    price: 2000,
   },
   {
     id: 4,
@@ -550,7 +550,7 @@ const resources = [
   {
     id: 5,
     name: "metal",
-    price: 1200,
+    price: 2000,
   },
 ];
 
@@ -563,12 +563,13 @@ const events = [
   {
     id: 1,
     title: "山賊入侵",
-    description: "遭遇打劫, 各組金錢資源減少30%",
+    description: "遭遇打劫, 各組金錢減少30%",
   },
   {
     id: 2,
     title: "船身被毀",
-    description: "船隻航行能力受限, 骰子數量減為1, 抵達水之七島房產格方可修復",
+    description:
+      "船隻航行能力受限, 骰子數量減為1, 經過水之七島(10, 11)房產格方可修復",
   },
   {
     id: 3,
@@ -593,7 +594,8 @@ const events = [
   {
     id: 7,
     title: "同伴遇難",
-    description: "其中一個隊隨遭敵人抓走, 需前往監獄營救",
+    description:
+      "隊隨遭敵人抓走，小隊須前往遊戲格用 5000 塊賄賂遊戲格 NPC 來幫忙營救。每個遊戲格只會接受第一個到來的小隊的賄賂。10 分鐘內沒有成功解救隊隨的小隊會被強制送入監獄",
   },
   {
     id: 8,
@@ -603,14 +605,14 @@ const events = [
   {
     id: 9,
     title: "屠魔令",
-    description: "各組消耗大量資源躲避追緝，各組所有資源-2",
+    description: "各組消耗大量資源躲避追緝，各組所有資源-1",
   },
   {
     id: 10,
     title: "震震果實",
     description: "馬林福特附近遭受波及, 位於15~30之房產格房子數 -1",
   },
-  { id: 11, title: "八國革命", description: "購各國響應革命, NPC同時呼口號" },
+  { id: 11, title: "八國革命", description: "各國響應革命, NPC 同時呼口號" },
   {
     id: 12,
     title: "股市崩盤",
@@ -619,17 +621,17 @@ const events = [
   {
     id: 13,
     title: "3D2Y",
-    description: "回到各隊初始格, 金錢增加50%",
+    description: "回到各隊初始格(優先序最高), 金錢增加50%",
   },
   {
     id: 14,
     title: "暗水",
-    description: "全部特殊技能失效, 10分鐘內無法使用卡片效果",
+    description: "全部特殊技能失效, 小隊10分鐘內無法使用卡片",
   },
   {
     id: 15,
     title: "霸國",
-    description: "受巨人族協助, 各組同時前進15格",
+    description: "受巨人族協助, 各組同時前進15格(優先序最高)",
   },
   // {
   //   id: 16,
@@ -638,27 +640,27 @@ const events = [
   //     "海域不平靜, 各組暫停行動5分鐘, 擁有龍宮城、漁人島房產格隊伍不受影響",
   // },
   {
-    id: 17,
+    id: 16,
     title: "人民的法槌",
     description: "仇富心態爆發, 財產前4的小隊入獄",
   },
   {
-    id: 18,
+    id: 17,
     title: "締結同盟",
     description: "同盟共享資源, 當前金錢增加一倍",
   },
   {
-    id: 19,
+    id: 18,
     title: "政權交替",
     description: "政策變革：踩到他人房產格時，獲得與過路費等價之金錢",
   },
   {
-    id: 20,
+    id: 19,
     title: "政權二次交替",
     description: "政策再度改變：賺扣錢制度回復原狀",
   },
   {
-    id: 21,
+    id: 20,
     title: "天下太平",
     description: "海域回到最初的平靜, 往後不再發生大型事件",
   },

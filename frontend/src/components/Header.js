@@ -20,6 +20,7 @@ const Header = () => {
   const {
     role,
     setRole,
+    setRoleId,
     phase,
     setPhase,
     buildings,
@@ -42,6 +43,7 @@ const Header = () => {
   const handleLogout = () => {
     // console.log(role);
     setRole("");
+    setRoleId(0);
     localStorage.removeItem("role");
     navigate("/"); //set to home later
   };

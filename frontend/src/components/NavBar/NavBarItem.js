@@ -46,6 +46,13 @@ export const NavBarItems = [
     shortLabel: "Map",
     route: "map",
   },
+  {
+    id: 11,
+    icon: <ForestOutlinedIcon />,
+    label: "Resource",
+    shortLabel: "Resource",
+    route: "resource",
+  },
 ];
 
 export const NPCItems = [

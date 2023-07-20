@@ -1,7 +1,8 @@
-import React from "react";
-import { Grid, Paper, Typography } from "@mui/material";
+import { React, useState } from "react";
+import { Grid, Paper, Typography, Modal, Box } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import HouseIcon from "@mui/icons-material/House";
 
 const colors = {
   Go: "rgb(0,0,0)",
@@ -34,8 +35,14 @@ const PropertyCard = ({
   description,
   level,
   expanded,
+  price,
+  rent,
   buffed,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [buy, setBuy] = useState(0);
+  const [upgrade, setUpgrade] = useState(0);
+
   const colorData = type === "Building" ? colors[type][area] : colors[type];
   // console.log(ref);
   let levelIcon = [];
@@ -63,76 +70,176 @@ const PropertyCard = ({
     );
   }
 
+  const handleView = () => {
+    if (type === "Building") {
+      setBuy(price.buy);
+      setUpgrade(price.upgrade);
+      setOpen(true);
+    }
+    console.log(price.buy);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Paper
-      elevation={2}
-      key={id}
-      id={id}
-      ref={ref}
-      sx={{
-        borderLeft: 10,
-        borderColor: colorData,
-        paddingTop: 0.5,
-        paddingBottom: 0.5,
-        minWidth: "100%",
-      }}
-    >
-      <Grid container spacing={2}>
-        <Grid
-          item
-          xs={2}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Typography variant="h6">{id}</Typography>
-        </Grid>
-        <Grid item xs>
-          <Grid item>
-            {(buffed === 0 && type === "Building") || type !== "Building" ? (
-              <Typography
-                variant="h6"
-                marginTop="1px"
-                style={{ fontWeight: "600" }}
-              >
-                {name}
-              </Typography>
+    <>
+      <Paper
+        elevation={2}
+        key={id}
+        id={id}
+        ref={ref}
+        sx={{
+          borderLeft: 10,
+          borderColor: colorData,
+          paddingTop: 0.5,
+          paddingBottom: 0.5,
+          minWidth: "100%",
+        }}
+        onClick={handleView}
+      >
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Typography variant="h6">{id}</Typography>
+          </Grid>
+          <Grid item xs>
+            <Grid item>
+              {(buffed === 0 && type === "Building") || type !== "Building" ? (
+                <Typography
+                  variant="h6"
+                  marginTop="1px"
+                  style={{ fontWeight: "600" }}
+                >
+                  {name}
+                </Typography>
+              ) : (
+                <Typography
+                  variant="h6"
+                  marginTop="1px"
+                  style={{ fontWeight: "800", color: "rgb(255,178,14)" }}
+                >
+                  {name}
+                </Typography>
+              )}
+            </Grid>
+            {type === "Building" || type === "SpecialBuilding" ? (
+              <Grid item>
+                <Typography variant="caption">
+                  {owner === 0 ? <br /> : `第${owner}小隊`}
+                </Typography>
+              </Grid>
             ) : (
-              <Typography
-                variant="h6"
-                marginTop="1px"
-                style={{ fontWeight: "800", color: "rgb(255,178,14)" }}
-              >
-                {name}
-              </Typography>
+              <Grid item>
+                <Typography variant="caption">{description}</Typography>
+              </Grid>
             )}
           </Grid>
-          {type === "Building" || type === "SpecialBuilding" ? (
-            <Grid item>
-              <Typography variant="caption">
-                {owner === 0 ? <br /> : `第${owner}小隊`}
-              </Typography>
-            </Grid>
-          ) : (
-            <Grid item>
-              <Typography variant="caption">{description}</Typography>
+          {type === "Building" && (
+            <Grid
+              item
+              xs={5}
+              display="flex"
+              alignItems="center"
+              justifyContent="right"
+              paddingRight="5px"
+            >
+              {levelIcon}
             </Grid>
           )}
         </Grid>
-        {type === "Building" && (
-          <Grid
-            item
-            xs={5}
-            display="flex"
-            alignItems="center"
-            justifyContent="right"
-            paddingRight="5px"
+      </Paper>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            minWidth: 250,
+            margin: 4,
+            paddingLeft: 1,
+            border: "solid 3px rgb(38,81,217)",
+            borderRadius: "5px",
+            backgroundColor: "rgb(191,201,233)",
+            height: 250,
+            justifyContent: "space-around",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            {levelIcon}
-          </Grid>
-        )}
-      </Grid>
-    </Paper>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ fontWeight: 800 }}
+            >
+              房產資訊
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              height: "80%",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+          >
+            <Typography
+              id="modal-modal-description-1"
+              sx={{ fontWeight: 500 }}
+              component="h5"
+            >
+              {`地產名稱：${name}`}
+            </Typography>
+            <Typography
+              id="modal-modal-description-2"
+              sx={{ fontWeight: 500 }}
+              component="h5"
+            >
+              {`地產持有人：${owner === 0 ? "無" : `第${owner}小隊`}`}
+            </Typography>
+            <Typography
+              id="modal-modal-description-2"
+              sx={{ fontWeight: 500 }}
+              component="h4"
+            >
+              {`地產花費： 購買 ${buy}  升級 ${upgrade} `}
+            </Typography>
+            <Typography
+              id="modal-modal-description-2"
+              sx={{ fontWeight: 500 }}
+              component="h5"
+            >
+              {`過路費： 一級 ${rent[0]} 二級 ${rent[1]} 三級 ${rent[2]} `}
+            </Typography>
+            <Typography
+              id="modal-modal-description-2"
+              sx={{ fontWeight: 500 }}
+              component="h5"
+            >
+              {`相同房產增益： ${buffed === 0 ? "尚未觸發" : `已觸發`}`}
+            </Typography>
+          </Box>
+        </Box>
+      </Modal>
+    </>
   );
 };
 

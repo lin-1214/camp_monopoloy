@@ -30,6 +30,7 @@ const AddMoney = () => {
   const [team, setTeam] = useState(-1);
   const [teamData, setTeamData] = useState({});
   const [newData, setNewData] = useState(0);
+  const [jeff, setJeff] = useState(false);
 
   const [amount, setAmount] = useState("0");
   const [errorMessage, setErrorMessage] = useState("");
@@ -51,6 +52,11 @@ const AddMoney = () => {
     // console.log(data);
     setTeamData(data);
     setTeam(team);
+  };
+
+  const checkPropertyCost = async () => {
+    const { payload } = { team: team, building: building };
+    const { message } = await axios.post("/checkPropertyCost", payload);
   };
 
   const handleAmount = async (amount) => {

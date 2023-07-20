@@ -93,6 +93,14 @@ const Notifications = () => {
 
   useEffect(() => {
     //fetch event, messages, and historical broadcast from backend
+    const reloadCount = sessionStorage.getItem("reloadCount");
+    if (reloadCount < 1) {
+      sessionStorage.setItem("reloadCount", String(reloadCount + 1));
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloadCount");
+    }
+
     FetchEvent();
     FetchMessages();
     FetchBroadcast();
@@ -167,7 +175,7 @@ const Notifications = () => {
             sx={{ marginTop: "70px" }}
           >
             <Tab label="current" {...tabprops(0)} />
-            <Tab label="history" {...tabprops(1)} />
+            {/* <Tab label="history" {...tabprops(1)} /> */}
           </Tabs>
         </Box>
 

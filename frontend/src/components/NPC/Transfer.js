@@ -138,9 +138,14 @@ const Transfer = () => {
     }
   };
 
-  const handlePercentMoney = (percent) => {
+  const handlePercentMoney = async (percent) => {
     // const money = fromData.money; //find the team's money
-    setAmount(Math.round(amount * (1 + percent)));
+    console.log(building);
+    const { data } = await axios.get("/getRent", {
+      params: { building: building },
+    });
+    console.log(data);
+    setAmount(Math.round(data * (1 + percent)));
   };
 
   const handleEqualMoney = () => {
@@ -404,6 +409,7 @@ const Transfer = () => {
             >
               raise
             </Button>
+
             {/* <Button
               variant="contained"
               sx={{ marginBottom: 1 }}

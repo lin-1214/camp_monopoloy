@@ -83,7 +83,8 @@ const Resources = () => {
       getResources();
       flag = !flag;
       if (flag) updatePrices();
-    }, 50000);
+      console.log("update");
+    }, 5000);
 
     return () => clearInterval(update);
   }, []);
@@ -93,114 +94,118 @@ const Resources = () => {
   } else {
     return (
       <>
-        <Container component="main" maxWidth="xs">
-          <Box
-            sx={{
-              marginTop: 10,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Resource Trading
-            </Typography>
+        {roleId > 20 ? (
+          <Container component="main" maxWidth="xs">
+            <Box
+              sx={{
+                marginTop: 10,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography component="h1" variant="h5">
+                Resource Trading
+              </Typography>
 
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 250, marginTop: 2 }}
-            >
-              <TeamSelect
-                label="Team"
-                team={team}
-                handleTeam={handleTeam}
-                hasZero={true}
-              />
-            </FormControl>
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 250, marginTop: 2 }}
-            >
-              <InputLabel id="resource">Resource</InputLabel>
-              <Select
-                value={resourceId}
-                labelId="resource"
-                onChange={(e) => {
-                  setResourceId(e.target.value);
-                }}
+              <FormControl
+                variant="standard"
+                sx={{ minWidth: 250, marginTop: 2 }}
               >
-                <MenuItem value={-1}>Select Resource</MenuItem>
-                {resources.map((resource) => (
-                  <MenuItem value={resource.id} key={resource.id}>
-                    {resource.id} {resource.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 250, marginTop: 2 }}
-            >
-              <InputLabel id="mode">Mode</InputLabel>
-              <Select
-                value={mode}
-                labelId="mode"
-                onChange={(e) => {
-                  setMode(e.target.value);
-                }}
+                <TeamSelect
+                  label="Team"
+                  team={team}
+                  handleTeam={handleTeam}
+                  hasZero={true}
+                />
+              </FormControl>
+              <FormControl
+                variant="standard"
+                sx={{ minWidth: 250, marginTop: 2 }}
               >
-                <MenuItem value={0}>Sell</MenuItem>
-                <MenuItem value={1}>Buy</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 250, marginTop: 2 }}
-            >
-              <InputLabel id="number-resource">Number of resource</InputLabel>
-              <Select
-                value={number}
-                labelId="number-resource"
-                onChange={(e) => {
-                  setNumber(e.target.value);
-                }}
+                <InputLabel id="resource">Resource</InputLabel>
+                <Select
+                  value={resourceId}
+                  labelId="resource"
+                  onChange={(e) => {
+                    setResourceId(e.target.value);
+                  }}
+                >
+                  <MenuItem value={-1}>Select Resource</MenuItem>
+                  {resources.map((resource) => (
+                    <MenuItem value={resource.id} key={resource.id}>
+                      {resource.id} {resource.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl
+                variant="standard"
+                sx={{ minWidth: 250, marginTop: 2 }}
               >
-                <MenuItem value={0}>0</MenuItem>
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={6}>6</MenuItem>
-                <MenuItem value={7}>7</MenuItem>
-                <MenuItem value={8}>8</MenuItem>
-                <MenuItem value={9}>9</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl
-              variant="standard"
-              sx={{ minWidth: 250, marginTop: 2 }}
-            >
-              {/* <Button
-              disabled={team === -1 || building === -1}
-              onClick={handleClick}
-              sx={{ marginTop: 2 }}
-            >
-              Submit
-            </Button> */}
-              <Button
-                variant="contained"
-                disabled={team === -1 || number === -1}
+                <InputLabel id="mode">Mode</InputLabel>
+                <Select
+                  value={mode}
+                  labelId="mode"
+                  onChange={(e) => {
+                    setMode(e.target.value);
+                  }}
+                >
+                  <MenuItem value={0}>Sell</MenuItem>
+                  <MenuItem value={1}>Buy</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl
+                variant="standard"
+                sx={{ minWidth: 250, marginTop: 2 }}
+              >
+                <InputLabel id="number-resource">Number of resource</InputLabel>
+                <Select
+                  value={number}
+                  labelId="number-resource"
+                  onChange={(e) => {
+                    setNumber(e.target.value);
+                  }}
+                >
+                  <MenuItem value={0}>0</MenuItem>
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
+                  <MenuItem value={4}>4</MenuItem>
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={6}>6</MenuItem>
+                  <MenuItem value={7}>7</MenuItem>
+                  <MenuItem value={8}>8</MenuItem>
+                  <MenuItem value={9}>9</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl
+                variant="standard"
+                sx={{ minWidth: 250, marginTop: 2 }}
+              >
+                {/* <Button
+                disabled={team === -1 || building === -1}
                 onClick={handleClick}
-                fullWidth
                 sx={{ marginTop: 2 }}
               >
-                <SendIcon />
-              </Button>
-            </FormControl>
-          </Box>
-        </Container>
+                Submit
+              </Button> */}
+                <Button
+                  variant="contained"
+                  disabled={team === -1 || number === -1}
+                  onClick={handleClick}
+                  fullWidth
+                  sx={{ marginTop: 2 }}
+                >
+                  <SendIcon />
+                </Button>
+              </FormControl>
+            </Box>
+          </Container>
+        ) : (
+          <></>
+        )}
         <Paper
           elevation={0}
           sx={{

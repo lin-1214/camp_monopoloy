@@ -149,11 +149,33 @@ router.get("/team", async (req, res) => {
 });
 
 router.post("/teamRich", async (req, res) => {
-  const teams = await Team.find().sort({ money: 1 });
+  const teams = await Team.find().sort({ money: -1 });
   const team = teams[0];
-  console.log(team);
+  //console.log(team);
+  req.io.emit("broadcast", {
+    title: "劫富卡發動",
+    description: `第${team.id}小隊遭到劫富！！`,
+  });
   await Team.findOneAndUpdate({ id: team.id }, { money: team.money * 0.75 });
   res.json(team).status(200);
+});
+
+router.post("/checkPropertyCost", async (req, res) => {
+  const { team, building } = req.body;
+  const targetBuilding = await Land.find({ id: building });
+  const surplus = await Team.find({ id: team }).money;
+  const checkOwned = targetBuilding[0].owner;
+  if (checkOwned === 0) {
+    const checkPropertyCost = targetBuilding[0].price.buy;
+    if (surplus >= checkPropertyCost) res.json("OK").status(200);
+    else {
+      res.json("FUCK").status(200);
+    }
+  } else {
+    const checkPropertyCost = targetBuilding[0].price.upgrade;
+    if (surplus >= checkPropertyCost) res.json("OK").status(200);
+    else res.json("FUCK").status(200);
+  }
 });
 
 // router.get("/team/hawkeye", async (req, res) => {
@@ -186,6 +208,17 @@ router.post("/set", async (req, res) => {
   const { id, amount } = req.body;
   await Team.findOneAndUpdate({ id: parseInt(id) }, { money: amount });
   res.json({ success: true }).status(200);
+});
+
+router.get("/getRent", async (req, res) => {
+  const building = req.query.building;
+  console.log(`building: ${building}`);
+  const targetBuilding = await Land.find({ id: building });
+  if (targetBuilding === undefined) res.json(0).status(200);
+
+  const rent = targetBuilding[0].rent[targetBuilding[0].level - 1];
+  console.log(rent);
+  res.json(rent).status(200);
 });
 
 router.get("/resourceInfo", async (req, res) => {
@@ -225,20 +258,22 @@ router.post("/resource", async (req, res) => {
       { name: resources[i].name },
       {
         price:
-          resources[i].price +
-          (Math.floor(Math.random() * 15) + 1) * 10 -
-          (Math.floor(Math.random() * 15) + 1) * 10,
+          resources[i].price *
+          Math.floor(
+            ((Math.floor(Math.random() * 200) + 1) / 5) *
+              ((Math.floor(Math.random() * 10) + 1) / 50)
+          ),
       }
     );
   }
   // check whether price > 0
   const check = await Resource.find().sort({ id: 1 });
   for (let i = 0; i < check.length; i++) {
-    if (check[i].price < 0) {
+    if (check[i].price < 1) {
       await Resource.findOneAndUpdate(
         { name: check[i].name },
         {
-          price: 0,
+          price: 100,
         }
       );
     }
@@ -337,7 +372,7 @@ router
       // }
 
       switch (id) {
-        default: // 7, 8, 9, 11, 14, 15, 19, 20,21
+        default: // 7, 8, 9, 11, 14, 15, 20
           res.json("Success").status(200);
           break;
         case 1: // 遭遇打劫, 各組金錢資源減少30%
@@ -369,6 +404,10 @@ router
 
             for (let i = 0; i < buildings.length; i++) {
               buildings[i].owner = 0;
+              buildings[i].level = 0;
+              if (buildings[i].buffed === 1) {
+                debuffBuildings(buildings[0], buildings[1]);
+              }
               await buildings[i].save();
             }
             res.json("Success").status(200);
@@ -411,7 +450,9 @@ router
                 );
                 lands[i].owner = 0;
                 // await owner.save();
+                if (lands[i].buffed === 1) lands[i].buffed = 0;
               }
+
               lands[i].level -= 1;
               await lands[i].save();
             }
@@ -451,8 +492,10 @@ router
                 );
                 lands[i].owner = 0;
                 // await owner.save();
+                if (lands[i].buffed === 1) lands[i].buffed = 0;
               }
               lands[i].level -= 1;
+
               await lands[i].save();
             }
             res.json("Success").status(200);
@@ -509,7 +552,7 @@ router
         //   }
 
         //   break;
-        case 17: // 仇富心態爆發，財產前4的小隊入獄
+        case 16: // 仇富心態爆發，財產前4的小隊入獄
           {
             const teams = await Team.find().sort({ money: -1 });
             let count = 0;
@@ -534,12 +577,36 @@ router
             res.json(note).status(200);
           }
           break;
-        case 18: // 同盟共享資源，當前金錢變為2倍
+        case 17: // 同盟共享資源，當前金錢變為2倍
           {
             const teams = await Team.find();
             for (let i = 0; i < teams.length; i++) {
               teams[i].money *= 2;
               teams[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 18:
+          {
+            const buildings = await Land.find({ type: "Building" });
+            for (let i = 0; i < buildings.length; i++) {
+              for (let j = 0; j < 3; j++) {
+                buildings[i].rent[j] *= -1;
+              }
+              await buildings[i].save();
+            }
+            res.json("Success").status(200);
+          }
+          break;
+        case 19:
+          {
+            const buildings = await Land.find({ type: "Building" });
+            for (let i = 0; i < buildings.length; i++) {
+              for (let j = 0; j < 3; j++) {
+                buildings[i].rent[j] *= -1;
+              }
+              await buildings[i].save();
             }
             res.json("Success").status(200);
           }
@@ -552,6 +619,8 @@ router
       newEvent.note = note;
       newEvent.level = 0;
       await newEvent.save();
+      // await new Notification(newEvent).save();
+      // console.log(newEvent);
       req.io.emit("broadcast", newEvent);
       console.log("broadcast");
     } else {
@@ -596,6 +665,12 @@ router
       return;
     }
     await updateTeam(id, dollar, req.io, true);
+    if (dollar < 0) {
+      req.io.emit("broadcast", {
+        title: "扣錢",
+        description: `第${id}小隊遭扣除${-dollar}元！！`,
+      });
+    }
     res.status(200).send("Update succeeded");
   })
   .get("/add", async (req, res) => {
@@ -912,6 +987,7 @@ router.post("/effect", async (req, res) => {
   };
   // await deleteTimeoutNotification();
   // save
+  console.log(notification);
   await new Notification(notification).save();
   await team.save();
   req.io.emit("broadcast", notification);
