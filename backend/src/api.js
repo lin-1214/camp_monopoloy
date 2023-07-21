@@ -148,33 +148,33 @@ router.get("/team", async (req, res) => {
   res.json(teams).status(200);
 });
 
-router.post("/teamRich", async (req, res) => {
+router.get("/teamRich", async (req, res) => {
   const teams = await Team.find().sort({ money: -1 });
   const team = teams[0];
-  //console.log(team);
-  req.io.emit("broadcast", {
-    title: "劫富卡發動",
-    description: `第${team.id}小隊遭到劫富！！`,
-  });
-  await Team.findOneAndUpdate({ id: team.id }, { money: team.money * 0.75 });
+  console.log(team);
   res.json(team).status(200);
 });
 
 router.post("/checkPropertyCost", async (req, res) => {
   const { team, building } = req.body;
+
   const targetBuilding = await Land.find({ id: building });
-  const surplus = await Team.find({ id: team }).money;
+  const targetTeam = await Team.find({ id: team });
+  const surplus = targetTeam[0].money;
   const checkOwned = targetBuilding[0].owner;
   if (checkOwned === 0) {
     const checkPropertyCost = targetBuilding[0].price.buy;
-    if (surplus >= checkPropertyCost) res.json("OK").status(200);
+    console.log(`surplus: ${surplus}`);
+    console.log(`cost: ${checkPropertyCost}`);
+    if (surplus >= checkPropertyCost) res.json({ message: "OK" }).status(200);
     else {
-      res.json("FUCK").status(200);
+      res.json({ message: "FUCK" }).status(200);
     }
   } else {
     const checkPropertyCost = targetBuilding[0].price.upgrade;
-    if (surplus >= checkPropertyCost) res.json("OK").status(200);
-    else res.json("FUCK").status(200);
+    console.log(checkPropertyCost);
+    if (surplus >= checkPropertyCost) res.json({ message: "OK" }).status(200);
+    else res.json({ message: "FUCK" }).status(200);
   }
 });
 
@@ -212,12 +212,10 @@ router.post("/set", async (req, res) => {
 
 router.get("/getRent", async (req, res) => {
   const building = req.query.building;
-  console.log(`building: ${building}`);
   const targetBuilding = await Land.find({ id: building });
   if (targetBuilding === undefined) res.json(0).status(200);
 
   const rent = targetBuilding[0].rent[targetBuilding[0].level - 1];
-  console.log(rent);
   res.json(rent).status(200);
 });
 
@@ -260,7 +258,7 @@ router.post("/resource", async (req, res) => {
         price:
           resources[i].price *
           Math.floor(
-            ((Math.floor(Math.random() * 200) + 1) / 5) *
+            ((Math.floor(Math.random() * 200) + 1) / 8) *
               ((Math.floor(Math.random() * 10) + 1) / 50)
           ),
       }
@@ -274,6 +272,13 @@ router.post("/resource", async (req, res) => {
         { name: check[i].name },
         {
           price: 100,
+        }
+      );
+    } else if (check[i].price < 80000) {
+      await Resource.findOneAndUpdate(
+        { name: check[i].name },
+        {
+          price: 80000,
         }
       );
     }
@@ -657,8 +662,9 @@ router
 
 router
   .post("/add", async (req, res) => {
-    const { id, dollar } = req.body;
+    const { id, dollar, jeff, jeffTeam } = req.body;
     const team = await Team.findAndCheckValid(id);
+    const targetTeam = await Team.find({ id: jeffTeam });
     if (!team) {
       res.status(403).send();
       console.log("Team not found");
@@ -670,6 +676,17 @@ router
         title: "扣錢",
         description: `第${id}小隊遭扣除${-dollar}元！！`,
       });
+    }
+
+    if (jeff) {
+      req.io.emit("broadcast", {
+        title: "劫富卡發動",
+        description: `第${jeffTeam}小隊遭到劫富！！`,
+      });
+      await Team.findOneAndUpdate(
+        { id: jeffTeam },
+        { money: targetTeam[0].money * 0.75 }
+      );
     }
     res.status(200).send("Update succeeded");
   })

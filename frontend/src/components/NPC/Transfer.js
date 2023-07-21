@@ -144,7 +144,6 @@ const Transfer = () => {
     const { data } = await axios.get("/getRent", {
       params: { building: building },
     });
-    console.log(data);
     setAmount(Math.round(data * (1 + percent)));
   };
 

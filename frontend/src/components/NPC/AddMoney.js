@@ -31,6 +31,8 @@ const AddMoney = () => {
   const [teamData, setTeamData] = useState({});
   const [newData, setNewData] = useState(0);
   const [jeff, setJeff] = useState(false);
+  const [jeffTeam, setJeffTeam] = useState(-1);
+  const [checkMessage, setCheckMessage] = useState("");
 
   const [amount, setAmount] = useState("0");
   const [errorMessage, setErrorMessage] = useState("");
@@ -54,9 +56,13 @@ const AddMoney = () => {
     setTeam(team);
   };
 
-  const checkPropertyCost = async () => {
-    const { payload } = { team: team, building: building };
-    const { message } = await axios.post("/checkPropertyCost", payload);
+  const checkPropertyCost = async (building) => {
+    const payload = { team: team, building: building };
+    const {
+      data: { message },
+    } = await axios.post("/checkPropertyCost", payload);
+    console.log(message);
+    setCheckMessage(message);
   };
 
   const handleAmount = async (amount) => {
@@ -73,6 +79,7 @@ const AddMoney = () => {
       const { data } = await axios.get("/land/" + building);
       setBuilding(building);
       setPrice(data.price);
+      checkPropertyCost(building);
     } else {
       setBuilding(-1);
       setPrice({});
@@ -81,8 +88,10 @@ const AddMoney = () => {
   };
 
   const handleJeff = async () => {
-    const { data } = await axios.post("/teamRich");
+    const { data } = await axios.get("/teamRich");
     console.log(data);
+    setJeff(true);
+    setJeffTeam(data.id);
     handleAmount(Math.round(data.money * 0.25));
   };
 
@@ -98,8 +107,11 @@ const AddMoney = () => {
       id: team,
       teamname: `第${team}小隊`,
       dollar: parseInt(amount) ? parseInt(amount) : 0,
+      jeff: jeff,
+      jeffTeam: jeffTeam,
     };
     await axios.post("/add", payload);
+    setJeff(false);
     navigate("/teams");
     setNavBarId(2);
   };
@@ -276,7 +288,12 @@ const AddMoney = () => {
               <Box display="flex" flexDirection="row" justifyContent="center">
                 <Button
                   variant="contained"
-                  disabled={team === -1 || amount === "" || building === -1}
+                  disabled={
+                    team === -1 ||
+                    amount === "0" ||
+                    building === -1 ||
+                    checkMessage !== "OK"
+                  }
                   onClick={handleSubmitAndSetOwnership}
                   fullWidth
                 >
