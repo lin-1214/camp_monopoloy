@@ -209,11 +209,12 @@ router.post("/set", async (req, res) => {
 
 router.get("/getRent", async (req, res) => {
   const building = req.query.building;
-  const targetBuilding = await Land.find({ id: building });
-  if (targetBuilding === undefined) res.json(0).status(200);
-
-  const rent = targetBuilding[0].rent[targetBuilding[0].level - 1];
-  res.json(rent).status(200);
+  if (building !== -1) {
+    const targetBuilding = await Land.find({ id: building });
+    const rent = targetBuilding[0].rent[targetBuilding[0].level - 1];
+    res.json(rent).status(200);
+  }
+  res.json(0).status(200);
 });
 
 router.get("/resourceInfo", async (req, res) => {

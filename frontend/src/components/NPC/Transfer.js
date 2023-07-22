@@ -140,7 +140,6 @@ const Transfer = () => {
 
   const handlePercentMoney = async (percent) => {
     // const money = fromData.money; //find the team's money
-    console.log(building);
     const { data } = await axios.get("/getRent", {
       params: { building: building },
     });
