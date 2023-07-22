@@ -84,7 +84,7 @@ const Resources = () => {
       flag = !flag;
       if (flag) updatePrices();
       console.log("update");
-    }, 500000);
+    }, 80000);
 
     return () => clearInterval(update);
   }, []);
