@@ -156,21 +156,18 @@ router.get("/teamRich", async (req, res) => {
 });
 
 router.post("/checkPropertyCost", async (req, res) => {
-  const { team, building } = req.body;
+  const { team, building, mode } = req.body;
 
   const targetBuilding = await Land.find({ id: building });
   const targetTeam = await Team.find({ id: team });
   const surplus = targetTeam[0].money;
-  const checkOwned = targetBuilding[0].owner;
-  if (checkOwned === 0) {
+  if (mode === "Buy") {
     const checkPropertyCost = targetBuilding[0].price.buy;
-    console.log(`surplus: ${surplus}`);
-    console.log(`cost: ${checkPropertyCost}`);
     if (surplus >= checkPropertyCost) res.json({ message: "OK" }).status(200);
     else {
       res.json({ message: "FUCK" }).status(200);
     }
-  } else {
+  } else if (mode === "Upgrade") {
     const checkPropertyCost = targetBuilding[0].price.upgrade;
     console.log(checkPropertyCost);
     if (surplus >= checkPropertyCost) res.json({ message: "OK" }).status(200);
@@ -455,7 +452,12 @@ router
                 );
                 lands[i].owner = 0;
                 // await owner.save();
-                if (lands[i].buffed === 1) lands[i].buffed = 0;
+                if (lands[i].buffed === 1) {
+                  lands[i].buffed = 0;
+                  for (let j = 0; j < 3; j++) {
+                    lands[i].rent[j] /= 1.5;
+                  }
+                }
               }
 
               lands[i].level -= 1;
@@ -670,13 +672,6 @@ router
       console.log("Team not found");
       return;
     }
-    await updateTeam(id, dollar, req.io, true);
-    if (dollar < 0) {
-      req.io.emit("broadcast", {
-        title: "扣錢",
-        description: `第${id}小隊遭扣除${-dollar}元！！`,
-      });
-    }
 
     if (jeff) {
       req.io.emit("broadcast", {
@@ -688,6 +683,15 @@ router
         { money: targetTeam[0].money * 0.75 }
       );
     }
+
+    await updateTeam(id, dollar, req.io, true);
+    if (dollar < 0) {
+      req.io.emit("broadcast", {
+        title: "扣錢",
+        description: `第${id}小隊遭扣除${-dollar}元！！`,
+      });
+    }
+
     res.status(200).send("Update succeeded");
   })
   .get("/add", async (req, res) => {

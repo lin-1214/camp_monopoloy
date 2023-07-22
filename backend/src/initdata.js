@@ -223,6 +223,7 @@ const lands = [
   {
     id: 7,
     type: "Building",
+    area: 1,
     name: "阿拉巴斯坦 II",
     owner: 0,
     level: 0,

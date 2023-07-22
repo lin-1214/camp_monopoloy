@@ -56,8 +56,8 @@ const AddMoney = () => {
     setTeam(team);
   };
 
-  const checkPropertyCost = async (building) => {
-    const payload = { team: team, building: building };
+  const checkPropertyCost = async (mode) => {
+    const payload = { team: team, building: building, mode: mode };
     const {
       data: { message },
     } = await axios.post("/checkPropertyCost", payload);
@@ -79,7 +79,6 @@ const AddMoney = () => {
       const { data } = await axios.get("/land/" + building);
       setBuilding(building);
       setPrice(data.price);
-      checkPropertyCost(building);
     } else {
       setBuilding(-1);
       setPrice({});
@@ -258,7 +257,10 @@ const AddMoney = () => {
               variant="contained"
               disabled={team === -1 || !price.buy}
               sx={{ marginBottom: 1, width: 80 }}
-              onClick={() => handleAmount(-1 * price.buy)}
+              onClick={() => {
+                handleAmount(-1 * price.buy);
+                checkPropertyCost("Buy");
+              }}
             >
               Buy
             </Button>
@@ -266,7 +268,10 @@ const AddMoney = () => {
               variant="contained"
               disabled={team === -1 || !price.upgrade}
               sx={{ marginBottom: 1, width: 80 }}
-              onClick={() => handleAmount(-1 * price.upgrade)}
+              onClick={() => {
+                handleAmount(-1 * price.upgrade);
+                checkPropertyCost("Upgrade");
+              }}
             >
               Upgrade
             </Button>
