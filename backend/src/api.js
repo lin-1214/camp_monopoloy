@@ -256,8 +256,8 @@ router.post("/resource", async (req, res) => {
         price:
           resources[i].price *
           Math.floor(
-            ((Math.floor(Math.random() * 200) + 1) / 8) *
-              ((Math.floor(Math.random() * 10) + 1) / 50)
+            ((Math.floor(Math.random() * 120) + 1) / 8) *
+              ((Math.floor(Math.random() * 10) + 1) / 30)
           ),
       }
     );
@@ -272,11 +272,11 @@ router.post("/resource", async (req, res) => {
           price: 100,
         }
       );
-    } else if (check[i].price < 80000) {
+    } else if (check[i].price > 15000) {
       await Resource.findOneAndUpdate(
         { name: check[i].name },
         {
-          price: 80000,
+          price: 15000,
         }
       );
     }
