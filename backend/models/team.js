@@ -5,7 +5,7 @@ const TeamSchema = new Schema({
   teamname: String,
   // occupation: String,
   money: Number,
-  dice: Number,
+  deposit: Number,
   resources: {
     gold: Number,
     meat: Number,

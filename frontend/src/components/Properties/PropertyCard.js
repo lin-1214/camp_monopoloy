@@ -22,6 +22,8 @@ const colors = {
   Store: "rgb(51,153,255)",
   Game: "rgb(25,73,128)",
   Random: "rgb(153,0,153)",
+  Go: "rgb(247,207,0)",
+  Bank: "rgb(180,247,141)",
 };
 
 const PropertyCard = ({
@@ -110,23 +112,24 @@ const PropertyCard = ({
           </Grid>
           <Grid item xs>
             <Grid item>
-              {(buffed === 0 && type === "Building") || type !== "Building" ? (
-                <Typography
-                  variant="h6"
-                  marginTop="1px"
-                  style={{ fontWeight: "600" }}
-                >
-                  {name}
-                </Typography>
-              ) : (
-                <Typography
-                  variant="h6"
-                  marginTop="1px"
-                  style={{ fontWeight: "800", color: "rgb(255,178,14)" }}
-                >
-                  {name}
-                </Typography>
-              )}
+              <Typography
+                variant="h6"
+                marginTop="1px"
+                style={{
+                  fontWeight: "600",
+                  fontSize: "1.0rem",
+                  color:
+                    (buffed === 0 && type === "Building") || type !== "Building"
+                      ? ""
+                      : buffed === 1 && type === "Building"
+                      ? "rgb(255,178,14)"
+                      : buffed === 2 && type === "Building"
+                      ? "rgb(194,0,0)"
+                      : "",
+                }}
+              >
+                {name}
+              </Typography>
             </Grid>
             {type === "Building" || type === "SpecialBuilding" ? (
               <Grid item>
@@ -168,9 +171,9 @@ const PropertyCard = ({
             minWidth: 250,
             margin: 4,
             paddingLeft: 1,
-            border: "solid 3px rgb(38,81,217)",
+            border: "solid 5px rgb(255,102,102)",
             borderRadius: "5px",
-            backgroundColor: "rgb(191,201,233)",
+            backgroundColor: "rgb(255,253,236)",
             height: 250,
             justifyContent: "space-around",
           }}
@@ -187,7 +190,7 @@ const PropertyCard = ({
               id="modal-modal-title"
               variant="h6"
               component="h2"
-              sx={{ fontWeight: 800 }}
+              sx={{ fontWeight: 1000 }}
             >
               房產資訊
             </Typography>
@@ -203,38 +206,44 @@ const PropertyCard = ({
           >
             <Typography
               id="modal-modal-description-1"
-              sx={{ fontWeight: 500 }}
+              sx={{ fontWeight: 700 }}
               component="h5"
             >
               {`地產名稱：${name}`}
             </Typography>
             <Typography
               id="modal-modal-description-2"
-              sx={{ fontWeight: 500 }}
+              sx={{ fontWeight: 700 }}
               component="h5"
             >
               {`地產持有人：${owner === 0 ? "無" : `第${owner}小隊`}`}
             </Typography>
             <Typography
               id="modal-modal-description-2"
-              sx={{ fontWeight: 500 }}
+              sx={{ fontWeight: 700 }}
               component="h4"
             >
               {`地產花費： 購買 ${buy}  升級 ${upgrade} `}
             </Typography>
             <Typography
               id="modal-modal-description-2"
-              sx={{ fontWeight: 500 }}
+              sx={{ fontWeight: 700, fontSize: "0.9rem" }}
               component="h5"
             >
               {`過路費： 一級 ${rent[0]} 二級 ${rent[1]} 三級 ${rent[2]} `}
             </Typography>
             <Typography
               id="modal-modal-description-2"
-              sx={{ fontWeight: 500 }}
+              sx={{ fontWeight: 700 }}
               component="h5"
             >
-              {`相同房產增益： ${buffed === 0 ? "尚未觸發" : `已觸發`}`}
+              {`相同房產增益： ${
+                buffed === 0
+                  ? "尚未觸發"
+                  : buffed === 1
+                  ? "已觸發一級增益"
+                  : "已觸發二級增益"
+              }`}
             </Typography>
           </Box>
         </Box>

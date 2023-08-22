@@ -94,6 +94,34 @@ const AddMoney = () => {
     handleAmount(Math.round(data.money * 0.25));
   };
 
+  const handleCard = async (number) => {
+    if (number === 0) {
+      // 小隊現金*1.5，最多30000
+      setAmount(teamData.money * 0.5 > 30000 ? 30000 : teamData.money * 0.5);
+    } else if (number === 1) {
+      // 強制拍賣地產，賣得的錢七三分，地主七
+      const payload = { building: building };
+      const { data } = await axios.post("/goldenFruit", payload);
+      console.log(data);
+      handleAmount(
+        Math.round(
+          (data.land[0].price.buy +
+            data.land[0].price.upgrade * (data.level - 1)) *
+            0.03
+        ) * 10
+      );
+    } else if (number === 2) {
+      // 全部損失5000
+      await axios.post("/tape");
+      navigate("/teams");
+      setNavBarId(2);
+    }
+  };
+
+  const handlePercentMoney = async (percent) => {
+    handleAmount(Math.round(amount * (1 + percent)));
+  };
+
   const handlePreview = async () => {
     const { data } = await axios.get("/add", {
       params: { id: team, dollar: amount },
@@ -274,6 +302,69 @@ const AddMoney = () => {
               }}
             >
               Upgrade
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="contained"
+              disabled={team === -1 || amount === 0}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handlePercentMoney(0.2)}
+            >
+              20%
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === -1 || amount === 0}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handlePercentMoney(0.5)}
+            >
+              50%
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === -1 || amount === 0}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handlePercentMoney(1)}
+            >
+              100%
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="contained"
+              disabled={team === -1}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handleCard(0)}
+            >
+              縣城
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === -1 || building === -1}
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handleCard(1)}
+            >
+              金蔓
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ marginBottom: 1, width: 80 }}
+              onClick={() => handleCard(2)}
+            >
+              紙膠
             </Button>
           </Box>
           <Grid container spacing={1}>

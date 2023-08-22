@@ -14,7 +14,7 @@ import RoleContext from "../useRole";
 import TeamSelect from "../TeamSelect";
 import axios from "../axios";
 
-const SetMoney = () => {
+const Bankrupt = () => {
   const [team, setTeam] = useState(-1);
   const [amount, setAmount] = useState(0);
   const { role } = useContext(RoleContext);
@@ -94,4 +94,4 @@ const SetMoney = () => {
   );
 };
 
-export default SetMoney;
+export default Bankrupt;

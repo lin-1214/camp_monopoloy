@@ -4,18 +4,11 @@ import VillaIcon from "@mui/icons-material/Villa";
 import PaidIcon from "@mui/icons-material/Paid";
 import BuildIcon from "@mui/icons-material/Build";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
-import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined"; // import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import EventIcon from "@mui/icons-material/Event";
-import AddToQueueIcon from "@mui/icons-material/AddToQueue";
-import ConstructionIcon from "@mui/icons-material/Construction";
-// import BuildCircleIcon from "@mui/icons-material/BuildCircle";
-import QuizIcon from "@mui/icons-material/Quiz";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
-import GavelIcon from "@mui/icons-material/Gavel";
 import MapIcon from "@mui/icons-material/Map";
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
-import HelpIcon from "@mui/icons-material/Help";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 
 export const NavBarItems = [
   {
@@ -48,10 +41,10 @@ export const NavBarItems = [
   },
   {
     id: 11,
-    icon: <ForestOutlinedIcon />,
-    label: "Resource",
-    shortLabel: "Resource",
-    route: "resource",
+    icon: <AccountBalanceIcon />,
+    label: "Bank",
+    shortLabel: "Bank",
+    route: "bank",
   },
 ];
 
@@ -77,27 +70,20 @@ export const NPCItems = [
     shortLabel: "Transfer",
     route: "transfer",
   },
-  // {
-  //   id: 8,
-  //   icon: <ConstructionIcon />,
-  //   label: "Repair",
-  //   shortLabel: "Repair",
-  //   route: "setdice",
-  // },
   {
     id: 11,
-    icon: <ForestOutlinedIcon />,
-    label: "Resource",
-    shortLabel: "Resource",
-    route: "resource",
+    icon: <AccountBalanceIcon />,
+    label: "Bank",
+    shortLabel: "Bank",
+    route: "bank",
   },
-  {
-    id: 14,
-    icon: <QuizIcon />,
-    label: "Random",
-    shortLabel: "Random",
-    route: "random",
-  },
+  // {
+  //   id: 14,
+  //   icon: <QuizIcon />,
+  //   label: "Random",
+  //   shortLabel: "Random",
+  //   route: "random",
+  // },
 ];
 
 export const adminItems = [
@@ -110,10 +96,10 @@ export const adminItems = [
   },
   {
     id: 11,
-    icon: <ForestOutlinedIcon />,
-    label: "Resource",
-    shortLabel: "Resource",
-    route: "resource",
+    icon: <AccountBalanceIcon />,
+    label: "Bank",
+    shortLabel: "Bank",
+    route: "bank",
   },
   {
     id: 12,
@@ -125,9 +111,9 @@ export const adminItems = [
   {
     id: 13,
     icon: <PaidIcon />,
-    label: "Set Money",
-    shortLabel: "Set",
-    route: "setmoney",
+    label: "Bankrupt",
+    shortLabel: "Bankrupt",
+    route: "bankrupt",
   },
   {
     id: 14,
