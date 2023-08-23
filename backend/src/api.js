@@ -150,21 +150,6 @@ const buffings3 = async (buildings, num1, num2, num3) => {
   }
 };
 
-const soldOut = async (lands) => {
-  let total = 0;
-  for (let i = 0; i < lands.length; i++) {
-    total +=
-      (lands[i].price.buy + lands[i].price.upgrade * (lands[i].level - 1)) *
-      0.8;
-    lands[i].owner = 0;
-    lands[i].level = 0;
-    lands[i].buffed = 0;
-    await lands[i].save();
-  }
-
-  return total;
-};
-
 router.get("/", (req, res) => {
   res.json({ a: 1, b: 2 });
 });
@@ -468,6 +453,7 @@ router
 
       for (let i = 0; i < teams.length; i++) {
         teams[i].deposit = Math.round(teams[i].deposit * 0.105) * 10;
+        await teams[i].save();
       }
       switch (id) {
         default: // 1, 4, 6, 7, 9, 11, 14, 16
@@ -633,6 +619,10 @@ router.post("/tape", async (req, res) => {
     teams[i].money -= 5000;
     await teams[i].save();
   }
+  req.io.emit("broadcast", {
+    title: "紙膠帶發動",
+    description: "紙膠帶狂暴黑料!所有小隊遭扣除5000元",
+  });
   res.json("Success").status(200);
 });
 
@@ -650,7 +640,10 @@ router.post("/goldenFruit", async (req, res) => {
   land[0].level = 0;
   targetTeam[0].save();
   land[0].save();
-  req.io.emit("broadcast", `${targetTeam[0].teamname}被使用了金蔓莓果！`);
+  req.io.emit("broadcast", {
+    title: "金蔓莓果發動",
+    description: `${targetTeam[0].teamname}被使用了金蔓莓果！`,
+  });
   res.json({ land, level }).status(200);
 });
 
@@ -703,6 +696,21 @@ router.post("/series", async (req, res) => {
   res.json({ count }).status(200);
 });
 
+router.post("/soldout", async (req, res) => {
+  const { id, building } = req.body;
+  const team = await Team.find({ id: id });
+  const land = await Land.find({ id: building });
+  team[0].money +=
+    Math.round(
+      (land[0].price.buy + land[0].price.upgrade * (land[0].level - 1)) * 0.08
+    ) * 10;
+  land[0].level = 0;
+  land[0].owner = 0;
+  await team[0].save();
+  await land[0].save();
+  res.json("Success").status(200);
+});
+
 router.post("/deposit", async (req, res) => {
   const { id, dollar } = req.body;
   const team = await Team.find({ id: id });
@@ -716,12 +724,75 @@ router.post("/accounting", async (req, res) => {
   const teams = await Team.find().sort({ id: 1 });
   for (let i = 0; i < teams.length; i++) {
     const lands = await Land.find({ owner: teams[i].id });
-    const total = soldOut(lands);
-    teams[i].money +=
-      total + teams[i].deposit * (teams[i].deposit >= 0 ? 1 : 1.3);
+    let total = 0;
+    for (let i = 0; i < lands.length; i++) {
+      total +=
+        (lands[i].price.buy + lands[i].price.upgrade * (lands[i].level - 1)) *
+        0.8;
+    }
+    if (teams[i].deposit >= 0) teams[i].money += total + teams[i].deposit;
+    else teams[i].money += total + teams[i].deposit * 1.3;
+
     teams[i].deposit = 0;
     await teams[i].save();
   }
+  res.json("Success").status(200);
+});
+
+router.post("/rob", async (req, res) => {
+  const { id } = req.body;
+  const team = await Team.find({ id: id });
+  const teams = await Team.find().sort({ money: 1 });
+  const lands = await Land.find({ owner: teams[0].id, level: 1 });
+
+  if (lands.length === 0) {
+    req.io.emit("broadcast", {
+      title: "趁火打劫發動",
+      description: `${team[0].teamname}使用了趁火打劫，但${teams[0].teamname}逃過一劫...`,
+    });
+  } else {
+    const index = Math.floor(Math.random() * lands.length);
+    lands[index].owner = id;
+    await lands[index].save();
+    req.io.emit("broadcast", {
+      title: "趁火打劫發動",
+      description: `${team[0].teamname}使用了趁火打劫, 搶走${teams[0].teamname}的${lands[index].name}, 2ㄏ2ㄏ`,
+    });
+    res.json({ building: lands[index].id }).status(200);
+  }
+});
+
+router.post("/equility", async (req, res) => {
+  const { id } = req.body;
+  const team = await Team.find({ id: id });
+  const teams = await Team.find().sort({ money: 1 });
+  let order = -1;
+  for (let i = 0; i < teams.length; i++) {
+    if (teams[i].id === id) order = i;
+  }
+  if (order + 1 === teams.length) {
+    team[0].money -= 10000;
+    await team[0].save();
+    req.io.emit("broadcast", {
+      title: "實質平等發動",
+      description: `${team[0].teamname}使用了實質平等, 但你太有錢了, 扣除10000元`,
+    });
+  } else {
+    const money =
+      Math.round((teams[order].money + teams[order + 1].money) * 0.05) * 10;
+
+    teams[order].money = money;
+    teams[order + 1].money = money;
+    await teams[order].save();
+    await teams[order + 1].save();
+    req.io.emit("broadcast", {
+      title: "實質平等發動",
+      description: `${team[0].teamname}使用了實質平等, 與${
+        teams[order + 1].teamname
+      }平分金錢`,
+    });
+  }
+  res.json("Success").status(200);
 });
 
 const calcTransfer = async (from, to, amount, isEstate) => {

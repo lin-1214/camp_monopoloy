@@ -217,7 +217,6 @@ const Bank = () => {
                     >
                       <Button
                         variant="contained"
-                        disabled={team === -1 || amount === ""}
                         onClick={handleAccounting}
                         fullWidth
                       >

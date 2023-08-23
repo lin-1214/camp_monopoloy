@@ -110,9 +110,25 @@ const AddMoney = () => {
             0.03
         ) * 10
       );
+      navigate("/teams");
+      setNavBarId(2);
     } else if (number === 2) {
       // 全部損失5000
       await axios.post("/tape");
+      navigate("/teams");
+      setNavBarId(2);
+    } else if (number === 3) {
+      // 搶走錢最後一名的隨機一棟房子
+      const payload = { id: team };
+      const { data } = await axios.post("/rob", payload);
+      console.log(data);
+      if (data.building) navigate("/properties?id=" + data.building);
+      else navigate("/properties");
+      setNavBarId(3);
+    } else if (number === 4) {
+      // 與金錢榜前一名小隊平分金錢
+      const payload = { id: team };
+      await axios.post("/equility", payload);
       navigate("/teams");
       setNavBarId(2);
     }
@@ -315,9 +331,9 @@ const AddMoney = () => {
               variant="contained"
               disabled={team === -1 || amount === 0}
               sx={{ marginBottom: 1, width: 80 }}
-              onClick={() => handlePercentMoney(0.2)}
+              onClick={() => handlePercentMoney(-0.2)}
             >
-              20%
+              -20%
             </Button>
             <Button
               variant="contained"
@@ -325,7 +341,7 @@ const AddMoney = () => {
               sx={{ marginBottom: 1, width: 80 }}
               onClick={() => handlePercentMoney(0.5)}
             >
-              50%
+              +50%
             </Button>
             <Button
               variant="contained"
@@ -333,7 +349,7 @@ const AddMoney = () => {
               sx={{ marginBottom: 1, width: 80 }}
               onClick={() => handlePercentMoney(1)}
             >
-              100%
+              +100%
             </Button>
           </Box>
           <Box
@@ -365,6 +381,30 @@ const AddMoney = () => {
               onClick={() => handleCard(2)}
             >
               紙膠
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="contained"
+              disabled={team === -1}
+              sx={{ marginBottom: 1, width: 120 }}
+              onClick={() => handleCard(3)}
+            >
+              打劫
+            </Button>
+            <Button
+              variant="contained"
+              disabled={team === -1}
+              sx={{ marginBottom: 1, width: 120 }}
+              onClick={() => handleCard(4)}
+            >
+              平等
             </Button>
           </Box>
           <Grid container spacing={1}>

@@ -4,6 +4,9 @@ import {
   Container,
   TextField,
   FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Box,
   Paper,
   Typography,
@@ -11,26 +14,50 @@ import {
   Modal,
 } from "@mui/material";
 import RoleContext from "../useRole";
+import Shop2Icon from "@mui/icons-material/Shop2";
 import TeamSelect from "../TeamSelect";
 import axios from "../axios";
 
 const Bankrupt = () => {
   const [team, setTeam] = useState(-1);
+  const [building, setBuilding] = useState(-1);
+  const [buildingData, setBuildingData] = useState({});
   const [amount, setAmount] = useState(0);
   const { role } = useContext(RoleContext);
   const [open, setOpen] = useState(false);
+  const { filteredBuildings, setNavBarId } = useContext(RoleContext);
   const navigate = useNavigate();
+
   const handleClick = async () => {
     const payload = { id: team, amount: amount };
     await axios.post("/set", payload);
     setOpen(true);
   };
 
+  const handleBuilding = async (building) => {
+    console.log(team);
+    console.log(filteredBuildings);
+    const { data } = await axios.get("/land/" + building);
+    setBuilding(building);
+    setBuildingData(data);
+  };
+
+  const handleSoldOut = async () => {
+    const payload = { id: team, building: building };
+    await axios.post("/soldout", payload);
+    navigate("/properties?id=" + buildingData.id);
+    setNavBarId(3);
+  };
+
   useEffect(() => {
-    if (role !== "admin") {
-      navigate("/permission");
+    const reloadCount = sessionStorage.getItem("reloadCount");
+    if (reloadCount < 1) {
+      sessionStorage.setItem("reloadCount", String(reloadCount + 1));
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloadCount");
     }
-  });
+  }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -44,7 +71,7 @@ const Bankrupt = () => {
         }}
       >
         <Typography component="h1" variant="h5" sx={{ marginBottom: 0 }}>
-          Set Money
+          Bankrupt
         </Typography>
         <FormControl variant="standard" sx={{ minWidth: 250 }}>
           <TeamSelect
@@ -53,24 +80,33 @@ const Bankrupt = () => {
             handleTeam={setTeam}
             hasZero={false}
           />
-          <TextField
-            required
-            label="Amount"
-            id="amount"
-            value={amount}
-            sx={{ marginTop: 2, marginBottom: 1 }}
+        </FormControl>
+        <FormControl variant="standard" sx={{ minWidth: 250, marginTop: 2 }}>
+          <InputLabel id="building">Building</InputLabel>
+          <Select
+            value={building}
+            labelId="building"
             onChange={(e) => {
-              if (e.target.value === "") setAmount(0);
-              else setAmount(parseInt(e.target.value));
+              handleBuilding(e.target.value);
             }}
-            FormHelperTextProps={{ error: true }}
-          />
-          <Button
-            variant="outlined"
-            onClick={handleClick}
-            disabled={team === -1 || amount <= 0}
           >
-            Submit
+            <MenuItem value={-1}>Select Building</MenuItem>
+            {filteredBuildings.map((item) =>
+              item.owner === team && item.buffed === 0 ? (
+                <MenuItem value={item.id} key={item.id}>
+                  {item.id} {item.name}
+                </MenuItem>
+              ) : null
+            )}
+          </Select>
+          <Button
+            variant="contained"
+            disabled={building === -1 || team === -1}
+            onClick={handleSoldOut}
+            fullWidth
+            sx={{ marginTop: 2 }}
+          >
+            <Shop2Icon />
           </Button>
         </FormControl>
       </Box>
