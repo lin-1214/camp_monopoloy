@@ -22,11 +22,11 @@ mongoose.connect(process.env.MONGO_URL, {
 const users = [
   {
     username: "admin",
-    password: "4eeR62I5OP09",
+    password: "5dfR6269OP0G",
   },
   {
     username: "NPC",
-    password: "A6EhVQ94WXhG",
+    password: "K6EhJD587XpG",
   },
   {
     username: "第01小隊",
