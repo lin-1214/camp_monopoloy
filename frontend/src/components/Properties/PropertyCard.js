@@ -1,8 +1,10 @@
-import { React, useState } from "react";
-import { Grid, Paper, Typography, Modal, Box } from "@mui/material";
+import { React, useState, useContext } from "react";
+import { Grid, Paper, Typography, Modal, Box, Button } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import HouseIcon from "@mui/icons-material/House";
+import RoleContext from "../useRole";
+import axios from "axios";
 
 const colors = {
   Go: "rgb(0,0,0)",
@@ -44,6 +46,7 @@ const PropertyCard = ({
   const [open, setOpen] = useState(false);
   const [buy, setBuy] = useState(0);
   const [upgrade, setUpgrade] = useState(0);
+  const { roleId } = useContext(RoleContext);
 
   const colorData = type === "Building" ? colors[type][area] : colors[type];
   // console.log(ref);
@@ -71,6 +74,25 @@ const PropertyCard = ({
       <VisibilityIcon style={{ color: "rgb(160,160,160)" }} key={3} />
     );
   }
+
+  const handleBuff1 = async (name) => {
+    const payload = { name: name };
+    console.log(name);
+    await axios.post("/handleBuff1", payload);
+    handleClose();
+  };
+
+  const handleBuff2 = async (name) => {
+    const payload = { name: name };
+    console.log(2);
+    await axios.post("/handleBuff2", payload);
+  };
+
+  const handleDeBuff = async (name) => {
+    const payload = { name: name };
+    console.log(0);
+    await axios.post("/handleDeBuff", payload);
+  };
 
   const handleView = () => {
     if (type === "Building") {
@@ -246,6 +268,47 @@ const PropertyCard = ({
               }`}
             </Typography>
           </Box>
+          {/* {roleId > 80 ? (
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+                height: "20%",
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{ marginBottom: 1, width: 80 }}
+                onClick={() => {
+                  handleBuff1(name);
+                }}
+              >
+                buff1
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginBottom: 1, width: 80 }}
+                onClick={() => {
+                  handleBuff2(name);
+                  handleClose();
+                }}
+              >
+                buff2
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ marginBottom: 1, width: 80 }}
+                onClick={() => {
+                  handleDeBuff(name);
+                  handleClose();
+                }}
+              >
+                debuff
+              </Button>
+            </Box>
+          ) : null} */}
         </Box>
       </Modal>
     </>

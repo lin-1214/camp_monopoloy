@@ -452,7 +452,7 @@ router
       let note = "";
 
       for (let i = 0; i < teams.length; i++) {
-        teams[i].deposit = Math.round(teams[i].deposit * 0.105) * 10;
+        teams[i].deposit = Math.round(teams[i].deposit * 0.15) * 10;
         await teams[i].save();
       }
       switch (id) {
@@ -670,12 +670,12 @@ router
     }
 
     await updateTeam(id, dollar, req.io, true);
-    if (dollar < 0) {
-      req.io.emit("broadcast", {
-        title: "扣錢",
-        description: `第${id}小隊遭扣除${-dollar}元！！`,
-      });
-    }
+    // if (dollar < 0) {
+    //   req.io.emit("broadcast", {
+    //     title: "扣錢",
+    //     description: `第${id}小隊遭扣除${-dollar}元！！`,
+    //   });
+    // }
 
     res.status(200).send("Update succeeded");
   })
@@ -728,7 +728,7 @@ router.post("/accounting", async (req, res) => {
     for (let i = 0; i < lands.length; i++) {
       total +=
         (lands[i].price.buy + lands[i].price.upgrade * (lands[i].level - 1)) *
-        0.8;
+        0.9;
     }
     if (teams[i].deposit >= 0) teams[i].money += total + teams[i].deposit;
     else teams[i].money += total + teams[i].deposit * 1.3;
@@ -792,6 +792,42 @@ router.post("/equility", async (req, res) => {
       }平分金錢`,
     });
   }
+  res.json("Success").status(200);
+});
+
+router.post("/handleBuff1", async (req, res) => {
+  const { name } = req.body;
+  console.log(name);
+  const land = await Land.find({ name: name });
+  land[0].buffed = 1;
+  for (let i = 0; i < 3; i++) {
+    land[0].rent[i] *= 1.5;
+  }
+  await land[0].save();
+  res.json("Success").status(200);
+});
+
+router.post("/handleBuff2", async (req, res) => {
+  const { name } = req.body;
+  const land = await Land.find({ name: name });
+  land[0].buffed = 2;
+  for (let i = 0; i < 3; i++) {
+    land[0].rent[i] *= 2;
+  }
+  await land[0].save();
+  res.json("Success").status(200);
+});
+
+router.post("/handleDeBuff", async (req, res) => {
+  const { name } = req.body;
+  const land = await Land.find({ name: name });
+  const originstatus = land[0].buffed;
+  land[0].buffed = 0;
+  for (let i = 0; i < 3; i++) {
+    if (originstatus === 1) land[0].rent[i] /= 1.5;
+    else if (originstatus === 2) land[0].rent[i] /= 2;
+  }
+  await land[0].save();
   res.json("Success").status(200);
 });
 
