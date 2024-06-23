@@ -1,10 +1,17 @@
-# 2022_camp
+# 2024_camp
 
 This is the website of game "Monopoly" in NTUEE camp for freshman!
 
-By rayray2002, jerry1249756 and hackhaha1
+2022: By rayray2002, jerry1249756 and hackhaha1\
+2023: By lin-1214
 
 ## Development
+### Install packages
+```bash
+yarn install-all
+```
+
+
 ### Frontend
 ```bash
 cd frontend
@@ -25,7 +32,6 @@ yarn start
 ```
 
 ### Docker
-Image: [rayray2002/monopoly](https://hub.docker.com/r/rayray2002/monopoly)
 #### Build and Push
 ```bash
 bash scripts/build_and_push.sh

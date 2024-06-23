@@ -198,11 +198,7 @@ async function updateTeam(team, moneyChanged, io, saved) {
     if (moneyChanged > 0) ratio = 2;
     else ratio = 1.5;
   }
-  // console.log(ratio);
-  // console.log(teamObj.money);
-  // console.log(teamObj.money + moneyChanged * ratio);
   let final = Math.round(teamObj.money + moneyChanged * ratio);
-  // console.log("final: ", final);
   if (saved && final < 0) {
     const message = {
       title: "破產!!!",
@@ -226,18 +222,14 @@ async function updateTeam(team, moneyChanged, io, saved) {
 }
 
 async function deleteTimeoutNotification() {
-  // delete timeout notifications
   const notifications = await Notification.find();
   const time = Date.now() / 1000;
-  // console.log(notifications);
   for (let i = 0; i < notifications.length; i++) {
-    // console.log(notifications[i]);
     if (
       notifications[i].createdAt + notifications[i].duration < time &&
       notifications[i].duration > 0
     ) {
       await Notification.findByIdAndDelete(notifications[i]._id);
-      // console.log("Deleted notification", notifications[i].id);
     }
   }
 }
@@ -290,12 +282,6 @@ router.post("/checkPropertyCost", async (req, res) => {
     else res.json({ message: "FUCK" }).status(200);
   }
 });
-
-// router.get("/team/hawkeye", async (req, res) => {
-//   const team = await Team.findOne({ occupation: "鷹眼" });
-//   console.log(team);
-//   res.json(team).status(200);
-// });
 
 router.get("/team/:teamId", async (req, res) => {
   const team = await Team.findOne({ id: req.params.teamId });
@@ -362,63 +348,6 @@ router.post("/sellResource", async (req, res) => {
   res.json("Success").status(200);
 });
 
-// update resource
-// router.post("/resource", async (req, res) => {
-//   const resources = await Resource.find();
-//   for (let i = 0; i < resources.length; i++) {
-//     await Resource.findOneAndUpdate(
-//       { name: resources[i].name },
-//       {
-//         price:
-//           resources[i].price *
-//           Math.floor(
-//             ((Math.floor(Math.random() * 120) + 1) / 8) *
-//               ((Math.floor(Math.random() * 10) + 1) / 30)
-//           ),
-//       }
-//     );
-//   }
-//   // check whether price > 0
-//   const check = await Resource.find().sort({ id: 1 });
-//   for (let i = 0; i < check.length; i++) {
-//     if (check[i].price < 1) {
-//       await Resource.findOneAndUpdate(
-//         { name: check[i].name },
-//         {
-//           price: 100,
-//         }
-//       );
-//     } else if (check[i].price > 15000) {
-//       await Resource.findOneAndUpdate(
-//         { name: check[i].name },
-//         {
-//           price: 15000,
-//         }
-//       );
-//     }
-//   }
-//   res.json({ success: true }).status(200);
-// });
-
-// const calcSellPrice = (land, forced) => {
-//   let price;
-//   if (land.type === "Building") {
-//     if (land.level === 0) {
-//       res
-//         .status(400)
-//         .json({ error: "Cannot sell a building that is not built" });
-//       return;
-//     }
-//     price = land.price.buy + land.price.upgrade * (land.level - 1);
-//   } else {
-//     price = land.price.buy;
-//   }
-//   if (!forced) {
-//     return Math.round(price / 2);
-//   } else {
-//     return price * 2;
-//   }
-// };
 
 router.post("/sell", async (req, res) => {
   const { teamId, landId, forced } = req.body;
@@ -613,6 +542,7 @@ router
 //   console.log(team);
 //   res.json(team).status(200);
 // });
+
 router.post("/tape", async (req, res) => {
   const teams = await Team.find();
   for (let i = 0; i < teams.length; i++) {
